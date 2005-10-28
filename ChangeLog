@@ -1,0 +1,39 @@
+2005-10-28
+	* Modified interpretation of tol to prevent slowdown on large problems.
+2005-10-03
+	* Tweaked maxControlsCap in order to get it to handle distance
+	matrices of dimension 1xn or nx1 w/0 dropping their dimensions.
+2005-09-08
+	* Added some detail to error message in fullmatch() for it is
+	given lists that fail to be matrices.  The hope is that this will
+	be helpful to people in funny situations that can arise when they
+	have been manipulating lists containing a few "matrices" of
+	dimension 0xn or nxO, as arises when a subclass contains only
+	treatments or only controls.  fullmatch handles matrices like that
+	the way it should, but it's easy to inadvertently coerce such a
+	matrix to a vector of length 0 without a dim attribute. 
+2005-09-08
+	* Modified beginnings of fullmatch(), maxControlsCap() to remove
+	NULL entries from lists of distances.
+2005-03-15
+	* Created summary method for optmatch objects: reports bound on
+	discrepancy between match and optimal match, then calls
+	summary.factor
+	* Modified print.optmatch, removing report of bound on
+	discrepancy between match and optimal match and setting up for
+	printing more like that of print.factor (but without giving a
+	list of levels separately)
+	* Fixed example in matched.Rd
+	* Modified fullmatch() to permit giving a list of matrices as
+	first argument.  No testing of this new functionality yet, but
+	confirmed it still works with older-style calls
+
+2005-04-??
+	* Introduced minControlsCap, maxControlsCap
+2005-06-01
+	* Removed plantdist.rda and instead defined "plantdist" 
+	distance matrix in text of examples, in order to work around
+	hangup during Windows install
+
+2005-06-16
+	* Slight modification to zzz.R

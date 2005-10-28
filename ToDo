@@ -1,0 +1,8 @@
+
+Consider adding refs to Harrell's matching functions find.matches and
+matchCases.
+
+Introduce omit.controls arguments to max.control.cap, min.control.cap.
+Next step is to set it up to handle negative values of omit.controls
+cap.  I seem to recall doing a bit of testing of omit.controls option
+(in summer 2004).

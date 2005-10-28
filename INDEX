@@ -1,0 +1,8 @@
+fullmatch               Optimal full matching
+matched                 Identification of units placed into matched
+                        sets
+minControlsCap		Determine largest feasible lower limit on ratio of
+			matched controls to treatment unit
+maxControlsCap		Determine smallest feasible upper limit on ratio of
+			matched controls to treatment unit
+
