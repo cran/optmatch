@@ -1,0 +1,69 @@
+%\VignetteIndexEntry{HowTo: Mahalanobis matching}
+%\VignetteDepends{boot, optmatch}
+%\VignettePackage{optmatch}
+\documentclass[12pt]{article}
+
+\author{Jake Bowers and Ben Hansen}
+
+\title{How to match on a Mahalanobis distance}
+
+\begin{document}
+
+\maketitle
+
+In order to match on a Mahalanobis distance, or on a Mahalanobis
+distance within calipers, one has to first combine covariates into a
+matrix of Mahalanobis distances (or list of such matrices).  R has
+some functions for creating Mahalanobis distances, but they seem to be
+oriented to applications other than Mahalanobis matching.  This How To
+illustrates how those functions are adapted to this purpose.
+
+First, here is an adaptation of the R function \texttt{mahalanobis}.
+It is specifically designed to be combined with \texttt{outer}, and
+may behave unexpectedly if used in isolation.  Its arguments are
+\texttt{data}, a data frame containing all covariates to be combined
+in the distance; \texttt{inv.cov}, an inverted covariance for the $k$
+covariates, where $k \geq 2$; and character vectors \texttt{Tnms},
+\texttt{Cnms} containing subsets of the row names of \texttt{data}
+that correspond to treatment and control groups, respectively.
+
+<<>>=
+ myMH<-function(Tnms, Cnms, inv.cov, data) {
+   stopifnot(!is.null(dimnames(inv.cov)[[1]]), dim(inv.cov)[1]>1,
+             all.equal(dimnames(inv.cov)[[1]], dimnames(inv.cov)[[2]]),
+             all(dimnames(inv.cov)[[1]] %in% names(data)))
+   covars <- dimnames(inv.cov)[[1]]
+   xdiffs <- as.matrix(data[Tnms,covars])
+   xdiffs <- xdiffs - as.matrix(data[Cnms,covars])
+   rowSums((xdiffs %*% inv.cov) * xdiffs)
+ }
+@ 
+
+Before using it, one has to select the covariates, invert their
+covariance matrix, and isolate names of treated and control subjects.
+<<echo=FALSE, print=FALSE>>=
+library(optmatch)
+library(boot)
+data(nuclear)
+nuclear.nopt <- nuclear[!nuclear$pt,]
+row.names(nuclear.nopt)[as.logical(nuclear.nopt$pr)] <- LETTERS[1:7]
+row.names(nuclear.nopt)[!as.logical(nuclear.nopt$pr)] <- LETTERS[8:26]
+nuclear.nopt <- nuclear.nopt[order(row.names(nuclear.nopt)),]
+@ 
+
+<<>>=
+icv <- solve(cov(nuclear.nopt[,c('cap', 'date')]))
+trtnms <- row.names(nuclear.nopt)[as.logical(nuclear.nopt$pr)]
+ctlnms <- row.names(nuclear.nopt)[!as.logical(nuclear.nopt$pr)]
+mdist <- outer(trtnms, ctlnms, FUN=myMH, inv.cov=icv, data=nuclear.nopt)
+dimnames(mdist) <- list(trtnms, ctlnms)
+round(mdist, 2)
+fullmatch(mdist)
+@ 
+
+This construction can be wrapped inside a \texttt{lapply} function, as
+described in the ``listOfDistancesHowTo'' vignette, for Mahalanobis
+matching within subclasses; and it can be combined with calipers, as
+explained in the ``basicUses'' vignette.
+\end{document}
+
