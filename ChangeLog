@@ -1,3 +1,16 @@
+2006-06-04
+	* New function makedist().  (Renaming of distlist(), really.)
+	Vignette mahalanobisMatching updated and listOfDistances vignette
+	removed (as it is now obsolete).  Documentation of makedist()
+	contains a propensity score example.
+2006-06-01
+	* Improved, documented distlist()
+2006-04-12
+	* Added alpha version of function distlist() to facilitate
+	creation of distance matrices, using a formula interface.  Among
+	other things, it stores row names of generating data frame as an
+	attribute, "row.names".  Also added some lines at the end of
+	fullmatch() to take advantage of this info if it is given.
 2005-10-28
 	* Modified interpretation of tol to prevent slowdown on large problems.
 2005-10-03

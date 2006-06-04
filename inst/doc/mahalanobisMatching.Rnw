@@ -19,13 +19,14 @@ oriented to applications other than Mahalanobis matching.  This How To
 illustrates how those functions are adapted to this purpose.
 
 First, here is an adaptation of the R function \texttt{mahalanobis}.
-It is specifically designed to be combined with \texttt{outer}, and
-may behave unexpectedly if used in isolation.  Its arguments are
-\texttt{data}, a data frame containing all covariates to be combined
-in the distance; \texttt{inv.cov}, an inverted covariance for the $k$
-covariates, where $k \geq 2$; and character vectors \texttt{Tnms},
-\texttt{Cnms} containing subsets of the row names of \texttt{data}
-that correspond to treatment and control groups, respectively.
+It is specifically designed to be combined with \texttt{outer} or
+\texttt{makedist}, and may behave unexpectedly if used in isolation.
+Its arguments are \texttt{data}, a data frame containing all
+covariates to be combined in the distance; \texttt{inv.cov}, an
+inverted covariance for the $k$ covariates, where $k \geq 2$; and
+character vectors \texttt{Tnms}, \texttt{Cnms} containing subsets of
+the row names of \texttt{data} that correspond to treatment and
+control groups, respectively.
 
 <<>>=
  myMH<-function(Tnms, Cnms, inv.cov, data) {
@@ -61,9 +62,26 @@ round(mdist, 2)
 fullmatch(mdist)
 @ 
 
-This construction can be wrapped inside a \texttt{lapply} function, as
-described in the ``listOfDistancesHowTo'' vignette, for Mahalanobis
-matching within subclasses; and it can be combined with calipers, as
-explained in the ``basicUses'' vignette.
+A good way to use this construction is in combination with
+\texttt{makedist}, a function designed to handle a number of contingencies.
+<<>>=
+mdd <- function(trtvar, dat, inverse.cov)
+{
+  ans <- outer(names(trtvar)[trtvar], names(trtvar)[!trtvar],
+               FUN=myMH, inv.cov=inverse.cov, data=dat)
+  dim(ans) <- c(sum(trtvar), sum(!trtvar))
+  dimnames(ans) <- list(names(trtvar)[trtvar], names(trtvar)[!trtvar])
+  ans
+}
+altmdist <- makedist(pr~0,nuclear.nopt, mdd, inverse.cov=icv)
+fullmatch(altmdist)
+@ 
+
+Building on this, you could modify the function \texttt{mdd} to
+include calipers, variations on the Mahalanobis distance, or whatever.
+%This construction can be wrapped inside a \texttt{lapply} function, as
+%described in the ``listOfDistancesHowTo'' vignette, for Mahalanobis
+%matching within subclasses; and it can be combined with calipers, as
+%explained in the ``basicUses'' vignette.
 \end{document}
 

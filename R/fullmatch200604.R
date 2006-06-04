@@ -1,5 +1,5 @@
-fullmatch <- function(distance, subclass.indices=NULL, 
-min.controls=0, max.controls=Inf, omit.fraction=NULL, tol=.001)
+fullmatch <- function(distance,  min.controls=0, max.controls=Inf, 
+omit.fraction=NULL, tol=.001, subclass.indices=NULL)
 {
 ############################################################
 # CHECK DIMNAMES OF DISTANCE			   #
@@ -224,6 +224,14 @@ for (i in sfs)
        }
     }
 strat.abv <- as.factor(strat.abv)
+if ("optmatch.dlist" %in% class(distance))
+  {
+  if (all(attr(distance, "row.names")%in%names(strat.abv)))
+  {
+  strat.abv <- strat.abv[match(attr(distance, "row.names"), names(strat.abv))]
+} else warning("row.names attribute of distance doesn't match dimnames of dist matrices")
+}
+
 class(strat.abv) <- c("optmatch", "factor")
 attr(strat.abv, "exceedances") <- err
 if (sum(err, na.rm=TRUE)>TOL) 

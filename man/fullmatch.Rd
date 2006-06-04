@@ -10,9 +10,8 @@
   treatment to control units.%, and/or omit some fraction of the control group.
 }
 \usage{
-fullmatch(distance, subclass.indices = NULL, 
-min.controls = 0, max.controls = Inf, 
-omit.fraction = NULL, tol = 0.001)
+fullmatch(distance, min.controls = 0, max.controls = Inf, 
+omit.fraction = NULL, tol = 0.001, subclass.indices = NULL)
 }
 \arguments{
   \item{distance}{ A matrix of nonnegative discrepancies, 
@@ -82,18 +81,14 @@ must have row and column names.}
   into the same matched sets.
  }
 
-  \item{subclass.indices}{ An optional factor or data frame indicating
-  subclasses within which matched sets are to be wholly
-  contained.  If \code{subclass.indices} is provided, it must
-  have names corresponding to the row and column names of
-  \code{distance}. Unless \code{distance} is a matrix,
-  \code{subclass.indices} will be ignored.
-  \emph{Note: this argument is being phased out;
-    consider splitting up your matching problem and supplying it to
-    fullmatch as separate discrepancy matrices; see \code{distance}.}}
+  \item{subclass.indices}{ An old argument included for
+    back-compatibility; no longer needed.}
 }
 
 \details{
+  Consider using \code{\link{makedist}} to generate the distances,
+  particularly on large problems.
+  
   If \code{distance} is a list of matrices, each matrix is treated
   as a separate matching problem unto itself. In this case, one has
   to give names to the matrices in order to specify
@@ -105,11 +100,13 @@ must have row and column names.}
   \code{distance}, or the matrices it lists, are not simply row numbers
   of the data frame you're working with, then you should compare the
   names of fullmatch's output to your row names in order to be sure
-  things are in the proper order.
+  things are in the proper order.  You can relieve yourself of these
+  worries by using \code{\link{makedist}} to produce the distances, as
+  it passes the ordering of units to \code{fullmatch}, which then uses
+  it to order its outputs.
   
   The value of \code{tol} can have a substantial effect on
   computation time; with smaller values, computation takes longer.
-
   Not every tolerance can be met, and how small a tolerance is too small
   varies with the machine and with the details of the problem.  If
   \code{fullmatch} can't guarantee that the tolerance is as small as the
@@ -167,7 +164,7 @@ must have row and column names.}
   network flow problems; in the present implementation, the latter are handled
   by Bertsekas and Tseng's RELAX-IV codes.}
 
-\seealso{\code{\link{matched}}}
+\seealso{\code{\link{matched}}, \code{\link{makedist}}}
 \examples{
 plantdist <- matrix(nrow=7, ncol=19,byrow=TRUE,data=c(
 28, 0, 3,22,14,30,17,28,26,28,20,22,23,26,21,18,34,40,28,

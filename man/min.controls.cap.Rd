@@ -4,7 +4,7 @@
 
 \title{Set thinning and thickening caps for full matching}
 \description{
-  Functions to analyse to determine the largest value of min.controls,
+  Functions to find the largest value of min.controls,
   or the smallest value of max.controls, for which a full matching
   problem is feasible.  These are determined by
   constraints embedded in the matching problem's distance matrix.
@@ -28,15 +28,16 @@ maxControlsCap(distance, min.controls = NULL, subclass.indices = NULL)
   large problems it can be time-consuming.
 }
 \value{
-For \code{minControlsCap}, 
+  For \code{minControlsCap}, \code{strictest.feasible.min.controls} and
+\code{given.max.controls}. For \code{maxControlsCap},
+\code{given.min.controls} and \code{strictest.feasible.max.controls}.
+
   \item{strictest.feasible.min.controls}{The largest values of
     the \code{\link{fullmatch}} argument \code{min.controls} that yield
     a full match;}
   \item{given.max.controls}{
     The \code{max.controls} argument given to \code{minControlsCap}
     or, if none was given, a vector of \code{Inf}s. }
-  
-  For \code{maxControlsCap},
   \item{given.min.controls}{
     The \code{min.controls} argument given to \code{maxControlsCap}
     or, if none was given, a vector of \code{0}s; }
@@ -46,7 +47,8 @@ For \code{minControlsCap},
 }
 \references{Hansen, B.B. and S. Olsen Klopfer (2005),
   \sQuote{Optimal full matching and related designs via network flows}.
-  Technical Report 416, Statistics Department, University of Michigan.  }
+  Technical Report 416, Statistics Department, University of Michigan;
+    to appear, \emph{JCGS}.  }
 \author{Ben B. Hansen }
 \note{ Essentially this is just a line search.  I've done several things
   to speed it up, but not everything that might be done.  At present,
