@@ -79,7 +79,7 @@ dmt <- dmt + abs(outer(vvr[trtvar], vvr[!trtvar],"-"))
 }
 round(dmt)              
 }
-##-- Gives a warning because this FUN doesn't assign dimnames
+##-- Gives a warning because this fn doesn't assign dimnames
 (rdd1 <- makedist(pr~1, nuclear[nuclear$pt==0,], rankdiffs, c("cap","date")))
 fullmatch(rdd1)
 ##-- fullmatch() knows its value should be ordered as the nuclear data set is

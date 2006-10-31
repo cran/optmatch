@@ -1,0 +1,8 @@
+useDynLib(optmatch)
+
+export(fullmatch, pairmatch, makedist, matched, matchfailed, unmatched, maxControlsCap, minControlsCap, relaxinfo)
+
+S3method(print, optmatch)
+S3method(summary, optmatch)
+S3method(Ops, optmatch.dlist)
+
