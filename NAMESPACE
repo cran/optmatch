@@ -1,6 +1,6 @@
 useDynLib(optmatch)
 
-export(fullmatch, pairmatch, makedist, matched, matchfailed, unmatched, maxControlsCap, minControlsCap, relaxinfo)
+export(fullmatch, pairmatch, makedist, matched, matchfailed, unmatched, maxControlsCap, minControlsCap, relaxinfo, stratumStructure)
 
 S3method(print, optmatch)
 S3method(summary, optmatch)

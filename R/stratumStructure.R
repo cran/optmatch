@@ -1,0 +1,30 @@
+stratumStructure <- function(stratum,trtgrp=NULL)
+{
+if (class(stratum)[1]!="optmatch" & is.null(trtgrp))
+  stop("stratum not of class \'optmatch\'; trtgrp must be specified")
+if (class(stratum)[1]!="optmatch")
+  warning("stratum not of class optmatch; was this intended?")
+if (class(stratum)[1]=="optmatch" & !is.null(trtgrp))
+  warning("ignoring second argument to stratumStructure")
+if (class(stratum)[1]=="optmatch")
+   {
+     tgp <- attr(stratum, "contrast.group")
+   } else {
+     tgp <- trtgrp
+   }
+if (!any(tgp<=0) | !any(tgp>0))
+   warning("No variation in (trtgrp>0); was this intended?")
+ttab <- table(stratum,as.logical(tgp))
+ans <- table(paste(ttab[,2], ttab[,1], sep=":"),
+             dnn="stratum treatment:control ratios")
+tnn <- unlist(strsplit(names(ans), ":", fixed=FALSE))
+tnn <- as.numeric(tnn)
+onez <- tnn[2*(1:length(ans))-1]==1 & tnn[2*(1:length(ans))]==0
+if (any(onez))
+  {
+tnn[2*(1:length(ans))-1][onez] <- Inf
+tnn[2*(1:length(ans))][onez] <- 1
+}
+ans <- ans[order(-tnn[2*(1:length(ans))-1],tnn[2*(1:length(ans))])]
+ans
+}  

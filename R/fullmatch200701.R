@@ -228,8 +228,11 @@ if ("optmatch.dlist" %in% class(distance))
   {
   if (all(attr(distance, "row.names")%in%names(strat.abv)))
   {
+  inrow <- inrow[match(attr(distance, "row.names"), names(strat.abv))]
   strat.abv <- strat.abv[match(attr(distance, "row.names"), names(strat.abv))]
-} else warning("row.names attribute of distance doesn't match dimnames of dist matrices")
+} else {
+  warning("row.names attribute of distance doesn't match dimnames of dist matrices")
+}
 }
 
 class(strat.abv) <- c("optmatch", "factor")
