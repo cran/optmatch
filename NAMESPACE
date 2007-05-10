@@ -5,4 +5,5 @@ export(fullmatch, pairmatch, makedist, matched, matchfailed, unmatched, maxContr
 S3method(print, optmatch)
 S3method(summary, optmatch)
 S3method(Ops, optmatch.dlist)
+S3method(abs, optmatch.dlist)
 
