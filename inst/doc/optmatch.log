@@ -1,11 +1,12 @@
-This is pdfeTeXk, Version 3.141592-1.11b-2.1 (Web2C 7.5.2) (format=pdflatex 2004.4.16)  10 MAY 2007 10:49
+This is pdfeTeXk, Version 3.141592-1.11b-2.1 (Web2C 7.5.2) (format=pdflatex 2004.4.16)  8 JUL 2007 16:53
 entering extended mode
  file:line:error style messages enabled.
  %&-line parsing enabled.
  (/usr/local/teTeX/share/texmf.tetex/web2c/cp8bit.tcx)
-**\nonstopmode \input /Users/bbh/Private/projects/fmpackage/optmatch/inst/doc/o
-ptmatch.tex
-(/Users/bbh/Private/projects/fmpackage/optmatch/inst/doc/optmatch.tex
+**\nonstopmode \input /Users/bbh/Private/projects/fmpackage/trunk/v03/optmatch/
+inst/doc/optmatch.tex
+
+(/Users/bbh/Private/projects/fmpackage/trunk/v03/optmatch/inst/doc/optmatch.tex
 (/usr/local/teTeX/share/texmf.tetex/tex/latex/base/article.cls
 Document Class: article 2001/04/21 v1.4e Standard LaTeX document class
 (/usr/local/teTeX/share/texmf.tetex/tex/latex/base/size12.clo
@@ -357,83 +358,93 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Warning: Font shape `T1/aett/bx/n' undefined
 (Font)              using `T1/aett/m/n' instead on input line 166.
 
-[2]
-Overfull \hbox (52.76927pt too wide) in paragraph at lines 234--235
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 185
+.
+(/Library/Frameworks/R.framework/Resources/share/texmf/ts1aett.fd
+File: ts1aett.fd 
+)
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 185
+.
+
+(/usr/local/teTeX/share/texmf.tetex/tex/latex/base/ts1cmtt.fd
+File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `TS1/aett/m/n' in size <12> not available
+(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 185.
+ [2]
+Overfull \hbox (52.76927pt too wide) in paragraph at lines 251--252
 [] /aett12/full-match(distance, sub-class.indices = NULL, min.controls = 0, max
 .controls
  []
 
 
-Overfull \hbox (13.92352pt too wide) in paragraph at lines 246--254
+Overfull \hbox (13.92352pt too wide) in paragraph at lines 263--271
 []/aett12/A mat-rix of non-neg-at-ive dis-crep-an-cies, each in-dic-at-ing the 
 per-
  []
 
 
-Overfull \hbox (2.83961pt too wide) in paragraph at lines 246--254
+Overfull \hbox (2.83961pt too wide) in paragraph at lines 263--271
 /aett12/miss-ib-il-ity and de-sirab-il-ity of match-ing the unit cor-res-pond-i
 ng to
  []
 
 
-Overfull \hbox (2.83961pt too wide) in paragraph at lines 246--254
+Overfull \hbox (2.83961pt too wide) in paragraph at lines 263--271
 /aett12/its row (a 'treat-ment') to the unit cor-res-pond-ing to its column (a
  []
 
 
-Overfull \hbox (2.83961pt too wide) in paragraph at lines 246--254
+Overfull \hbox (2.83961pt too wide) in paragraph at lines 263--271
 /aett12/'con-trol'); or a list of such matrices.  Fi-nite dis-crep-an-cies in-
  []
 
 
-Overfull \hbox (27.51143pt too wide) in paragraph at lines 246--254
+Overfull \hbox (27.51143pt too wide) in paragraph at lines 263--271
 /aett12/dic-ate per-miss-ible matches, with smal-ler dis-crep-an-cies in-dic-at
 -ing more
  []
 
 
-Overfull \hbox (27.51143pt too wide) in paragraph at lines 246--254
+Overfull \hbox (27.51143pt too wide) in paragraph at lines 263--271
 /aett12/de-sir-able matches. Mat-rix 'dis-tance', or the mat-rix ele-ments of '
 dis-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 302--305
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 319--322
 /aett10/date is date of con-struc-tion, in
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--305
+Underfull \hbox (badness 10000) in paragraph at lines 319--322
 /aett10/years after 1965; ca-pa-city is net
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--305
+Underfull \hbox (badness 10000) in paragraph at lines 319--322
 /aett10/ca-pa-city of the power plant, in
  []
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 312.
+(Font)              <5> on input line 329.
 
-Underfull \vbox (badness 2469) has occurred while \output is active []
-
- [3]
-Underfull \hbox (badness 10000) in paragraph at lines 377--381
+Underfull \hbox (badness 10000) in paragraph at lines 394--398
 /aett10/Here, date is /aeitt10/rank of /aett10/date of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 377--381
+Underfull \hbox (badness 10000) in paragraph at lines 394--398
 /aett10/con-struc-tion, in years after
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 377--381
+Underfull \hbox (badness 10000) in paragraph at lines 394--398
 /aett10/1965, and ca-pa-city is /aeitt10/rank of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 377--381
+Underfull \hbox (badness 10000) in paragraph at lines 394--398
 /aett10/net ca-pa-city of the power plant,
  []
 
@@ -442,45 +453,45 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4]
 [5] [6]
-Overfull \hbox (1.58762pt too wide) in paragraph at lines 579--585
+Overfull \hbox (1.58762pt too wide) in paragraph at lines 596--602
 []/aett12/The min-imum ra-tio of con-trols to treat-ments that is to be
  []
 
 
-Overfull \hbox (2.83961pt too wide) in paragraph at lines 579--585
+Overfull \hbox (2.83961pt too wide) in paragraph at lines 596--602
 /aett12/per-mit-ted within a matched set: should be non-neg-at-ive and fi-nite.
 
  []
 
 
-Overfull \hbox (21.34348pt too wide) in paragraph at lines 579--585
+Overfull \hbox (21.34348pt too wide) in paragraph at lines 596--602
 /aett12/If min.controls is not a whole num-ber, the re-cip-rocal of a whole num
 -
  []
 
 
-Overfull \hbox (15.17552pt too wide) in paragraph at lines 579--585
+Overfull \hbox (15.17552pt too wide) in paragraph at lines 596--602
 /aett12/ber, or zero, then it is roun-ded down to the nearest whole num-ber or
  []
 
 
-Overfull \hbox (7.75557pt too wide) in paragraph at lines 586--592
+Overfull \hbox (7.75557pt too wide) in paragraph at lines 603--609
 []/aett12/The max-imum ra-tio of con-trols to treat-ments that is to be
  []
 
 
-Overfull \hbox (15.17552pt too wide) in paragraph at lines 586--592
+Overfull \hbox (15.17552pt too wide) in paragraph at lines 603--609
 /aett12/per-mit-ted within a matched set: should be pos-it-ive and nu-meric. If
 
  []
 
 
-Overfull \hbox (2.83961pt too wide) in paragraph at lines 586--592
+Overfull \hbox (2.83961pt too wide) in paragraph at lines 603--609
 /aett12/max.controls is not a whole num-ber, the re-cip-rocal of a whole num-
  []
 
 
-Overfull \hbox (21.34348pt too wide) in paragraph at lines 586--592
+Overfull \hbox (21.34348pt too wide) in paragraph at lines 603--609
 /aett12/ber, or Inf, then it is roun-ded up to the nearest whole num-ber or re-
 
  []
@@ -492,33 +503,35 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
  )
 (\end occurred inside a group at level 3)
 
-### simple group (level 3) entered at line 723 ({)
-### simple group (level 2) entered at line 199 ({)
-### simple group (level 1) entered at line 196 ({)
+### simple group (level 3) entered at line 740 ({)
+### simple group (level 2) entered at line 216 ({)
+### simple group (level 1) entered at line 213 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4675 strings out of 94970
- 64318 string characters out of 1179734
- 122132 words of memory out of 1567837
- 7684 multiletter control sequences out of 10000+50000
- 30696 words of font info for 73 fonts, out of 1000000 for 2000
+ 4701 strings out of 94970
+ 65088 string characters out of 1179734
+ 123132 words of memory out of 1567837
+ 7703 multiletter control sequences out of 10000+50000
+ 30993 words of font info for 74 fonts, out of 1000000 for 2000
  180 hyphenation exceptions out of 1000
- 35i,8n,24p,425b,551s stack positions out of 5000i,500n,6000p,200000b,40000s
- 107 PDF objects out of 300000
+ 35i,8n,24p,435b,555s stack positions out of 5000i,500n,6000p,200000b,40000s
+ 110 PDF objects out of 300000
  20 named destinations out of 131072
  17 words of extra memory for PDF output out of 65536
 {/usr/local/teTeX/share/texmf.tetex/dvips/tetex/09fbbfac.enc}</
 usr/local/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmsltt10.pfb></usr/loc
 al/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmtt10.pfb>{/usr/local/teTeX/
 share/texmf.tetex/dvips/tetex/f7b6d320.enc}</usr/local/teTeX/share/texmf.tetex/
-fonts/type1/bluesky/cm/cmbx12.pfb>{/usr/local/teTeX/share/texmf.tetex/dvips/tet
-ex/bbad153f.enc}</usr/local/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmsy
-10.pfb>{/usr/local/teTeX/share/texmf.tetex/dvips/tetex/aae443f0.enc}</usr/local
-/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmmi12.pfb>{/usr/local/teTeX/sh
-are/texmf.tetex/dvips/tetex/b6a4d7c7.enc}</usr/local/teTeX/share/texmf.tetex/fo
-nts/type1/bluesky/cm/cmitt10.pfb>{/usr/local/teTeX/share/texmf.tetex/dvips/tete
-x/74afc74c.enc}</usr/local/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmti1
-2.pfb></usr/local/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmr12.pfb></us
-r/local/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmtt12.pfb></usr/local/t
-eTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmr17.pfb>
-Output written on optmatch.pdf (12 pages, 124943 bytes).
+fonts/type1/bluesky/cm/cmbx12.pfb>{/usr/local/teTeX/share/texmf.local/dvips/cm-
+super/cm-super-ts1.enc}</usr/local/teTeX/share/texmf.local/fonts/type1/public/c
+m-super/sftt1200.pfb>{/usr/local/teTeX/share/texmf.tetex/dvips/tetex/bbad153f.e
+nc}</usr/local/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmsy10.pfb>{/usr/
+local/teTeX/share/texmf.tetex/dvips/tetex/aae443f0.enc}</usr/local/teTeX/share/
+texmf.tetex/fonts/type1/bluesky/cm/cmmi12.pfb>{/usr/local/teTeX/share/texmf.tet
+ex/dvips/tetex/b6a4d7c7.enc}</usr/local/teTeX/share/texmf.tetex/fonts/type1/blu
+esky/cm/cmitt10.pfb>{/usr/local/teTeX/share/texmf.tetex/dvips/tetex/74afc74c.en
+c}</usr/local/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmti12.pfb></usr/l
+ocal/teTeX/share/texmf.tetex/fonts/type1/bluesky/cm/cmr12.pfb></usr/local/teTeX
+/share/texmf.tetex/fonts/type1/bluesky/cm/cmtt12.pfb></usr/local/teTeX/share/te
+xmf.tetex/fonts/type1/bluesky/cm/cmr17.pfb>
+Output written on optmatch.pdf (12 pages, 145998 bytes).

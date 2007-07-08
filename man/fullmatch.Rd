@@ -17,11 +17,9 @@ omit.fraction = NULL, tol = 0.001, subclass.indices = NULL)
   \item{distance}{ A matrix of nonnegative discrepancies, 
 each indicating the permissibility and desirability of matching the unit 
 corresponding to its row (a 'treatment') to the unit
-corresponding to its column (a 'control'); or a list of such matrices.  Finite
-discrepancies indicate permissible matches, with smaller
-discrepancies indicating more desirable matches. 
-Matrix \code{distance}, or the matrix elements of \code{distance},
-must have row and column names.}
+corresponding to its column (a 'control'); or, better, a list of such matrices,
+as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
+\code{\link{makedist}}.}
   \item{min.controls}{ The minimum ratio of controls to
   treatments that is to be permitted within a matched set: should
   be nonnegative and finite.  If
@@ -29,8 +27,8 @@ must have row and column names.}
   number, or zero, then it is rounded \emph{down} to the nearest
   whole number or reciprocal of a whole number.
 
-  When \code{distance} is a list of matrices (or \code{subclass.indices}
-  is given), \code{min.controls} may be a named numeric vector
+  When matching within subclasses, \code{min.controls} may be a named
+  numeric vector
   separately specifying the minimum permissible ratio of controls to
   treatments for each subclass.  The names of this vector should include
   names of all matrices in the list \code{distance}.
@@ -46,10 +44,9 @@ must have row and column names.}
   whole number, or \code{Inf}, then it is rounded \emph{up} to the
   nearest whole number or reciprocal of a whole number.
 
-  When \code{distance} is a list of matrices (or \code{subclass.indices}
-  is given), \code{max.controls} may be a named numeric vector
-  separately specifying the maximum permissible ratio of controls to
-  treatments in each subclass. }
+  When matching within subclasses, \code{max.controls} may be a named
+  numeric vector separately specifying the maximum permissible ratio
+  of controls to treatments in each subclass. }
 
 \item{omit.fraction}{Optionally, specify what fraction of
   controls or treated subjects are to be rejected.  If
@@ -63,8 +60,8 @@ must have row and column names.}
   treated and control subjects without permissible matches among the
   control and treated subjects, respectively, are omitted.
   
-  When \code{distance} is a list of matrices (or \code{subclass.indices}
-  has been given), \code{omit.fraction} specifies the fraction of
+  When matching within subclasses (so that \code{distance} is a list of matrices, as produced by
+  \code{makedist} or \code{mahal.dist} or \code{pscore.dist}), \code{omit.fraction} specifies the fraction of
   controls to be rejected in each subproblem, a parameter that can be
   made to differ by subclass by setting \code{omit.fraction} equal to a
   named numeric vector of fractions.  }
@@ -86,14 +83,12 @@ must have row and column names.}
 }
 
 \details{
-  Consider using \code{\link{makedist}} to generate the distances,
-  particularly on large problems.
+  Finite entries in matrix slots of \code{distance} indicate
+  permissible matches, with smaller
+  discrepancies indicating more desirable matches. 
+  Matrix \code{distance} must have row and column names.
   
-  If \code{distance} is a list of matrices, each matrix is treated
-  as a separate matching problem unto itself. In this case, one has
-  to give names to the matrices in order to specify
-  arguments \code{min.controls} or \code{max.controls}.  
-
+  Consider using \code{\link{makedist}} to generate the distances.
   \code{fullmatch} tries to guess the
   order in which units would have been given in a data frame, and to
   order the factor that it returns accordingly.  If the dimnames of
@@ -101,7 +96,8 @@ must have row and column names.}
   of the data frame you're working with, then you should compare the
   names of fullmatch's output to your row names in order to be sure
   things are in the proper order.  You can relieve yourself of these
-  worries by using \code{\link{makedist}} to produce the distances, as
+  worries by using \code{\link{makedist}}, \code{\link{pscore.dist}},
+  or \code{\link{mahal.dist}} to produce the distances, as
   it passes the ordering of units to \code{fullmatch}, which then uses
   it to order its outputs.
   
@@ -118,25 +114,28 @@ must have row and column names.}
   treatment and control groups in reference to which the matching
   problem was posed, and are named accordingly; the names are taken from
   the row and column names of \code{distance}.  Each element of
-  the vector is the concatenation of: (i) a character abbreviation of
-  \code{subclass.indices}, if that argument was given, or the string
-  '\code{m}' if it was not; (ii) the string \code{.}; and (iii) a
+  the vector is either \code{NA}, indicating unavailability of any
+  suitable matches for that element, or the concatenation of: (i) a character abbreviation of
+  the name of the subclass, if matching within subclasses, or the string
+  '\code{m}' if not; (ii) the string \code{.}; and (iii) a
   nonnegative integer or the string \code{NA}.  In this last place,
   positive whole numbers indicate placement of the unit into a matched
-  set, zero indicates a unit that was not matched, and \code{NA}
+  set and \code{NA}
   indicates that all or part of the matching problem given to
-  \code{fullmatch} was found to be infeasible.
+  \code{fullmatch} was found to be infeasible.  The functions
+  \code{\link{matched}}, \code{\link{unmatched}}, and
+  \code{\link{matchfailed}} distinguish these scenarios.
 
-  In some cases, only proper subsets of the initial treatment and/or
-  control groups will be represented in the value of \code{fullmatch}.
-  Whether this occurs is determined by the status of argument
-  \code{subclass.indices}.  If \code{subclass.indices} is null, then all
-  elements of the treatment and control groups, \emph{i.e.} the rows and
-  columns of \code{distance}, are represented in the value of
-  \code{fullmatch}.  Otherwise, the vector has an element for each unit
-  represented in \code{subclass.indices}, \emph{i.e.} for each element
-  of factor \code{subclass.indices} or for each row of data frame
-  \code{subclass.indices}.
+%  In some cases, only proper subsets of the initial treatment and/or
+%  control groups will be represented in the value of \code{fullmatch}.
+%  Whether this occurs is determined by the status of argument
+%  \code{subclass.indices}.  If \code{subclass.indices} is null, then all
+%  elements of the treatment and control groups, \emph{i.e.} the rows and
+%  columns of \code{distance}, are represented in the value of
+%  \code{fullmatch}.  Otherwise, the vector has an element for each unit
+%  represented in \code{subclass.indices}, \emph{i.e.} for each element
+%  of factor \code{subclass.indices} or for each row of data frame
+%  \code{subclass.indices}.
 
   Secondarily, \code{fullmatch} returns various data about the matching
   process and its result, stored as attributes of the named vector
@@ -167,6 +166,7 @@ must have row and column names.}
 \seealso{\code{\link{matched}}, \code{\link{makedist}}}
 \examples{
 data(plantdist)
+round(plantdist)
 plantsfm <- fullmatch(plantdist) # A full match with unrestricted
                                  # treatment-control balance
 pr <- logical(26)
@@ -175,29 +175,32 @@ pr[match(dimnames(plantdist)[[1]], names(plantsfm))] <- TRUE
 table(plantsfm,                        # treatment-control balance, 
 ifelse(pr,'treated', 'control'))       # by matched set
 
-tapply(names(plantsfm),                # largest treatment-control 
-plantsfm, FUN= function(x, dmat) {     # distances, by matched set
-max(
-    dmat[match(x, dimnames(dmat)[[1]]), 
-         match(x, dimnames(dmat)[[2]])], 
-    na.rm=TRUE )
-}, dmat=plantdist)
+stratumStructure(plantsfm)             # summary of sets' trt-ctl balance
+
+sum(plantdist*                         # sum of matched distances
+    outer(plantsfm[pr], plantsfm[!pr],
+          "==")   )
 
 plantsfm1 <- fullmatch(plantdist, # A full match with 
 min.controls=2, max.controls=3)   # restrictions on matched sets' 
                                   # treatment-control balance
 
 
-table(plantsfm1,                  # treatment-control balance is 
-ifelse(pr,'treated','control'))   # improved by restrictions
+stratumStructure(plantsfm1)       # treatment-control balance is 
+                                  # improved by restrictions
 
-tapply(names(plantsfm1),                # but distances between
-plantsfm1, FUN= function(x, dmat) {     # matched units increase
-max(                                    # slightly
+sum(plantdist*                          # but distances between
+    outer(plantsfm1[pr], plantsfm1[!pr],# matched units increase
+          "==") )                       
+
+tapply(names(plantsfm),                 # largest treatment-control 
+plantsfm1, FUN= function(x, dmat) {     # distances, by matched set
+max(
     dmat[match(x, dimnames(dmat)[[1]]), 
          match(x, dimnames(dmat)[[2]])], 
     na.rm=TRUE )
 }, dmat=plantdist)
+
 }
 
 \keyword{ nonparametric }% at least one, from doc/KEYWORDS

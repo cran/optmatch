@@ -7,14 +7,21 @@ makedist <- function(structure.fmla, data,
   {
   if (!attr(terms(structure.fmla), "response")>0) 
     stop("structure.fmla must specify a treatment group variable")
-
+  fn <- match.fun(fn)
+  
   zpos <- attr(terms(structure.fmla), "response")
   vars <- eval(attr(terms(structure.fmla), "variables"), data, 
              parent.frame())
   zzz <- vars[[zpos]]
-  stopifnot(is.numeric(zzz) | is.logical(zzz),
-            all(!is.na(zzz)), any(zzz<=0), any(zzz>0))
-# more informative error message here...
+  if (!is.numeric(zzz) & !is.logical(zzz))
+    stop("treatment variable (LHS of structure.fmla) must be numeric or logical")
+  if (any(is.na(zzz)))
+      stop("NAs not allowed in treatment variable (LHS of structure.fmla)")
+  if (all(zzz>0))
+    stop("there are no controls (LHS of structure.fmla >0)")
+  if (all(zzz<=0))
+    stop("there are no treatment group members (LHS of structure.fmla <=0)")
+
   zz <- (zzz>0)
   vars <- vars[-zpos]
   names(zz) <- row.names(model.frame(structure.fmla,data))
@@ -26,7 +33,7 @@ if (length(vars)>0)
                 dat=data, ..., simplify=FALSE)
   FUNchk <- unlist(lapply(ans,
                           function(x){!is.matrix(x) & !is.vector(x)}))
-  if (any(FUNchk)) { stop("FUN should always return matrices")}
+  if (any(FUNchk)) { stop("fn should always return matrices")}
 
   mdms <- split(zz,ss)
   NMFLG <- FALSE
@@ -38,9 +45,9 @@ if (length(vars)>0)
     if (is.null(dim(ans[[ii]])))
       {
       if (length(dn1)>1 & length(dn2)>1)
-        { stop("FUN should always return matrices")}
+        { stop("fn should always return matrices")}
       if (length(ans[[ii]])!=max(length(dn1), length(dn2)))
-        { stop(paste("unuseable FUN value for stratum", names(ans)[ii]))}
+        { stop(paste("unuseable fn value for stratum", names(ans)[ii]))}
       
       if (is.null(names(ans[[ii]])))
           {
@@ -58,7 +65,7 @@ if (length(vars)>0)
         }
       } else {
       if (!all(dim(ans[[ii]])==c(length(dn1), length(dn2))))
-        { stop(paste("FUN value has incorrect dimension at stratum",
+        { stop(paste("fn value has incorrect dimension at stratum",
                      names(ans)[ii])) }
       if (is.null(dimnames(ans[[ii]])))
         {
@@ -68,7 +75,7 @@ if (length(vars)>0)
           if (!all(dn1%in%dimnames(ans[[ii]])[[1]]) |
               !all(dn2%in%dimnames(ans[[ii]])[[2]]) )
             { stop(paste(
-                    "dimnames of FUN value don't match unit names in stratum",
+                    "dimnames of fn value don't match unit names in stratum",
                          names(ans)[ii])) }
         }
       
@@ -76,7 +83,7 @@ if (length(vars)>0)
   }
 
   if (NMFLG){
-warning("FUN value not given dimnames; assuming they are list(names(trtvar)[trtvar], names(trtvar)[!trtvar])")}
+warning("fn value not given dimnames; assuming they are list(names(trtvar)[trtvar], names(trtvar)[!trtvar])")}
 
   
   attr(ans, 'row.names') <- names(zz)

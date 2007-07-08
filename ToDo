@@ -1,23 +1,19 @@
 2006-04-28
-For future help page/howto regarding distlist():
+For future help page/howto regarding makedist():
 A likely source of errors in writing a function to be called in
-distlist() are errors due to coercion of 1xn or nx1 matrices to
+makedist() are errors due to coercion of 1xn or nx1 matrices to
 vectors.  outer() helpfully gives you a matrix rather than a vector in
 this case, but then if you operate on that matrix it tends to get
 coerced to a vector.
   
 2006-04-19 
-Maybe distlist() should accept as argument a
+Maybe makedist() should accept as argument a
 distance-making function with 1st and second args Tnms and Cnms.  Can
 this readily be done?  Maybe try it with a new function name, since I
-now seem to have a working distlist().
+now seem to have a working makedist().
 
 2006-04-12
-Test distlist().  Some tests: formula with null RHS; non-binary LHS, expression on LHS  
-Test interaction of fullmatch() and distlist().
-When happy with this, change earlier sections of fullmatch() 
-that sort on unit names, so that sorting is not done if a distlist 
-object was given as argument.
+Test makedist().  Some tests: formula with null RHS; non-binary LHS, expression on LHS  
 
 2005
 Consider adding refs to Harrell's matching functions find.matches and

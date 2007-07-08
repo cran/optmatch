@@ -1,3 +1,14 @@
+2007-07-08
+	* Fixed a bug in mahal.dist
+	* reorganized /src to pass checks
+2007-06-20
+	* v0.3
+	* Changed unmatched indicator to NA in fullmatch output 
+	(line 188 of fullmatch200706.R)
+	* Small changes to stratumStructure() to adapt to prev change
+	* Added mahaldist, propensitydist functions
+	* Various updates to help pages
+	
 2007-05-10
 	* Added optmatch.dlist method for abs
 2007-01-06

@@ -122,7 +122,8 @@ if (any(temp>0))
    ans[names(mout)] <- mout
    }
 }
-if (any(ans=="0")) {ans[ans=="0"] <- paste("0", 1:sum(ans=="0"), sep="")}
+#if (any(ans=="0")) {ans[ans=="0"] <- paste("0", 1:sum(ans=="0"), sep="")}
+if (any(ans=="0")) {ans[ans=="0"] <- NA}
 
 list(cells=ans, err=maxerr, match.distance=dist)
 }

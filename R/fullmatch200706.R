@@ -185,7 +185,8 @@ ntrs <-  unsplit(tapply(inrow,idc,
 mgrp <- (nctls>0) & (ntrs>0)
 strat.abv <- abbreviate(as.character(idc), 2)
 names(strat.abv) <- names(idc)
-strat.abv[!mgrp] <- paste(strat.abv[!mgrp], "0", sep=".")
+#strat.abv[!mgrp] <- paste(strat.abv[!mgrp], "0", sep=".")
+strat.abv[!mgrp] <- NA
 
 rnl <- split(rns[(mgrp&inrow)], factor(idc[(mgrp&inrow)]))
 cnl <- split(rns[(mgrp&incol)], factor(idc[(mgrp&incol)]))
@@ -216,9 +217,13 @@ for (i in sfs)
     	min=max(1/mxcpt[i], 1/nrow), tolerance=(TOL*tol.frac), 
     	omit.fraction=switch(1+is.na(omf[i]), -omf[i], NULL))
 	}
-    strat.abv[names(temp$cells)] <- paste(strat.abv[names(temp$cells)],
-                                          temp$cells, sep=".")
-    if (!any(temp$cells=="NA")) 
+
+    strat.abv[names(temp$cells)] <-
+      ifelse(is.na(temp$cells),NA,
+             paste(strat.abv[names(temp$cells)],
+                   temp$cells, sep=".") )
+
+    if (!any(!is.na(temp$cells) & temp$cells=="NA")) 
        {
        err[i] <- temp$err
        }

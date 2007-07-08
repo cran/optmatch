@@ -14,6 +14,11 @@ if (class(stratum)[1]=="optmatch")
    }
 if (!any(tgp<=0) | !any(tgp>0))
    warning("No variation in (trtgrp>0); was this intended?")
+
+stratum <- as.integer(as.factor(stratum))
+if (any(is.na(stratum)))
+  stratum[is.na(stratum)] <- max(stratum) + 1:sum(is.na(stratum))
+
 ttab <- table(stratum,as.logical(tgp))
 ans <- table(paste(ttab[,2], ttab[,1], sep=":"),
              dnn="stratum treatment:control ratios")

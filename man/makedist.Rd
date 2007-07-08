@@ -59,7 +59,7 @@ this function, but then \code{fullmatch()} has no way of knowing the
 order of observations in whatever data frame you're working from, since
 that info is lost in the transition to a distance matrix.}
 
-\seealso{\code{\link{fullmatch}}}
+\seealso{\code{\link{fullmatch}}, \code{\link{pscore.dist}}, \code{\link{mahal.dist}}}
 \examples{
 data(nuclear, package='boot')
 ##-- A re-ordering of row names helps to illustrate

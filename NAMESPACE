@@ -1,9 +1,10 @@
 useDynLib(optmatch)
 
-export(fullmatch, pairmatch, makedist, matched, matchfailed, unmatched, maxControlsCap, minControlsCap, relaxinfo, stratumStructure)
+export(fullmatch, pairmatch, makedist, pscore.dist, mahal.dist, matched.distances, matched, matchfailed, unmatched, maxControlsCap, minControlsCap, relaxinfo, stratumStructure)
 
 S3method(print, optmatch)
 S3method(summary, optmatch)
 S3method(Ops, optmatch.dlist)
 S3method(abs, optmatch.dlist)
+S3method(print, optmatch.dlist)
 
