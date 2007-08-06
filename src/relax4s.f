@@ -115,7 +115,7 @@ C     TRANSLATING INPUT VARIABLES TO GLOBAL VARIABLES
 
       DO 30 I=1,N
 C     CONVERT SUPPLY OF EACH NODE TO DEMAND
-	B(I)=-b1(I)
+        B(I)=-b1(I)
 30    CONTINUE
 
 C---------------------------------------------------------------
@@ -140,7 +140,7 @@ CC     READ SUPPLY OF EACH NODE; CONVERT IT TO DEMAND
 CC
 C      DO 30 I=1,N
 C        READ(13,1000) B(I)
-C	B(I)=-B(I)
+C       B(I)=-B(I)
 C30    CONTINUE
 C
 C1000  FORMAT(4I8)
@@ -163,21 +163,21 @@ C
       FLAG3=0
       DO 40 I=1,NA
         IF (ABS(C(I)).GT.LARGE) FLAG1=1
-	IF (U(I).GT.LARGE) FLAG2=1
+        IF (U(I).GT.LARGE) FLAG2=1
         IF (ABS(C(I)).GT.DANGER_THRESH) FLAG3=1
 40    CONTINUE
       IF (FLAG1.EQ.1) THEN
 CC        PRINT*,'SOME COSTS EXCEED THE ALLOWABLE RANGE'
 CC        PRINT*,'PROGRAM CANNOT RUN; PRESS <CR> TO EXIT'
-CC	PAUSE
-CC	STOP
+CC      PAUSE
+CC      STOP
         RETURN
       END IF
       IF (FLAG2.EQ.1) THEN
 CC        PRINT*,'SOME ARC CAPACITIES EXCEED THE ALLOWABLE RANGE'
 CC        PRINT*,'PROGRAM CANNOT RUN; PRESS <CR> TO EXIT'
-CC	PAUSE
-CC	STOP
+CC      PAUSE
+CC      STOP
         RETURN
       END IF
       IF (FLAG3.EQ.1) THEN
@@ -256,19 +256,19 @@ C
       DO 80 NODE=1,N
         IF (B(NODE).NE.0) THEN
 CC          PRINT*,'NONZERO SURPLUS AT NODE ',NODE
-	END IF
+        END IF
 80    CONTINUE
       DO 90 ARC=1,NA
         IF (X(ARC).GT.0) THEN
-	  IF (RC(ARC).GT.0) THEN
-CC	    PRINT*,'COMPLEMENTARY SLACKNESS VIOLATED AT ARC ',ARC
-	  ENDIF
-	ENDIF
+          IF (RC(ARC).GT.0) THEN
+CC          PRINT*,'COMPLEMENTARY SLACKNESS VIOLATED AT ARC ',ARC
+          ENDIF
+        ENDIF
         IF (U(ARC).GT.0) THEN
-	  IF (RC(ARC).LT.0) THEN
-CC	    PRINT*,'COMPLEMENTARY SLACKNESS VIOLATED AT ARC ',ARC
-	  ENDIF
-	ENDIF
+          IF (RC(ARC).LT.0) THEN
+CC          PRINT*,'COMPLEMENTARY SLACKNESS VIOLATED AT ARC ',ARC
+          ENDIF
+        ENDIF
 90    CONTINUE
 C
 C     COMPUTE AND DISPLAY COST OF FLOWS (IN DOUBLE PRECISION)
@@ -635,23 +635,23 @@ C
         NODE_DEF=DFCT(NODE)
         DDPOS(NODE)=NODE_DEF
         DDNEG(NODE)=-NODE_DEF
-	MAXCAP=0
+        MAXCAP=0
         SCAPOU=0
         ARC=FOU(NODE)
 11      IF (ARC.GT.0) THEN
           IF (SCAPOU.LE.LARGE-U(ARC)) THEN
             SCAPOU=SCAPOU+U(ARC)
-	  ELSE
-	    GO TO 10
-	  END IF
+          ELSE
+            GO TO 10
+          END IF
           ARC=NXTOU(ARC)
           GO TO 11
         END IF
-	IF (SCAPOU.LE.LARGE-NODE_DEF) THEN
-	  CAPOUT=SCAPOU+NODE_DEF
-	ELSE
-	  GO TO 10
-	END IF
+        IF (SCAPOU.LE.LARGE-NODE_DEF) THEN
+          CAPOUT=SCAPOU+NODE_DEF
+        ELSE
+          GO TO 10
+        END IF
         IF (CAPOUT.LT.0) THEN
 C
 C     PROBLEM IS INFEASIBLE - EXIT
@@ -667,20 +667,20 @@ C
         ARC=FIN(NODE)
 12      IF (ARC.GT.0) THEN
           U(ARC)=MIN0(U(ARC),CAPOUT)
-	  IF (MAXCAP.LT.U(ARC)) MAXCAP=U(ARC)
+          IF (MAXCAP.LT.U(ARC)) MAXCAP=U(ARC)
           IF (SCAPIN.LE.LARGE-U(ARC)) THEN
             SCAPIN=SCAPIN+U(ARC)
-	  ELSE
-	    GO TO 10
-	  END IF
+          ELSE
+            GO TO 10
+          END IF
           ARC=NXTIN(ARC)
           GO TO 12
         END IF
         IF (SCAPIN.LE.LARGE+NODE_DEF) THEN
-	  CAPIN=SCAPIN-NODE_DEF
-	ELSE
-	  GO TO 10
-	END IF
+          CAPIN=SCAPIN-NODE_DEF
+        ELSE
+          GO TO 10
+        END IF
         IF (CAPIN.LT.0) THEN
 C
 C     PROBLEM IS INFEASIBLE - EXIT
@@ -818,14 +818,14 @@ C
               DDNEG(NODE) = DDNEG(NODE) - T      
               DDPOS(T1) = DDPOS(T1) - T          
             END IF
-C	      
+C             
 C     DECREASE THE REDUCED COST ON ALL OUTGOING ARCS.
 C
             TRC = TRC - DELPRC
             IF ((TRC.GT.0).AND.(TRC.LT.NXTBRK)) THEN
               NXTBRK = TRC
             ELSE IF (TRC.EQ.0) THEN
-C	      
+C             
 C     ARC GOES FROM INACTIVE TO BALANCED.  UPDATE THE 
 C     RATE OF DUAL ASCENT AT NODE AND AT ITS NEIGHBOR.
 C
@@ -856,14 +856,14 @@ C
               DDPOS(T1) = DDPOS(T1) - T     
               DDNEG(NODE) = DDNEG(NODE) - T 
             END IF
-C	      
+C             
 C     INCREASE THE REDUCED COST ON ALL INCOMING ARCS.
 C
             TRC = TRC + DELPRC
             IF ((TRC.LT.0).AND.(TRC.GT.-NXTBRK)) THEN
               NXTBRK = -TRC
             ELSE IF (TRC.EQ.0) THEN
-C	      
+C             
 C     ARC GOES FROM ACTIVE TO BALANCED.  UPDATE THE 
 C     RATE OF DUAL ASCENT AT NODE AND AT ITS NEIGHBOR.
 C
@@ -947,14 +947,14 @@ C
               DDPOS(NODE) = DDPOS(NODE) - T
               DDNEG(T1) = DDNEG(T1) - T
             END IF
-C	      
+C             
 C     INCREASE THE REDUCED COST ON ALL OUTGOING ARCS.
 C
             TRC = TRC + DELPRC
             IF ((TRC.LT.0).AND.(TRC.GT.-NXTBRK)) THEN
               NXTBRK = -TRC
             ELSE IF (TRC.EQ.0) THEN
-C	      
+C             
 C     ARC GOES FROM ACTIVE TO BALANCED.  UPDATE THE 
 C     RATE OF DUAL ASCENT AT NODE AND AT ITS NEIGHBOR.
 C
@@ -985,14 +985,14 @@ C
               DDNEG(T1) = DDNEG(T1) - T     
               DDPOS(NODE) = DDPOS(NODE) - T
             END IF
-C	      
+C             
 C     DECREASE THE REDUCED COST ON ALL INCOMING ARCS.
 C
             TRC = TRC - DELPRC
             IF ((TRC.GT.0).AND.(TRC.LT.NXTBRK)) THEN
               NXTBRK = TRC
             ELSE IF (TRC.EQ.0) THEN
-C	      
+C             
 C     ARC GOES FROM INACTIVE TO BALANCED.  UPDATE THE 
 C     RATE OF DUAL ASCENT AT NODE AND AT ITS NEIGHBOR.
 C
@@ -1096,22 +1096,22 @@ C
       IF (NODE.EQ.LASTQUEUE) THEN
         NUMNZ=NUMNZ_NEW
         NUMNZ_NEW=0
-	LASTQUEUE=PREVNODE
-	NUM_PASSES=NUM_PASSES+1
+        LASTQUEUE=PREVNODE
+        NUM_PASSES=NUM_PASSES+1
       END IF
 C 
 C     CODE FOR DELETING A NODE FROM THE QUEUE
 C 
       IF (DEFCIT.EQ.0) THEN
-	NXTNODE=NXTQUEUE(NODE)
-	IF (NODE.EQ.NXTNODE) THEN
-	  RETURN
-	ELSE
-	  NXTQUEUE(PREVNODE)=NXTNODE
-	  NXTQUEUE(NODE)=0
-	  NODE=NXTNODE
+        NXTNODE=NXTQUEUE(NODE)
+        IF (NODE.EQ.NXTNODE) THEN
+          RETURN
+        ELSE
+          NXTQUEUE(PREVNODE)=NXTNODE
+          NXTQUEUE(NODE)=0
+          NODE=NXTNODE
           GO TO 100
-	END IF
+        END IF
       ELSE
         POSIT = (DEFCIT.GT.0)
       END IF
@@ -1212,11 +1212,11 @@ C
           NODE2=ENDN(ARC)
           T1=X(ARC)
           DFCT(NODE2)=DFCT(NODE2)+T1
-	  IF (NXTQUEUE(NODE2).EQ.0) THEN
-	    NXTQUEUE(PREVNODE)=NODE2
-	    NXTQUEUE(NODE2)=NODE
-	    PREVNODE=NODE2
-	  END IF
+          IF (NXTQUEUE(NODE2).EQ.0) THEN
+            NXTQUEUE(PREVNODE)=NODE2
+            NXTQUEUE(NODE2)=NODE
+            PREVNODE=NODE2
+          END IF
           U(ARC)=U(ARC)+T1
           X(ARC)=0
         ELSE
@@ -1224,11 +1224,11 @@ C
           NODE2=STARTN(NARC)
           T1=U(NARC)
           DFCT(NODE2)=DFCT(NODE2)+T1
-	  IF (NXTQUEUE(NODE2).EQ.0) THEN
-	    NXTQUEUE(PREVNODE)=NODE2
-	    NXTQUEUE(NODE2)=NODE
-	    PREVNODE=NODE2
-	  END IF
+          IF (NXTQUEUE(NODE2).EQ.0) THEN
+            NXTQUEUE(PREVNODE)=NODE2
+            NXTQUEUE(NODE2)=NODE
+            PREVNODE=NODE2
+          END IF
           X(NARC)=X(NARC)+T1
           U(NARC)=0
         END IF
@@ -1298,24 +1298,24 @@ C
             DX=MIN0(DEFCIT,-T1,T2)
             DEFCIT=DEFCIT-DX
             DFCT(NODE2)=T1+DX
-	    IF (NXTQUEUE(NODE2).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=NODE2
-	      NXTQUEUE(NODE2)=NODE
-	      PREVNODE=NODE2
-	    END IF
+            IF (NXTQUEUE(NODE2).EQ.0) THEN
+              NXTQUEUE(PREVNODE)=NODE2
+              NXTQUEUE(NODE2)=NODE
+              PREVNODE=NODE2
+            END IF
             X(ARC)=T2-DX
             U(ARC)=U(ARC)+DX
             IF (DEFCIT.EQ.0) GO TO 4019
           END IF
         ELSE
-C	
+C       
 C     -ARC IS AN INCOMING ARC TO NODE.
 C
           NARC=-ARC
           NODE2=STARTN(NARC)
           T1=DFCT(NODE2)
           IF (T1.LT.0) THEN
-C	  
+C         
 C     DECREASE THE TOTAL DEFICIT BY INCREASING FLOW OF -ARC.
 C
             QUIT=.TRUE.
@@ -1323,11 +1323,11 @@ C
             DX=MIN0(DEFCIT,-T1,T2)
             DEFCIT=DEFCIT-DX
             DFCT(NODE2)=T1+DX
-	    IF (NXTQUEUE(NODE2).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=NODE2
-	      NXTQUEUE(NODE2)=NODE
-	      PREVNODE=NODE2
-	    END IF
+            IF (NXTQUEUE(NODE2).EQ.0) THEN
+              NXTQUEUE(PREVNODE)=NODE2
+              NXTQUEUE(NODE2)=NODE
+              PREVNODE=NODE2
+            END IF
             X(NARC)=X(NARC)+DX
             U(NARC)=T2-DX
             IF (DEFCIT.EQ.0) GO TO 4019
@@ -1453,11 +1453,11 @@ C
           NODE2=STARTN(ARC)
           T1=X(ARC)
           DFCT(NODE2)=DFCT(NODE2)-T1
-	  IF (NXTQUEUE(NODE2).EQ.0) THEN
-	    NXTQUEUE(PREVNODE)=NODE2
-	    NXTQUEUE(NODE2)=NODE
-	    PREVNODE=NODE2
-	  END IF
+          IF (NXTQUEUE(NODE2).EQ.0) THEN
+            NXTQUEUE(PREVNODE)=NODE2
+            NXTQUEUE(NODE2)=NODE
+            PREVNODE=NODE2
+          END IF
           U(ARC)=U(ARC)+T1
           X(ARC)=0
         ELSE
@@ -1465,11 +1465,11 @@ C
           NODE2=ENDN(NARC)
           T1=U(NARC)
           DFCT(NODE2)=DFCT(NODE2)-T1
-	  IF (NXTQUEUE(NODE2).EQ.0) THEN
-	    NXTQUEUE(PREVNODE)=NODE2
-	    NXTQUEUE(NODE2)=NODE
-	    PREVNODE=NODE2
-	  END IF
+          IF (NXTQUEUE(NODE2).EQ.0) THEN
+            NXTQUEUE(PREVNODE)=NODE2
+            NXTQUEUE(NODE2)=NODE
+            PREVNODE=NODE2
+          END IF
           X(NARC)=X(NARC)+T1
           U(NARC)=0
         END IF
@@ -1531,17 +1531,17 @@ C
             DX=MIN0(DEFCIT,T1,T2)
             DEFCIT=DEFCIT-DX
             DFCT(NODE2)=T1-DX
-	    IF (NXTQUEUE(NODE2).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=NODE2
-	      NXTQUEUE(NODE2)=NODE
-	      PREVNODE=NODE2
-	    END IF
+            IF (NXTQUEUE(NODE2).EQ.0) THEN
+              NXTQUEUE(PREVNODE)=NODE2
+              NXTQUEUE(NODE2)=NODE
+              PREVNODE=NODE2
+            END IF
             X(ARC)=T2-DX
             U(ARC)=U(ARC)+DX
             IF (DEFCIT.EQ.0) GO TO 4029
           END IF
         ELSE
-C	
+C       
 C     -ARC IS AN OUTGOING ARC FROM NODE.
 C
           NARC=-ARC
@@ -1553,11 +1553,11 @@ C
             DX=MIN0(DEFCIT,T1,T2)
             DEFCIT=DEFCIT-DX
             DFCT(NODE2)=T1-DX
-	    IF (NXTQUEUE(NODE2).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=NODE2
-	      NXTQUEUE(NODE2)=NODE
-	      PREVNODE=NODE2
-	    END IF
+            IF (NXTQUEUE(NODE2).EQ.0) THEN
+              NXTQUEUE(PREVNODE)=NODE2
+              NXTQUEUE(NODE2)=NODE
+              PREVNODE=NODE2
+            END IF
             X(NARC)=X(NARC)+DX
             U(NARC)=T2-DX
             IF (DEFCIT.EQ.0) GO TO 4029
@@ -1654,7 +1654,7 @@ C
             LABEL(NLABEL)=NODE2
             PRDCSR(NODE2)=ARC
             MARK(NODE2)=.TRUE.
-	    DELX=DELX+X(ARC)
+            DELX=DELX+X(ARC)
           END IF
         ELSE
           NARC=-ARC
@@ -1944,9 +1944,9 @@ C     INCREASE (DECREASE) THE FLOW OF ALL FORWARD (BACKWARD)
 C     ARCS IN THE FLOW AUGMENTING PATH.  ADJUST NODE DEFICIT ACCORDINGLY.
 C
             IF (NXTQUEUE(AUGNOD).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=AUGNOD
-	      NXTQUEUE(AUGNOD)=NODE
-	      PREVNODE=AUGNOD
+              NXTQUEUE(PREVNODE)=AUGNOD
+              NXTQUEUE(AUGNOD)=NODE
+              PREVNODE=AUGNOD
             END IF
             DFCT(AUGNOD)=DFCT(AUGNOD)+DX
             DFCT(NODE)=DFCT(NODE)-DX
@@ -1989,9 +1989,9 @@ C
 C     UPDATE THE FLOW AND DEFICITS.
 C
             IF (NXTQUEUE(AUGNOD).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=AUGNOD
-	      NXTQUEUE(AUGNOD)=NODE
-	      PREVNODE=AUGNOD
+              NXTQUEUE(PREVNODE)=AUGNOD
+              NXTQUEUE(AUGNOD)=NODE
+              PREVNODE=AUGNOD
             END IF
             DFCT(AUGNOD)=DFCT(AUGNOD)-DX
             DFCT(NODE)=DFCT(NODE)+DX
@@ -2121,7 +2121,7 @@ C
 C     FACTOR DETERMINES BY HOW MUCH EPSILON IS REDUCED AT EACH MINIMIZATION
 C
       FACTOR=3
-C	
+C       
 C     NUM_PASSES DETERMINES HOW MANY AUCTION SCALING PHASES ARE PERFORMED
 C
       NUM_PASSES=1
@@ -2132,18 +2132,18 @@ C    SET ARC FLOWS TO SATISFY CS AND CALCULATE MAXCOST AND MINCOST
       MINCOST=LARGE       
       DO 49 ARC=1,NA
         START=STARTN(ARC)
-	END=ENDN(ARC)
-	RDCOST=RC(ARC)
+        END=ENDN(ARC)
+        RDCOST=RC(ARC)
         IF (MAXCOST.LT.RDCOST) MAXCOST=RDCOST
         IF (MINCOST.GT.RDCOST) MINCOST=RDCOST
-	IF (RDCOST.LT.0) THEN
-	  DFCT(START)=DFCT(START)+U(ARC)
-	  DFCT(END)=DFCT(END)-U(ARC)
-	  X(ARC)=U(ARC)
-	  U(ARC)=0
-	ELSE
-	  X(ARC)=0
-	END IF
+        IF (RDCOST.LT.0) THEN
+          DFCT(START)=DFCT(START)+U(ARC)
+          DFCT(END)=DFCT(END)-U(ARC)
+          X(ARC)=U(ARC)
+          U(ARC)=0
+        ELSE
+          X(ARC)=0
+        END IF
 49    CONTINUE
 C 
 C     SET INITIAL EPSILON
@@ -2151,13 +2151,13 @@ C
       IF ((MAXCOST-MINCOST).GE.8) THEN
         EPS=INT((MAXCOST-MINCOST)/8)
       ELSE 
-	EPS=1
+        EPS=1
       END IF
 C 
 C     SET INITIAL PRICES TO ZERO
 C
       DO 48 NODE=1,N
-	P(NODE)=0
+        P(NODE)=0
 48    CONTINUE
 C
 C     INITIALIZATION USING AUCTION/SHORTEST PATHS.
@@ -2174,13 +2174,13 @@ C     NODES
 C
       DO 110 NODE=1,N
         PRDCSR(NODE)=0
-	PATH_ID(NODE)=.FALSE.
+        PATH_ID(NODE)=.FALSE.
         EXTEND_ARC(NODE)=0
-	SB_LEVEL(NODE)=-LARGE
-	NXTQUEUE(NODE)=NODE+1
-	IF (DFCT(NODE).GT.0) THEN
-	  NOLIST=NOLIST+1
-	  SAVE(NOLIST)=NODE
+        SB_LEVEL(NODE)=-LARGE
+        NXTQUEUE(NODE)=NODE+1
+        IF (DFCT(NODE).GT.0) THEN
+          NOLIST=NOLIST+1
+          SAVE(NOLIST)=NODE
         END IF
 110   CONTINUE
 C
@@ -2188,71 +2188,71 @@ C
       ROOT=1
       PREVNODE=N
       LASTQUEUE=N
-C	
+C       
 C     INITIALIZATION WITH DOWN ITERATIONS FOR NEGATIVE SURPLUS NODES
 C
       DO 150 I=1,NOLIST
         NODE=SAVE(I)
-	NSP=NSP+1
+        NSP=NSP+1
 C
 C     BUILD THE LIST OF ARCS W/ ROOM FOR PUSHING FLOW 
 C     AND FIND PROPER PRICE FOR DOWN ITERATION
 C
         BSTLEVEL=-LARGE
-	FPUSHF(NODE)=0
+        FPUSHF(NODE)=0
         ARC=FOU(NODE)
 152     IF (ARC.GT.0) THEN
-	  IF (U(ARC).GT.0) THEN
-	    IF (FPUSHF(NODE).EQ.0) THEN
-	      FPUSHF(NODE)=ARC
-	      NXTPUSHF(ARC)=0
-	      LAST=ARC
-	    ELSE
-	      NXTPUSHF(LAST)=ARC
-	      NXTPUSHF(ARC)=0
-	      LAST=ARC
-	    END IF
-	  END IF
-	  IF (X(ARC).GT.0) THEN
-	    NEW_LEVEL = P(ENDN(ARC)) + RC(ARC)
-	    IF (NEW_LEVEL.GT.BSTLEVEL) THEN
-	      BSTLEVEL=NEW_LEVEL
-	      EXTARC=ARC
-	    END IF
-	  END IF
-	  ARC=NXTOU(ARC)
-	  GO TO 152
-	END IF
+          IF (U(ARC).GT.0) THEN
+            IF (FPUSHF(NODE).EQ.0) THEN
+              FPUSHF(NODE)=ARC
+              NXTPUSHF(ARC)=0
+              LAST=ARC
+            ELSE
+              NXTPUSHF(LAST)=ARC
+              NXTPUSHF(ARC)=0
+              LAST=ARC
+            END IF
+          END IF
+          IF (X(ARC).GT.0) THEN
+            NEW_LEVEL = P(ENDN(ARC)) + RC(ARC)
+            IF (NEW_LEVEL.GT.BSTLEVEL) THEN
+              BSTLEVEL=NEW_LEVEL
+              EXTARC=ARC
+            END IF
+          END IF
+          ARC=NXTOU(ARC)
+          GO TO 152
+        END IF
 C
-	FPUSHB(NODE)=0
+        FPUSHB(NODE)=0
         ARC=FIN(NODE)
 154     IF (ARC.GT.0) THEN
-	  IF (X(ARC).GT.0) THEN
-	    IF (FPUSHB(NODE).EQ.0) THEN
-	      FPUSHB(NODE)=ARC
-	      NXTPUSHB(ARC)=0
-	      LAST=ARC
-	    ELSE
-	      NXTPUSHB(LAST)=ARC
-	      NXTPUSHB(ARC)=0
-	      LAST=ARC
-	    END IF
-	  END IF
-	  IF (U(ARC).GT.0) THEN
-	    NEW_LEVEL = P(STARTN(ARC)) - RC(ARC)
-	    IF (NEW_LEVEL.GT.BSTLEVEL) THEN
-	      BSTLEVEL=NEW_LEVEL
-	      EXTARC=-ARC
-	    END IF
-	  END IF
-	  ARC=NXTIN(ARC)
-	  GO TO 154
-	END IF
-	EXTEND_ARC(NODE)=EXTARC
-	P(NODE)=BSTLEVEL-EPS
-		
+          IF (X(ARC).GT.0) THEN
+            IF (FPUSHB(NODE).EQ.0) THEN
+              FPUSHB(NODE)=ARC
+              NXTPUSHB(ARC)=0
+              LAST=ARC
+            ELSE
+              NXTPUSHB(LAST)=ARC
+              NXTPUSHB(ARC)=0
+              LAST=ARC
+            END IF
+          END IF
+          IF (U(ARC).GT.0) THEN
+            NEW_LEVEL = P(STARTN(ARC)) - RC(ARC)
+            IF (NEW_LEVEL.GT.BSTLEVEL) THEN
+              BSTLEVEL=NEW_LEVEL
+              EXTARC=-ARC
+            END IF
+          END IF
+          ARC=NXTIN(ARC)
+          GO TO 154
+        END IF
+        EXTEND_ARC(NODE)=EXTARC
+        P(NODE)=BSTLEVEL-EPS
+                
 150   CONTINUE
-C	
+C       
 C     START THE AUGMENTATION CYCLES OF THE NEW SCALING PHASE.
 C
 200   CONTINUE
@@ -2274,43 +2274,43 @@ C
 C
 C     BUILD THE LIST OF ARCS W/ ROOM FOR PUSHING FLOW
 C
-	FPUSHF(TERM)=0
+        FPUSHF(TERM)=0
         ARC=FOU(TERM)
 502     IF (ARC.GT.0) THEN
-	  IF (U(ARC).GT.0) THEN
-	    IF (FPUSHF(TERM).EQ.0) THEN
-	      FPUSHF(TERM)=ARC
-	      NXTPUSHF(ARC)=0
-	      LAST=ARC
-	    ELSE
-	      NXTPUSHF(LAST)=ARC
-	      NXTPUSHF(ARC)=0
-	      LAST=ARC
-	    END IF
-	  END IF
-	  ARC=NXTOU(ARC)
-	  GO TO 502
-	END IF
+          IF (U(ARC).GT.0) THEN
+            IF (FPUSHF(TERM).EQ.0) THEN
+              FPUSHF(TERM)=ARC
+              NXTPUSHF(ARC)=0
+              LAST=ARC
+            ELSE
+              NXTPUSHF(LAST)=ARC
+              NXTPUSHF(ARC)=0
+              LAST=ARC
+            END IF
+          END IF
+          ARC=NXTOU(ARC)
+          GO TO 502
+        END IF
 C
-	FPUSHB(TERM)=0
+        FPUSHB(TERM)=0
         ARC=FIN(TERM)
 504     IF (ARC.GT.0) THEN
-	  IF (X(ARC).GT.0) THEN
-	    IF (FPUSHB(TERM).EQ.0) THEN
-	      FPUSHB(TERM)=ARC
-	      NXTPUSHB(ARC)=0
-	      LAST=ARC
-	    ELSE
-	      NXTPUSHB(LAST)=ARC
-	      NXTPUSHB(ARC)=0
-	      LAST=ARC
-	    END IF
-	  END IF
-	  ARC=NXTIN(ARC)
-	  GO TO 504
-	END IF	
-	
-      	GO TO 600
+          IF (X(ARC).GT.0) THEN
+            IF (FPUSHB(TERM).EQ.0) THEN
+              FPUSHB(TERM)=ARC
+              NXTPUSHB(ARC)=0
+              LAST=ARC
+            ELSE
+              NXTPUSHB(LAST)=ARC
+              NXTPUSHB(ARC)=0
+              LAST=ARC
+            END IF
+          END IF
+          ARC=NXTIN(ARC)
+          GO TO 504
+        END IF        
+        
+              GO TO 600
       END IF
 C
 C     SPECULATIVE PATH EXTENSION ATTEMPT
@@ -2324,20 +2324,20 @@ C
       IF (EXTARC.GT.0) THEN 
 
         IF (U(EXTARC).EQ.0) THEN
-	  SECLEVEL=SB_LEVEL(TERM)
-	  GO TO 580
-	END IF
- 	END=ENDN(EXTARC)
+          SECLEVEL=SB_LEVEL(TERM)
+          GO TO 580
+        END IF
+         END=ENDN(EXTARC)
         BSTLEVEL=P(END)+RC(EXTARC)
         IF (PTERM.GE.BSTLEVEL) THEN
-	  IF (PATH_ID(END)) GOTO 1200
+          IF (PATH_ID(END)) GOTO 1200
           TERM=END
           PRDCSR(TERM)=EXTARC
-	  PATH_ID(TERM)=.TRUE.
+          PATH_ID(TERM)=.TRUE.
 C
 C     IF NEGATIVE SURPLUS NODE IS FOUND, DO AN AUGMENTATION
 C
-	  IF (DFCT(TERM).GT.0) GOTO 2000
+          IF (DFCT(TERM).GT.0) GOTO 2000
 C       
 C     RETURN FOR ANOTHER ITERATION
 C
@@ -2346,27 +2346,27 @@ C
       ELSE
         EXTARC=-EXTARC
         IF (X(EXTARC).EQ.0) THEN
-	  SECLEVEL=SB_LEVEL(TERM)
-	  GO TO 580
-	END IF
-	START=STARTN(EXTARC)
+          SECLEVEL=SB_LEVEL(TERM)
+          GO TO 580
+        END IF
+        START=STARTN(EXTARC)
         BSTLEVEL=P(START)-RC(EXTARC)
         IF (PTERM.GE.BSTLEVEL) THEN
-	  IF (PATH_ID(START)) GOTO 1200
+          IF (PATH_ID(START)) GOTO 1200
           TERM=START
           PRDCSR(TERM)=-EXTARC
-	  PATH_ID(TERM)=.TRUE.
+          PATH_ID(TERM)=.TRUE.
 C
 C     IF NEGATIVE SURPLUS NODE IS FOUND, DO AN AUGMENTATION
 C
-	  IF (DFCT(TERM).GT.0) GOTO 2000
+          IF (DFCT(TERM).GT.0) GOTO 2000
 C       
 C     RETURN FOR ANOTHER ITERATION
 C
           GO TO 500
         END IF
       END IF
-C	    
+C           
 C     SECOND BEST LOGIC TEST APPLIED TO SAVE A FULL NODE SCAN
 C     IF OLD BEST LEVEL CONTINUES TO BE BEST GO FOR ANOTHER CONTRACTION
 C
@@ -2377,19 +2377,19 @@ C     IF SECOND BEST CAN BE USED DO EITHER A CONTRACTION
 C     OR START OVER WITH A SPECULATIVE EXTENSION
 C
 580   IF (SECLEVEL.GT.-LARGE) THEN
-	EXTARC=SB_ARC(TERM)
+        EXTARC=SB_ARC(TERM)
         IF (EXTARC.GT.0) THEN 
-	  IF (U(EXTARC).EQ.0) GOTO 600
-	  BSTLEVEL=P(ENDN(EXTARC))+RC(EXTARC)
-	ELSE
-	  IF (X(-EXTARC).EQ.0) GOTO 600
+          IF (U(EXTARC).EQ.0) GOTO 600
+          BSTLEVEL=P(ENDN(EXTARC))+RC(EXTARC)
+        ELSE
+          IF (X(-EXTARC).EQ.0) GOTO 600
           BSTLEVEL=P(STARTN(-EXTARC))-RC(-EXTARC)
-	END IF
-	IF (BSTLEVEL.EQ.SECLEVEL) THEN
-	  SB_LEVEL(TERM)=-LARGE
-	  EXTEND_ARC(TERM)=EXTARC
-	  GOTO 800
-	END IF
+        END IF
+        IF (BSTLEVEL.EQ.SECLEVEL) THEN
+          SB_LEVEL(TERM)=-LARGE
+          EXTEND_ARC(TERM)=EXTARC
+          GOTO 800
+        END IF
       END IF
 C
 C     EXTENSION/CONTRACTION ATTEMPT WAS UNSUCCESSFUL, SO SCAN TERMINAL NODE
@@ -2403,37 +2403,37 @@ C
       ARC=FPUSHF(TERM)
 700   IF (ARC.GT.0) THEN
         NEW_LEVEL = P(ENDN(ARC)) + RC(ARC)
-	IF (NEW_LEVEL.LT.SECLEVEL) THEN
-	  IF (NEW_LEVEL.LT.BSTLEVEL) THEN
-	    SECLEVEL=BSTLEVEL
-	    BSTLEVEL=NEW_LEVEL
-	    SECARC=EXTARC
-	    EXTARC=ARC
-	  ELSE
-	    SECLEVEL=NEW_LEVEL
-	    SECARC=ARC
-	  END IF
-	END IF
-	ARC=NXTPUSHF(ARC)
-	GOTO 700
+        IF (NEW_LEVEL.LT.SECLEVEL) THEN
+          IF (NEW_LEVEL.LT.BSTLEVEL) THEN
+            SECLEVEL=BSTLEVEL
+            BSTLEVEL=NEW_LEVEL
+            SECARC=EXTARC
+            EXTARC=ARC
+          ELSE
+            SECLEVEL=NEW_LEVEL
+            SECARC=ARC
+          END IF
+        END IF
+        ARC=NXTPUSHF(ARC)
+        GOTO 700
       END IF
        
       ARC=FPUSHB(TERM)
 710   IF (ARC.GT.0) THEN
         NEW_LEVEL = P(STARTN(ARC)) - RC(ARC)
-	IF (NEW_LEVEL.LT.SECLEVEL) THEN
-	  IF (NEW_LEVEL.LT.BSTLEVEL) THEN
+        IF (NEW_LEVEL.LT.SECLEVEL) THEN
+          IF (NEW_LEVEL.LT.BSTLEVEL) THEN
             SECLEVEL=BSTLEVEL
-	    BSTLEVEL=NEW_LEVEL
-	    SECARC=EXTARC
-	    EXTARC=-ARC
-	  ELSE
-	    SECLEVEL=NEW_LEVEL
-	    SECARC=-ARC
-	  END IF
-	END IF
-	ARC=NXTPUSHB(ARC)
-	GOTO 710
+            BSTLEVEL=NEW_LEVEL
+            SECARC=EXTARC
+            EXTARC=-ARC
+          ELSE
+            SECLEVEL=NEW_LEVEL
+            SECARC=-ARC
+          END IF
+        END IF
+        ARC=NXTPUSHB(ARC)
+        GOTO 710
       END IF
        
       SB_LEVEL(TERM)=SECLEVEL
@@ -2445,7 +2445,7 @@ C     IF THE TERMINAL NODE IS THE ROOT, ADJUST ITS PRICE AND CHANGE ROOT
 C
 800   IF (TERM.EQ.ROOT) THEN
         P(TERM)=BSTLEVEL+EPS
-	IF (PTERM.GE.LARGE) THEN
+        IF (PTERM.GE.LARGE) THEN
 CC          PRINT*,'NO PATH TO THE DESTINATION'
 CC          PRINT*,' PROBLEM IS FOUND TO BE INFEASIBLE.'
 CC          PRINT*, 'PROGRAM ENDED; PRESS <CR> TO EXIT'
@@ -2455,11 +2455,11 @@ C         pause, stop replaced with return for S compatibility
           RETURN
 CC          PAUSE
 CC          STOP
-	END IF
-	PATH_ID(ROOT)=.FALSE.
-	PREVNODE=ROOT
-	ROOT=NXTQUEUE(ROOT)
-	GO TO 200
+        END IF
+        PATH_ID(ROOT)=.FALSE.
+        PREVNODE=ROOT
+        ROOT=NXTQUEUE(ROOT)
+        GO TO 200
       END IF
 C
 C     CHECK WHETHER EXTENSION OR CONTRACTION
@@ -2472,7 +2472,7 @@ C
         PR_TERM=ENDN(-PRD)
         PREVLEVEL=P(PR_TERM)+RC(-PRD)
       END IF
-C	    
+C           
       IF (PREVLEVEL.GT.BSTLEVEL) THEN
 C
 C     PATH EXTENSION
@@ -2483,13 +2483,13 @@ C
           P(TERM)=PREVLEVEL
         END IF
         IF (EXTARC.GT.0) THEN
-   	  END=ENDN(EXTARC)
-  	  IF (PATH_ID(END)) GOTO 1200
-   	  TERM=END
+             END=ENDN(EXTARC)
+            IF (PATH_ID(END)) GOTO 1200
+             TERM=END
         ELSE
- 	  START=STARTN(-EXTARC)
- 	  IF (PATH_ID(START)) GOTO 1200
-  	  TERM=START
+           START=STARTN(-EXTARC)
+           IF (PATH_ID(START)) GOTO 1200
+            TERM=START
         END IF 
         PRDCSR(TERM)=EXTARC
         PATH_ID(TERM)=.TRUE.
@@ -2497,10 +2497,10 @@ C
 C     IF NEGATIVE SURPLUS NODE IS FOUND, DO AN AUGMENTATION
 C
       IF (DFCT(TERM).GT.0) GOTO 2000
-C	 
+C        
 C     RETURN FOR ANOTHER ITERATION
 C   
-    	GO TO 500
+            GO TO 500
       ELSE
 C
 C     PATH CONTRACTION.
@@ -2509,7 +2509,7 @@ C
         PATH_ID(TERM)=.FALSE.
         TERM=PR_TERM
         IF (PR_TERM.NE.ROOT) THEN
- 	  IF (BSTLEVEL.LE.PTERM+EPS) THEN
+           IF (BSTLEVEL.LE.PTERM+EPS) THEN
           GOTO 2000
         END IF
       END IF
@@ -2525,7 +2525,7 @@ C     DO A SECOND BEST TEST AND IF THAT FAILS, DO A FULL NODE SCAN
 C
         GOTO 550
       END IF
-C	   
+C          
 C     A CYCLE IS ABOUT TO FORM; DO A RETREAT SEQUENCE.
 C
 1200  CONTINUE
@@ -2536,19 +2536,19 @@ C
         PRD=PRDCSR(NODE)
         IF (PRD.GT.0) THEN
           PR_TERM=STARTN(PRD)
-	  IF (P(PR_TERM).EQ.P(NODE)+RC(PRD)+EPS) THEN
+          IF (P(PR_TERM).EQ.P(NODE)+RC(PRD)+EPS) THEN
             NODE=PR_TERM
             GOTO 1600
-	  END IF
+          END IF
         ELSE
-	  PR_TERM=ENDN(-PRD)
-	  IF (P(PR_TERM).EQ.P(NODE)-RC(-PRD)+EPS) THEN
+          PR_TERM=ENDN(-PRD)
+          IF (P(PR_TERM).EQ.P(NODE)-RC(-PRD)+EPS) THEN
             NODE=PR_TERM
-	    GOTO 1600
- 	  END IF
+            GOTO 1600
+           END IF
         END IF
 C
-C     DO A FULL SCAN AND PRICE RISE AT PR_TERM	         
+C     DO A FULL SCAN AND PRICE RISE AT PR_TERM                 
 C
         NSP=NSP+1
         BSTLEVEL=LARGE
@@ -2573,20 +2573,20 @@ C
 C       
         ARC=FPUSHB(PR_TERM)
 1710    IF (ARC.GT.0) THEN
-	  NEW_LEVEL = P(STARTN(ARC)) - RC(ARC)
-	  IF (NEW_LEVEL.LT.SECLEVEL) THEN
-	    IF (NEW_LEVEL.LT.BSTLEVEL) THEN
-	      SECLEVEL=BSTLEVEL
-	      BSTLEVEL=NEW_LEVEL
-	      SECARC=EXTARC
-	      EXTARC=-ARC
+          NEW_LEVEL = P(STARTN(ARC)) - RC(ARC)
+          IF (NEW_LEVEL.LT.SECLEVEL) THEN
+            IF (NEW_LEVEL.LT.BSTLEVEL) THEN
+              SECLEVEL=BSTLEVEL
+              BSTLEVEL=NEW_LEVEL
+              SECARC=EXTARC
+              EXTARC=-ARC
             ELSE
-  	      SECLEVEL=NEW_LEVEL
-	      SECARC=-ARC
+                SECLEVEL=NEW_LEVEL
+              SECARC=-ARC
             END IF
           END IF
-	  ARC=NXTPUSHB(ARC)
-	  GOTO 1710
+          ARC=NXTPUSHB(ARC)
+          GOTO 1710
         END IF
        
         SB_LEVEL(PR_TERM)=SECLEVEL
@@ -2595,31 +2595,31 @@ C
        
         P(PR_TERM)=BSTLEVEL+EPS
         IF (PR_TERM.EQ.ROOT) THEN
-	  PREVNODE=ROOT
-	  PATH_ID(ROOT)=.FALSE.
-	  ROOT=NXTQUEUE(ROOT)
-	  GOTO 200
-	END IF
+          PREVNODE=ROOT
+          PATH_ID(ROOT)=.FALSE.
+          ROOT=NXTQUEUE(ROOT)
+          GOTO 200
+        END IF
 
         PATH_ID(PR_TERM)=.FALSE.
-	PRD=PRDCSR(PR_TERM)
+        PRD=PRDCSR(PR_TERM)
         IF (PRD.GT.0) THEN
           TERM=STARTN(PRD)
-	ELSE
-	  TERM=ENDN(-PRD)
+        ELSE
+          TERM=ENDN(-PRD)
         END IF
 
         IF (TERM.EQ.ROOT) THEN
-	  PREVNODE=ROOT
-	  PATH_ID(ROOT)=.FALSE.
-	  ROOT=NXTQUEUE(ROOT)
-	  GOTO 200
-	ELSE
-	  GOTO 2000
+          PREVNODE=ROOT
+          PATH_ID(ROOT)=.FALSE.
+          ROOT=NXTQUEUE(ROOT)
+          GOTO 200
+        ELSE
+          GOTO 2000
         END IF
-	      
+              
       END IF
-C	
+C       
 C     END OF AUCTION/SHORTEST PATH ROUTINE.
 C     DO AUGMENTATION FROM ROOT AND CORRECT THE PUSH LISTS
 C
@@ -2641,12 +2641,12 @@ C
       IF (DFCT(TERM).GT.0) THEN
         IF (INCR.GT.DFCT(TERM)) INCR=DFCT(TERM)
       END IF
-C		
+C               
       NODE = ROOT
 2100  EXTARC=EXTEND_ARC(NODE)
       IF (EXTARC.GT.0) THEN
         END=ENDN(EXTARC)
-C	
+C       
 C     ADD ARC TO THE REDUCED GRAPH
 C
         IF (X(EXTARC).EQ.0) THEN
@@ -2660,7 +2660,7 @@ C
         END IF
         X(EXTARC)=X(EXTARC)+INCR
         U(EXTARC)=U(EXTARC)-INCR
-C	
+C       
 C    REMOVE ARC FROM THE REDUCED GRAPH
 C
         IF (U(EXTARC).EQ.0) THEN
@@ -2670,25 +2670,25 @@ C
             FPUSHF(NODE)=NXTPUSHF(ARC)
           ELSE
             PREVARC=ARC
-            ARC=NXTPUSHF(ARC)	    
+            ARC=NXTPUSHF(ARC)            
 2200        IF (ARC.GT.0) THEN
-	      IF (ARC.EQ.EXTARC) THEN
-	        NXTPUSHF(PREVARC)=NXTPUSHF(ARC)
-	        GO TO 2250
-	      END IF
-	      PREVARC=ARC
-	      ARC=NXTPUSHF(ARC)
-	      GOTO 2200
+              IF (ARC.EQ.EXTARC) THEN
+                NXTPUSHF(PREVARC)=NXTPUSHF(ARC)
+                GO TO 2250
+              END IF
+              PREVARC=ARC
+              ARC=NXTPUSHF(ARC)
+              GOTO 2200
             END IF
           END IF
         END IF
 
 2250    NODE=END
-	  
+          
       ELSE
         EXTARC=-EXTARC
         START=STARTN(EXTARC)
-C	
+C       
 C    ADD ARC TO THE REDUCED GRAPH
 C
         IF (U(EXTARC).EQ.0) THEN
@@ -2701,7 +2701,7 @@ C
           END IF
         END IF
         U(EXTARC)=U(EXTARC)+INCR
-        X(EXTARC)=X(EXTARC)-INCR         	
+        X(EXTARC)=X(EXTARC)-INCR                 
 C
 C    REMOVE ARC FROM THE REDUCED GRAPH
 C
@@ -2712,19 +2712,19 @@ C
             FPUSHB(NODE)=NXTPUSHB(ARC)
           ELSE
             PREVARC=ARC
-            ARC=NXTPUSHB(ARC)	    
+            ARC=NXTPUSHB(ARC)            
 2300        IF (ARC.GT.0) THEN
               IF (ARC.EQ.EXTARC) THEN
-	        NXTPUSHB(PREVARC)=NXTPUSHB(ARC)
-	        GO TO 2350
-	      END IF
-	      PREVARC=ARC
-	      ARC=NXTPUSHB(ARC)
-	      GOTO 2300
+                NXTPUSHB(PREVARC)=NXTPUSHB(ARC)
+                GO TO 2350
+              END IF
+              PREVARC=ARC
+              ARC=NXTPUSHB(ARC)
+              GOTO 2300
             END IF
           END IF
         END IF
-          	
+                  
 2350    NODE=START
 
       END IF
@@ -2733,20 +2733,20 @@ C
       DFCT(TERM)=DFCT(TERM)-INCR
       DFCT(ROOT)=DFCT(ROOT)+INCR
 C
-C     INSERT TERM IN THE QUEUE IF IT HAS A LARGE ENOUGH SURPLUS	
+C     INSERT TERM IN THE QUEUE IF IT HAS A LARGE ENOUGH SURPLUS        
 C
       IF (DFCT(TERM).LT.THRESH_DFCT) THEN
-	IF (NXTQUEUE(TERM).EQ.0) THEN
-	  NXTNODE=NXTQUEUE(ROOT)
-	  IF ((P(TERM).GE.P(NXTNODE)).AND.(ROOT.NE.NXTNODE)) THEN
-	    NXTQUEUE(ROOT)=TERM
-	    NXTQUEUE(TERM)=NXTNODE
-	  ELSE
-	    NXTQUEUE(PREVNODE)=TERM
-	    NXTQUEUE(TERM)=ROOT
-	    PREVNODE=TERM
-	  END IF
-	END IF
+        IF (NXTQUEUE(TERM).EQ.0) THEN
+          NXTNODE=NXTQUEUE(ROOT)
+          IF ((P(TERM).GE.P(NXTNODE)).AND.(ROOT.NE.NXTNODE)) THEN
+            NXTQUEUE(ROOT)=TERM
+            NXTQUEUE(TERM)=NXTNODE
+          ELSE
+            NXTQUEUE(PREVNODE)=TERM
+            NXTQUEUE(TERM)=ROOT
+            PREVNODE=TERM
+          END IF
+        END IF
       END IF
 C
 C     IF ROOT HAS A LARGE ENOUGH SURPLUS, KEEP IT 
@@ -2783,7 +2783,7 @@ C
       IF (EPS.LT.1) EPS=1
       THRESH_DFCT=INT(THRESH_DFCT/FACTOR)
       IF (EPS.EQ.1) THRESH_DFCT=0
-C	 
+C        
 C     IF ANOTHER AUCTION SCALING PHASE REMAINS, RESET THE FLOWS & THE PUSH LISTS
 C     ELSE RESET ARC FLOWS TO SATISFY CS AND COMPUTE REDUCED COSTS 
 C
@@ -2791,28 +2791,28 @@ C
 
         DO 3800 ARC=1,NA
           START=STARTN(ARC)
-	  END=ENDN(ARC)
-	  PSTART=P(START)
-	  PEND=P(END)
-	  IF (PSTART.GT.PEND+EPS+RC(ARC)) THEN
-	    RESID=U(ARC)
-	    IF (RESID.GT.0) THEN
-	      DFCT(START)=DFCT(START)+RESID
-	      DFCT(END)=DFCT(END)-RESID
-	      X(ARC)=X(ARC)+RESID
-	      U(ARC)=0
-	    END IF
-	  ELSE
-	    IF (PSTART.LT.PEND-EPS+RC(ARC)) THEN
-	      FLOW=X(ARC)
-	      IF (FLOW.GT.0) THEN
-	        DFCT(START)=DFCT(START)-FLOW
-	        DFCT(END)=DFCT(END)+FLOW
-	        X(ARC)=0
-	        U(ARC)=U(ARC)+FLOW
-	      END IF
-	    END IF
-	  END IF
+          END=ENDN(ARC)
+          PSTART=P(START)
+          PEND=P(END)
+          IF (PSTART.GT.PEND+EPS+RC(ARC)) THEN
+            RESID=U(ARC)
+            IF (RESID.GT.0) THEN
+              DFCT(START)=DFCT(START)+RESID
+              DFCT(END)=DFCT(END)-RESID
+              X(ARC)=X(ARC)+RESID
+              U(ARC)=0
+            END IF
+          ELSE
+            IF (PSTART.LT.PEND-EPS+RC(ARC)) THEN
+              FLOW=X(ARC)
+              IF (FLOW.GT.0) THEN
+                DFCT(START)=DFCT(START)-FLOW
+                DFCT(END)=DFCT(END)+FLOW
+                X(ARC)=0
+                U(ARC)=U(ARC)+FLOW
+              END IF
+            END IF
+          END IF
 3800    CONTINUE
 C
 C     RETURN FOR ANOTHER PHASE
@@ -2831,27 +2831,27 @@ C
             RESID=U(ARC)
             IF (RESID.GT.0) THEN
               DFCT(START)=DFCT(START)+RESID
-  	      DFCT(END)=DFCT(END)-RESID
-	      X(ARC)=X(ARC)+RESID
-	      U(ARC)=0
-	    END IF
-	  ELSE
-	    IF (RED_COST.GT.0) THEN
-	      FLOW=X(ARC)
-	      IF (FLOW.GT.0) THEN
-	        DFCT(START)=DFCT(START)-FLOW
-	        DFCT(END)=DFCT(END)+FLOW
-	        X(ARC)=0
-	        U(ARC)=U(ARC)+FLOW
-	      END IF
-	    END IF
-	  END IF
-	  RC(ARC)=RED_COST
+                DFCT(END)=DFCT(END)-RESID
+              X(ARC)=X(ARC)+RESID
+              U(ARC)=0
+            END IF
+          ELSE
+            IF (RED_COST.GT.0) THEN
+              FLOW=X(ARC)
+              IF (FLOW.GT.0) THEN
+                DFCT(START)=DFCT(START)-FLOW
+                DFCT(END)=DFCT(END)+FLOW
+                X(ARC)=0
+                U(ARC)=U(ARC)+FLOW
+              END IF
+            END IF
+          END IF
+          RC(ARC)=RED_COST
 3900    CONTINUE
 
       END IF
-              	    
-      RETURN	
+                          
+      RETURN        
       END
 C
 C
@@ -3202,18 +3202,18 @@ C
             T2=X(ARC)
             T3=STARTN(ARC)
             DFCT(T3)=DFCT(T3)-T2
-	    IF (NXTQUEUE(T3).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=T3
-	      NXTQUEUE(T3)=CURNODE
-	      PREVNODE=T3
-      	    END IF
+            IF (NXTQUEUE(T3).EQ.0) THEN
+              NXTQUEUE(PREVNODE)=T3
+              NXTQUEUE(T3)=CURNODE
+              PREVNODE=T3
+                  END IF
             T3=ENDN(ARC)
             DFCT(T3)=DFCT(T3)+T2
-	    IF (NXTQUEUE(T3).EQ.0) THEN
-	      NXTQUEUE(PREVNODE)=T3
-	      NXTQUEUE(T3)=CURNODE
-	      PREVNODE=T3
-      	    END IF
+            IF (NXTQUEUE(T3).EQ.0) THEN
+              NXTQUEUE(PREVNODE)=T3
+              NXTQUEUE(T3)=CURNODE
+              PREVNODE=T3
+                  END IF
             U(ARC)=U(ARC)+T2
             X(ARC)=0
             END IF
@@ -3230,18 +3230,18 @@ C
               T2=U(ARC)
               T3=STARTN(ARC)
               DFCT(T3)=DFCT(T3)+T2
-	      IF (NXTQUEUE(T3).EQ.0) THEN
-	    	NXTQUEUE(PREVNODE)=T3
-	    	NXTQUEUE(T3)=CURNODE
-	    	PREVNODE=T3
-      	      END IF
+              IF (NXTQUEUE(T3).EQ.0) THEN
+                    NXTQUEUE(PREVNODE)=T3
+                    NXTQUEUE(T3)=CURNODE
+                    PREVNODE=T3
+                    END IF
               T3=ENDN(ARC)
               DFCT(T3)=DFCT(T3)-T2
-	      IF (NXTQUEUE(T3).EQ.0) THEN
-	    	NXTQUEUE(PREVNODE)=T3
-	    	NXTQUEUE(T3)=CURNODE
-	    	PREVNODE=T3
-      	      END IF
+              IF (NXTQUEUE(T3).EQ.0) THEN
+                    NXTQUEUE(PREVNODE)=T3
+                    NXTQUEUE(T3)=CURNODE
+                    PREVNODE=T3
+                    END IF
               X(ARC)=X(ARC)+T2
               U(ARC)=0
             END IF
@@ -3486,18 +3486,18 @@ C
               T2=X(ARC)
               T3=STARTN(ARC)
               DFCT(T3)=DFCT(T3)-T2
-	      IF (NXTQUEUE(T3).EQ.0) THEN
-	        NXTQUEUE(PREVNODE)=T3
-	    	NXTQUEUE(T3)=CURNODE
-	    	PREVNODE=T3
-      	      END IF
+              IF (NXTQUEUE(T3).EQ.0) THEN
+                NXTQUEUE(PREVNODE)=T3
+                    NXTQUEUE(T3)=CURNODE
+                    PREVNODE=T3
+                    END IF
               T3=ENDN(ARC)
               DFCT(T3)=DFCT(T3)+T2
-	      IF (NXTQUEUE(T3).EQ.0) THEN
-	    	NXTQUEUE(PREVNODE)=T3
-	    	NXTQUEUE(T3)=CURNODE
-	    	PREVNODE=T3
-      	      END IF
+              IF (NXTQUEUE(T3).EQ.0) THEN
+                    NXTQUEUE(PREVNODE)=T3
+                    NXTQUEUE(T3)=CURNODE
+                    PREVNODE=T3
+                    END IF
               U(ARC)=U(ARC)+T2
               X(ARC)=0
             END IF
@@ -3514,18 +3514,18 @@ C
               T2=U(ARC)
               T3=STARTN(ARC)
               DFCT(T3)=DFCT(T3)+T2
-	      IF (NXTQUEUE(T3).EQ.0) THEN
-	        NXTQUEUE(PREVNODE)=T3
-	        NXTQUEUE(T3)=CURNODE
-	        PREVNODE=T3
-      	      END IF
+              IF (NXTQUEUE(T3).EQ.0) THEN
+                NXTQUEUE(PREVNODE)=T3
+                NXTQUEUE(T3)=CURNODE
+                PREVNODE=T3
+                    END IF
               T3=ENDN(ARC)
               DFCT(T3)=DFCT(T3)-T2
-	      IF (NXTQUEUE(T3).EQ.0) THEN
-	        NXTQUEUE(PREVNODE)=T3
-	        NXTQUEUE(T3)=CURNODE
-	        PREVNODE=T3
-      	      END IF
+              IF (NXTQUEUE(T3).EQ.0) THEN
+                NXTQUEUE(PREVNODE)=T3
+                NXTQUEUE(T3)=CURNODE
+                PREVNODE=T3
+                    END IF
               X(ARC)=X(ARC)+T2
               U(ARC)=0
             END IF
@@ -3580,7 +3580,7 @@ C
       IMPLICIT INTEGER (A-Z)
 C
 C---------------------------------------------------------------
-C								
+C                                                               
 C  PURPOSE - THIS SUBROUTINE ALLOWS THE USER TO INTERACTIVELY
 C     EITHER CHANGE NODE SUPPLY, OR CHANGE FLOW UPPER BOUND
 C     OF AN EXISTING ARC, OR CHANGE COST OF AN EXISTING ARC,
@@ -3781,10 +3781,10 @@ C
 C
 C    IF ARC BECOMES BALANCED, CHECK TO ADD ARC TO TFSTOU, TFSTIN,.... 
 C
-	  IF ((RC(ARC).EQ.0).AND.(DELC.NE.0)) THEN
-	    CALL ADDTR(ARC)
-	  END IF
-C	    
+          IF ((RC(ARC).EQ.0).AND.(DELC.NE.0)) THEN
+            CALL ADDTR(ARC)
+          END IF
+C           
         ELSE IF ((SEL.EQ.4).OR.(SEL.EQ.6)) THEN
 C
 C     DELETE AN ARC.
@@ -3833,7 +3833,7 @@ C
 C     REMOVE ARC FROM THE ARRAY TFSTIN, TFSTOU, TNXTIN, TNXTOU. 
 C
 260       ARC1=TFSTOU(STARTN(ARC))
-	  IF (ARC1.EQ.0) GO TO 262
+          IF (ARC1.EQ.0) GO TO 262
           IF (ARC1.EQ.ARC) THEN
             TFSTOU(STARTN(ARC))=TNXTOU(ARC1)
           ELSE
@@ -3846,7 +3846,7 @@ C
             IF (TNXTOU(ARC1).GT.0) GO TO 261
           END IF
 262       ARC1=TFSTIN(ENDN(ARC))
-	  IF (ARC1.EQ.0) GO TO 264
+          IF (ARC1.EQ.0) GO TO 264
           IF (ARC1.EQ.ARC) THEN
             TFSTIN(ENDN(ARC))=TNXTIN(ARC1)
           ELSE
@@ -3939,7 +3939,7 @@ C
           END IF
           GO TO 320
         END IF
-	PRICE(IT)=-C(IARC)
+        PRICE(IT)=-C(IARC)
 C
 C     COMPUTE REDUCED COST OF THE NEW ARC AND UPDATE FLOW AND DEFICIT 
 C     ACCORDINGLY.
@@ -3958,12 +3958,12 @@ C
         FOU(IH)=IARC
         NXTIN(IARC)=FIN(IT)
         FIN(IT)=IARC
-	IF (RC(IARC).EQ.0) THEN
+        IF (RC(IARC).EQ.0) THEN
           TNXTOU(IARC)=TFSTOU(IH)
           TFSTOU(IH)=IARC
           TNXTIN(IARC)=TFSTIN(IT)
           TFSTIN(IT)=IARC
-	END IF
+        END IF
       END IF
       GO TO 20
       END

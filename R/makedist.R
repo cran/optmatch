@@ -8,10 +8,17 @@ makedist <- function(structure.fmla, data,
   if (!attr(terms(structure.fmla), "response")>0) 
     stop("structure.fmla must specify a treatment group variable")
   fn <- match.fun(fn)
+
+### WHEN THIS FUNCTION IS WRAPPED TO, THIS IS HOW INFO ABOUT WHICH
+### GENERATION PARENT FRAME structure.fmla IS TO BE EVALUATED IN IS PASSED
+  pframe.generation <- 1
+  if (!is.null(attr(structure.fmla, "generation.increment")))
+    pframe.generation <- pframe.generation +
+      attr(structure.fmla, "generation.increment")
   
   zpos <- attr(terms(structure.fmla), "response")
   vars <- eval(attr(terms(structure.fmla), "variables"), data, 
-             parent.frame())
+             parent.frame(n=pframe.generation))
   zzz <- vars[[zpos]]
   if (!is.numeric(zzz) & !is.logical(zzz))
     stop("treatment variable (LHS of structure.fmla) must be numeric or logical")
@@ -22,20 +29,20 @@ makedist <- function(structure.fmla, data,
   if (all(zzz<=0))
     stop("there are no treatment group members (LHS of structure.fmla <=0)")
 
-  zz <- (zzz>0)
+  zzz <- (zzz>0)
   vars <- vars[-zpos]
-  names(zz) <- row.names(model.frame(structure.fmla,data))
+  names(zzz) <- row.names(data)
 if (length(vars)>0)
   {
   ss <- interaction(vars, drop=TRUE)
-} else ss <- factor(zz>=0, labels="m")
-  ans <- tapply(zz, ss, FUN=fn,
+} else ss <- factor(zzz>=0, labels="m")
+  ans <- tapply(zzz, ss, FUN=fn,
                 dat=data, ..., simplify=FALSE)
   FUNchk <- unlist(lapply(ans,
                           function(x){!is.matrix(x) & !is.vector(x)}))
   if (any(FUNchk)) { stop("fn should always return matrices")}
 
-  mdms <- split(zz,ss)
+  mdms <- split(zzz,ss)
   NMFLG <- FALSE
 
   for (ii in (1:length(ans)))
@@ -86,7 +93,7 @@ if (length(vars)>0)
 warning("fn value not given dimnames; assuming they are list(names(trtvar)[trtvar], names(trtvar)[!trtvar])")}
 
   
-  attr(ans, 'row.names') <- names(zz)
+  attr(ans, 'row.names') <- names(zzz)
   class(ans) <- c('optmatch.dlist', 'list')
   ans
   }

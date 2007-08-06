@@ -1,3 +1,13 @@
+2007-07-23
+	* Bug fixes in Ops.optmatch.dlist, having to do with handling of lists containing a dim 0xn or nx0 matrix.
+	* Bug fix in mahal.dist, having to do with names of icv not matching those of the data frame after data frame names are checked and modified by make.names (called by data.frame()).
+2007-07-17
+	* Adjusted handling of frames in makedist, pscore.dist, mahal.dist
+2007-07-15
+	* Small change to pscore.dist -- error changed to warning; 
+	bug fixes re use of structure.fmla in pscore.dist and mahal.dist
+2007-07-09
+	* Removed tabs from relax4s.f
 2007-07-08
 	* Fixed a bug in mahal.dist
 	* reorganized /src to pass checks

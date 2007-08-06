@@ -8,7 +8,8 @@ if (is.null(structure.fmla))
 } else
 {
 structure.fmla <- update.formula(structure.fmla, ZzZz~.)
-stopifnot(all(all.vars(structure.fmla)%in%names(glmobject$data)))
+if (!all(all.vars(structure.fmla)%in%c('ZzZz',names(glmobject$data))))
+  warning('stratifying variables (in structure.fmla) not in propensity specification')
 }
 ZzZz <- glmobject$y>0
 pooled.sd <- sqrt((var(glmobject$linear.predictors[ZzZz])*(sum(ZzZz)-1) +
@@ -16,8 +17,10 @@ pooled.sd <- sqrt((var(glmobject$linear.predictors[ZzZz])*(sum(ZzZz)-1) +
                   (length(ZzZz)-2))
 Ppty <- glmobject$linear.predictors/pooled.sd
 
+attr(structure.fmla, 'generation.increment') <- 1
+
 makedist(structure.fmla,
-         data.frame(ZzZz, Ppty),
+         data.frame(ZzZz, Ppty,glmobject$data),
          fn=function(trtvar,data)
          {
            sclr <- data[names(trtvar), 'Ppty']

@@ -10,13 +10,19 @@ Ops.optmatch.dlist <- function (e1, e2=NULL)
 
     if (nchar(.Method[1])) {
      rn1 <- attr(e1, "row.names")
-     e1 <- e1[unlist(as.logical(lapply(e1, length)))]
+     nne <- unlist(as.logical(lapply(e1, length)))
+     e1.nullentries <- e1[!nne]
+     full.sc1 <- names(e1)
+     e1 <- e1[nne]
      sc1 <- names(e1)
      } else {rn1 <- NULL}
 
    if (nchar(.Method[2])) {
      rn2 <- attr(e2, "row.names")
-     e2 <- e2[unlist(as.logical(lapply(e2, length)))]
+     nne <- unlist(as.logical(lapply(e2, length)))
+     e2.nullentries <- e2[!nne]
+     full.sc2 <- names(e2)
+     e2 <- e2[nne]
      sc2 <- names(e2)
      } else {rn2 <- NULL}
 
@@ -63,6 +69,26 @@ Ops.optmatch.dlist <- function (e1, e2=NULL)
       }
 
     names(value) <- sc1
+
+    if (nchar(.Method[1]) )
+      {
+        if (length(e1.nullentries))
+          {
+            value <- c(value, e1.nullentries)
+            value <- value[full.sc1]
+          }
+      } else
+    {
+      if (nchar(.Method[2]))
+        {
+          if (length(e2.nullentries))
+            {
+            value <- c(value, e2.nullentries)
+            value <- value[full.sc2]
+            }
+        }
+    }
+    
     class(value) <- c('optmatch.dlist', 'list')
     if (length(rn1)>length(rn2))
       {
@@ -70,5 +96,6 @@ Ops.optmatch.dlist <- function (e1, e2=NULL)
         } else {
           attr(value, "row.names") <- rn2
         }
+    
     value
   }

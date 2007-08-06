@@ -1,3 +1,6 @@
+2006-07-25
+At present, an expression like 0+mdist (mdist of class optmatch.dlist) fails, although mdist+0 works.  Make the first work also.
+
 2006-04-28
 For future help page/howto regarding makedist():
 A likely source of errors in writing a function to be called in

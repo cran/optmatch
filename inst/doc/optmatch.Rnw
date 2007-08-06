@@ -140,11 +140,11 @@ sets may contain multiple treated units (cases) alongside one control.
 This distinguishes full matching from both pair matching, matching with
 }\textrm{ ${k\ge 2}$ }\textrm{controls, and matching with a variable
 number of controls, although full matchings sometimes coincide with
-matches produced by these simpler methods \citep{hansen:klopfer:2005}.
+matches produced by these simpler methods \citep{hansen:klopfer:2006}.
 Among all methods of matching for two groups, full matching alone is
 demonstrably optimal as a method of producing similarity with matched
 sets; this was shown by \citet{rosenbaum:1991a}, who introduced the method. It
-shares these advantages with full matching with restrictions \citep{hansen:klopfer:2005}, a procedure that can also mimic pair matching and
+shares these advantages with full matching with restrictions \citep{hansen:klopfer:2006}, a procedure that can also mimic pair matching and
 matching with a fixed or variable number of controls. The workhorse of
 ``optmatch'' is a function, }fullmatch()\textrm{, that performs full
 matching and full matching with restrictions. }}
@@ -155,31 +155,42 @@ matching and full matching with restrictions. }}
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{The following are the functions contained in ``optmatch'' and
-their respective purposes:}}
+% {\selectlanguage{english}\ttfamily
+% \textrm{The following are the functions contained in ``optmatch'' and
+% their respective purposes:}}
 
 
-\bigskip
-\begin{description}
-\item[\texttt{fullmatch}]  \textrm{Optimal full matching}
-\item[\texttt{
-matched}]   \textrm{Identification of units placed into matched sets}
-\item[\texttt{
-matchfailed}]  \textrm{Identification of units not placed into matched
-sets }
-\item[\texttt{
-maxControlsCap}]  \textrm{Set thinning cap for full matching}
-\item[\texttt{
-minControlsCap}]  \textrm{Set thickening cap for full matching}
-\item[\texttt{
-unmatched}]  \textrm{Identification of units not placed into matched
-sets}
-\end{description}
+% \bigskip
+% \begin{description}
+% \item[\texttt{
+% fullmatch}]  \textrm{Optimal full matching}
+% \item[\texttt{
+% pairmatch}] \textrm{Optimal pair matching}
+% \item[\texttt{
+% matched}]   \textrm{Identification of units placed into matched sets}
+% \item[\texttt{
+% matchfailed}]  \textrm{Identification of units/subclasses for which matching 
+% was infeasible}
+% \item[\texttt{
+% unmatched}]  \textrm{Identification of units not placed into matched
+% sets}
+% \item[\texttt{
+% matched.distances}] \textrm{??}
+% \item[\texttt{
+% makedist}] \textrm{??}
+% \item[\texttt{
+% mahal.dist}] \textrm{??}
+% \item[\texttt{
+% pscore.dist}] \textrm{??}
+% \item[\texttt{
+% maxControlsCap}]  \textrm{Set thinning cap for full matching}
+% \item[\texttt{
+% minControlsCap}]  \textrm{Set thickening cap for full matching}
+% \end{description}
 
-\bigskip
+% \bigskip
 
-<<echo=FALSE, print=FALSE>>=
+<<echo=FALSE, print=FALSE, quiet=TRUE>>=
 library(optmatch)
 library(boot)
 data(nuclear)
@@ -286,7 +297,7 @@ construction of further LWR plants. To illustrate the use of }distance,
 plants, for the purpose of comparing their construction costs. In the
 nuclear plans example, seven existing{}-site plans are to be matched to
 19 new{}-site plants, in order to allow an adjusted assessment of the
-cost of building on existing versus new sights. Variables available for
+cost of building on existing versus new sites. Variables available for
 use in the analysis are cost and date of issue of construction permit.
 For the illustration, we matched only upon cap and date, but an earnest
 analysis might match on other variables as well. Also, in this
@@ -496,6 +507,10 @@ plantsfm
 adjustments are made, the fullmatch command matches A to I, B{}- to J,
 etc.}}
 
+{\selectlanguage{english}\ttfamily
+\textrm{If you adapt this example directly to your problem, then be sure to check after matching that the names of the factor that results from matching are identical with the row names of your working data frame.  Sometimes the observations get scrambled from their original order, and things get confused when you go on to do analysis.  Another way to avoid this problem is to make your distance using the} \texttt{makedist, mahal.dist} \textrm{or} \texttt{pscore.dist} \textrm{functions, which keep track of the order of observations for you.  The help page for } \texttt{makedist}, \textrm{accessible with} \texttt{?makedist},\textrm{shows in its examples how to make the distance given above using it.}}
+
+
 
 \bigskip
 
@@ -513,7 +528,7 @@ have the same covariates: for instance, in the nuclear plants example
 only four exactly matched pairs are possible, namely AI, BJ, DQ, and
 ER. \ For continuous covariates, matching within calipers enforces
 similarity of matches (if not that they be exactly the same) 
-\citep{hansen:klopfer:2005}. \ }}
+\citep{hansen:klopfer:2006}. \ }}
 
 {\selectlanguage{english}\ttfamily
 \textrm{ Continuing the nuclear plants illustration, we impose a caliper
@@ -539,13 +554,12 @@ distance matrix as follows,}}
 \bigskip
 
 <<>>=
-( plantdist <- plantdist/
-outer(date[pr==1], date[pr==0],
-function(x,y){abs(x-y)<3}) )
+datediffs <- outer(date[pr==1], date[pr==0],"-")
+( plantdist <- plantdist/(abs(datediffs)<3) )
 @
 
 {\selectlanguage{english}\ttfamily
-\textrm{The infinite entries indicate unwanted matches.}}
+\textrm{The infinite entries occur where the matrix} \texttt{datediffs} \textrm{has an entry less than $-3$ or greater than $+3$, indicating an unwanted match.  (If you had constructed the distance} \texttt{plantdist} \textrm{using} \texttt{makedist}, \textrm{or} \texttt{mahal.dist} \textrm{or} \texttt{pscore.dist}, \textrm{then you may have to use} \texttt{makedist} \textrm{also to create} \texttt{datediffs} \textrm{in order for the division} \texttt{plantdist/(abs(datediffs)<3)} \textrm{to work.)}}
 
 \bigskip
 
@@ -589,6 +603,7 @@ Treatment{}-control balance by matched set}
 
 
 <<>>=
+stratumStructure(plantsfm)
 table(plantsfm,ifelse(pr,'treated', 'control')) 
 @
 
@@ -602,7 +617,7 @@ subject varies widely. Such imbalance can be prevented as follows.}}
 \bigskip
 <<>>=
 plantsfm1 <- fullmatch(plantdist,min.controls=2, max.controls=3)
-table(plantsfm1, ifelse(pr,'treated','control'))
+stratumStructure(plantsfm1)
 @
 
 {\selectlanguage{english}\ttfamily
@@ -635,7 +650,7 @@ tapply(names(plantsfm), plantsfm, FUN= function(x, dmat)
 @
 
 {\selectlanguage{english}\rmfamily
-This function gives the largest difference in each of the matched sets.}
+This function gives the largest difference in each of the matched sets. }
 
 
 \bigskip
@@ -657,7 +672,8 @@ tapply(date, plantsfm, FUN= function(x)
 For example, in m.6, we see that the biggest difference in the dates of
 F,U, and Z is the difference between U and Z: 71.08 {}- 69.50 = 1.58.
 
-
+  The function \texttt{matched.distances} is also useful for determining how close matches are; see its help page for details.
+}
 \bigskip
 
 {\selectlanguage{english}\rmfamily\bfseries
@@ -831,52 +847,35 @@ detach()
 @
 
 {\selectlanguage{english}\rmfamily
-\bibliography{optmatchbib} \bibliographystyle{asa}
+\bibliographystyle{asa}
+\begin{thebibliography}{5}
+\newcommand{\enquote}[1]{``#1''}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Gu and Rosenbaum(1993)}]{gu:rose:1993}
+Gu, X. and Rosenbaum, P.~R. (1993), \enquote{Comparison of Multivariate
+  Matching Methods: Structures, Distances, and Algorithms,} \textit{Journal of
+  Computational and Graphical Statistics}, 2, 405--420.
+
+\bibitem[{Hansen(2004)}]{Hansen:2004}
+Hansen, B.~B. (2004), \enquote{Full matching in an observational study of
+  coaching for the {SAT},} \textit{Journal of the American Statistical
+  Association}, 99, 609--618.
+
+\bibitem[{Hansen and Klopfer(2006)}]{hansen:klopfer:2006}
+Hansen, B.~B. and Klopfer, S.~O. (2006), \enquote{Optimal full matching and
+  related designs via network flows,} \textit{Journal of Computational and
+  Graphical Statistics}, 15, 609--627.
+
+\bibitem[{Rosenbaum(1991)}]{rosenbaum:1991a}
+Rosenbaum, P.~R. (1991), \enquote{A Characterization of Optimal Designs for
+  Observational Studies,} \textit{Journal of the Royal Statistical Society},
+  53, 597-- 610.
+
+\bibitem[{Rosenbaum(2002)}]{rosenbaum:2002}
+--- (2002), \textit{Observational Studies}, Springer-Verlag, 2nd ed.
+
+\end{thebibliography}
+
 }
 \end{document}
-
-
-{\selectlanguage{english}\rmfamily\bfseries
-References:}
-
-
-\bigskip
-
-{\selectlanguage{english}\ttfamily
-\textrm{\textmd{Gu, X.S. \& Paul~R. Rosenbaum (1993), ``Comparison of
-multivariate matching methods: structures, distances, and algorithms.''
-}}\textrm{\textup{Journal of Computational and Graphical
-Statistics}}\textrm{\textbf{\textit{.}}}\textrm{\textmd{
-2:405{}-420.}}}
-
-{\selectlanguage{english}
-Hansen, B.B. and S. Olsen Klopfer (2005), `Optimal full matching and
-related designs via network flows'. Technical Report 416, Statistics
-Department, University of Michigan.}
-
-{\selectlanguage{english}
-Hansen, B.B. (2004), {\textasciigrave}{\textasciigrave}Full Matching in
-an Observational Study of Coaching for the
-\{SAT\},'' Journal of the American
-Statistical Association, to appear. (Cf. especially the Appendix.) }
-
-
-\bigskip
-
-{\selectlanguage{english}
-Rosenbaum, P. (1991), {\textasciigrave}{\textasciigrave}A
-Characterization of Optimal Designs for Observational
-Studies,'' Journal of the Royal
-Statistical Society, Series B, 53, 597{--}610. }
-
-
-\bigskip
-
-
-\bigskip
-
-
-\bigskip
-
-
-\bigskip

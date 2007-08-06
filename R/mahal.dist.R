@@ -6,18 +6,41 @@ if (is.null(structure.fmla))
   if (!attr(terms(distance.fmla,data=data), "response")>0) 
     stop("either distance.fmla or structure.fmla must specify a treatment group variable")
   structure.fmla <- update.formula(distance.fmla, .~1,data=data)
-}
-distance.fmla <- terms(distance.fmla, data=data)
+  structure.fmla <- terms.formula(structure.fmla, data=data)
+} else
+{
+    if (!attr(terms(structure.fmla,data=data), "response")>0 &
+        !attr(terms(distance.fmla,data=data), "response")>0)
+      stop("either distance.fmla or structure.fmla must specify a treatment group variable")
+
+    if (!attr(terms(structure.fmla,data=data), "response")>0)
+      {
+      lhs <- as.character(distance.fmla[[2]])
+      structure.fmla <- update.formula(structure.fmla,
+                                       paste(lhs, '~.', sep=''))
+      structure.fmla <- terms.formula(structure.fmla, data=data)
+      }
+  }
 distance.fmla <- update.formula(distance.fmla, ~-1+.,data=data)
-dfr <- model.matrix(distance.fmla, model.frame(distance.fmla,data))
+distance.fmla <- terms(distance.fmla, data=data)
+ds.vars <- attr(distance.fmla, "variables")
+if (length(ds.vars)<2) stop("No variables on RHS of distance.fmla")
+
+dfr <- model.matrix(distance.fmla, #model.frame(distance.fmla,data))
+                    structure(eval(ds.vars, data, parent.frame()),
+                              names=as.character(ds.vars[2:length(ds.vars)])))
+sf.vars <- all.vars(structure.fmla)
+sf.vars <- sf.vars[!(sf.vars%in% names(dfr))]
+sf.vars <- sf.vars[sf.vars %in% names(data)]
 
 if (is.null(inverse.cov))
   {
-  zpos <- attr(terms(structure.fmla,data=data), "response")
-  vars <- eval(attr(terms(structure.fmla,data=data), "variables"), data, 
-             parent.frame())
-  zz <- vars[[zpos]]>0
-  cv <- cov(dfr[zz, ,drop=FALSE])*(sum(zz)-1)/(length(zz)-2)
+    zpos <- attr(terms(structure.fmla,data=data), "response")
+    vars <- eval(attr(terms(structure.fmla,data=data), "variables"), data, 
+                 parent.frame())
+    zz <- vars[[zpos]]>0
+
+  cv <- cov(dfr[as.logical(zz), ,drop=FALSE])*(sum(zz)-1)/(length(zz)-2)
   cv <- cv + cov(dfr[!zz,,drop=FALSE])*(sum(!zz)-1)/(length(zz)-2)
   icv <- try( solve(cv), silent=TRUE)
   if (inherits(icv,"try-error"))
@@ -31,15 +54,24 @@ if (is.null(inverse.cov))
        icv <- s$v[, nz] %*% (t(s$u[, nz])/s$d[nz])
        dimnames(icv) <- dnx[2:1]
     }
-} else
+stopifnot(is.matrix(icv),
+          dim(icv)[1]==dim(icv)[2],
+          all.equal(dimnames(icv)[[1]],dimnames(icv)[[2]]),
+          all.equal(dimnames(icv)[[1]],dimnames(dfr)[[2]]))
+  } else
 {
 stopifnot(is.matrix(inverse.cov),
           dim(inverse.cov)[1]==dim(inverse.cov)[2],
           all.equal(dimnames(inverse.cov)[[1]],dimnames(inverse.cov)[[2]]),
-          all(dimnames(inverse.cov)[[1]]%in%dimnames(dfr)[[2]]))
+          all.equal(dimnames(inverse.cov)[[1]],dimnames(dfr)[[2]]))
 }
+attr(structure.fmla, 'generation.increment') <- 1
 
-makedist(structure.fmla, data.frame(data, dfr),
+ln.dfr <- dim(dfr)[2]
+dfr <- data.frame(dfr, data[sf.vars], row.names=row.names(data))
+dimnames(icv) <- list(names(dfr)[1:ln.dfr], names(dfr)[1:ln.dfr])
+
+makedist(structure.fmla, dfr,
          fn=optmatch.mahalanobis, inverse.cov=icv)
   }
 

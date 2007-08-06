@@ -17,6 +17,6 @@ if (any(omf<0)) stop('not enough controls in some subclasses')
 }
 fullmatch(distance=distance, min.controls=controls,
           max.controls=controls, omit.fraction=omf,
-          tol=.001)
+          tol=tol)
   }
 
