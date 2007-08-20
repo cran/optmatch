@@ -17,7 +17,7 @@ if (!any(tgp<=0) | !any(tgp>0))
 
 stratum <- as.integer(as.factor(stratum))
 if (any(is.na(stratum)))
-  stratum[is.na(stratum)] <- max(stratum) + 1:sum(is.na(stratum))
+  stratum[is.na(stratum)] <- max(stratum, na.rm=TRUE) + 1:sum(is.na(stratum))
 
 ttab <- table(stratum,as.logical(tgp))
 ans <- table(paste(ttab[,2], ttab[,1], sep=":"),

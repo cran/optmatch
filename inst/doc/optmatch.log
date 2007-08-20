@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.14159-1.10b (Web2C 7.4.5) (format=pdflatex 2006.1.9)  6 AUG 2007 11:41
+This is pdfTeXk, Version 3.14159-1.10b (Web2C 7.4.5) (format=pdflatex 2006.1.9)  24 AUG 2007 10:42
  file:line:error style messages enabled.
 **\nonstopmode \input /afs/umich.edu/user/b/b/bbh/Private/projects/fmpackage/tr
 unk/v03/optmatch/inst/doc/optmatch.tex
@@ -531,4 +531,4 @@ hare/texmf/dvips/tetex/74afc74c.enc}</usr/share/texmf/fonts/type1/bluesky/cm/cm
 ti12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/f
 onts/type1/bluesky/cm/cmtt12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr17
 .pfb>
-Output written on optmatch.pdf (12 pages, 123622 bytes).
+Output written on optmatch.pdf (12 pages, 123620 bytes).

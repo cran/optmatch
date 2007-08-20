@@ -57,30 +57,40 @@ Ops.optmatch.dlist <- function (e1, e2=NULL)
     else quote(FUN(left, right))
 
 
-    for (j in sc1)
-      {
-        left <- e1[[j]]
-        if (!unary) {
-          if (nchar(.Method[2])) {
-            right <- e2[[j]] } else {
-              right <- e2}
-        }
-        value[[j]] <- eval(f)
-      }
-
-    names(value) <- sc1
-
+    
     if (nchar(.Method[1]) )
       {
-        if (length(e1.nullentries))
-          {
-            value <- c(value, e1.nullentries)
-            value <- value[full.sc1]
-          }
-      } else
+      for (j in sc1)
+        {
+          left <- e1[[j]]
+          if (!unary) {
+            if (nchar(.Method[2])) {
+              right <- e2[[j]] } else {
+                right <- e2}
+        }
+          value[[j]] <- eval(f)
+        }
+      
+      names(value) <- sc1
+
+      if (length(e1.nullentries))
+        {
+          value <- c(value, e1.nullentries)
+          value <- value[full.sc1]
+        }
+    } else
     {
       if (nchar(.Method[2]))
         {
+      for (j in sc2)
+        {
+          right <- e2[[j]]
+          left <- e1
+          value[[j]] <- eval(f)
+        }
+      
+      names(value) <- sc2
+          
           if (length(e2.nullentries))
             {
             value <- c(value, e2.nullentries)

@@ -1,3 +1,7 @@
+2007-08-20
+	* Bug fix in pscore.dist (accommodating glm's that had a subset argument)
+	* Small bug fix in stratumStructure
+	* Bug fix in Ops.optmatch.dlist
 2007-07-23
 	* Bug fixes in Ops.optmatch.dlist, having to do with handling of lists containing a dim 0xn or nx0 matrix.
 	* Bug fix in mahal.dist, having to do with names of icv not matching those of the data frame after data frame names are checked and modified by make.names (called by data.frame()).
