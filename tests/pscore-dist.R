@@ -1,3 +1,4 @@
+require('optmatch')
 data(nuclear, package="boot")
 psm <- glm(pr~.-(pr+cost), family=binomial(), data=nuclear)
 psd <- pscore.dist(psm)

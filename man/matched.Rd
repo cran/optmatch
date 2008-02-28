@@ -102,6 +102,6 @@ mxpl.fm2[unmatched(mxpl.fm2) &   # isolated units return as
          !matchfailed(mxpl.fm2)] # unmatched but not matchfailed
 
   }
-}
+
 \keyword{manip}
 %\keyword{ ~kwd2 } __ONLY ONE__ keyword per line

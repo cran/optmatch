@@ -1,0 +1,7 @@
+require('optmatch')
+data(nuclear, package="boot")
+mahal.dist(pr~date+cum.n, nuclear)
+mahal.dist(~date+cum.n, nuclear, pr~pt)
+cum.n.q <- cut(nuclear$cum.n, quantile(nuclear$cum.n), include.lowest=TRUE)
+mahal.dist(pr~date+cum.n.q, nuclear)
+mahal.dist(~date+cum.n.q, nuclear, pr~pt)

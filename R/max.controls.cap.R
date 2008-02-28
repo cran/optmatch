@@ -193,7 +193,7 @@ for (i in sfs)
 # IF THE PROBLEM IS FEASIBLE, SET TLMXC TO GREATEST OBTAINED
 # RATIO OF CONTROLS TO TREATED UNITS.  THIS MAY BE MUCH LESS THAN
 # THE GENERIC BOUND WE'D OTHERWISE USE.
-    if (all(temp$cells!="NA") & !all(temp$cells=="0"))
+    if (!any(is.na(temp$cells))&& all(temp$cells!="NA") && !all(temp$cells=="0"))
        {
        tlmxc <- max(apply(
                       table(temp$cells[temp$cells!='0'],
@@ -203,7 +203,7 @@ for (i in sfs)
     
     # ONLY GO FURTHER IF LEAST RESTRICTIVE TLMXC GAVE FEASIBILITY
     # ALSO, FOR THE TIME BEING, NEGATIVE OMIT.FRACTION NOT DEALT WITH
-    if (all(temp$cells!="NA") & !all(temp$cells=="0") &
+    if (!any(is.na(temp$cells))&& all(temp$cells!="NA") && !all(temp$cells=="0") &
         switch(1+is.na(omf[i]), omf[i]>=0, TRUE))
       {
     

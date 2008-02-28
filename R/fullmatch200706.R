@@ -227,7 +227,8 @@ for (i in sfs)
        {
        err[i] <- temp$err
        }
-    }
+    NULL
+  }
 strat.abv <- as.factor(strat.abv)
 if ("optmatch.dlist" %in% class(distance))
   {

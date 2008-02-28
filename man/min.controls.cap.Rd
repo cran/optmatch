@@ -45,10 +45,9 @@ maxControlsCap(distance, min.controls = NULL, subclass.indices = NULL)
     the \code{\link{fullmatch}} argument \code{max.controls} that yield
     a full match.}
 }
-\references{Hansen, B.B. and S. Olsen Klopfer (2005),
-  \sQuote{Optimal full matching and related designs via network flows}.
-  Technical Report 416, Statistics Department, University of Michigan;
-    to appear, \emph{JCGS}.  }
+\references{Hansen, B.B. and S. Olsen Klopfer (2006),
+  \sQuote{Optimal full matching and related designs via network flows},
+  \emph{Journal of Computational and Graphical Statistics} \bold{15}, 609--627.  }
 \author{Ben B. Hansen }
 \note{ Essentially this is just a line search.  I've done several things
   to speed it up, but not everything that might be done.  At present,

@@ -65,7 +65,12 @@ mahal.dist(distance.fmla, data, structure.fmla = NULL, inverse.cov = NULL)
 
 \examples{
 if (!match('nuclear',ls(),nomatch=0)) data(nuclear, package="boot")
- mahal.dist(pr~date+cum.n, nuclear)
- mahal.dist(~date+cum.n, nuclear, pr~pt)
+mhd1 <- mahal.dist(pr~date+cum.n, nuclear)
+lapply(mhd1, round)
+attributes(mhd1)
+fullmatch(mhd1)
+mhd2 <- mahal.dist(~date+cum.n, nuclear, pr~pt)
+lapply(mhd2, round)
+fullmatch(mhd2)
 }
 \keyword{nonparametric }% at least one, from doc/KEYWORDS

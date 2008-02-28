@@ -76,9 +76,9 @@ makedist(structure.fmla, dfr,
   }
 
 
+
 optmatch.mahalanobis <- function(trtvar, dat, inverse.cov)
-  {
-    
+  {  
   myMH <- function(Tnms, Cnms, inv.cov, data) {
    stopifnot(!is.null(dimnames(inv.cov)[[1]]), 
              all.equal(dimnames(inv.cov)[[1]], dimnames(inv.cov)[[2]]),
@@ -89,11 +89,44 @@ optmatch.mahalanobis <- function(trtvar, dat, inverse.cov)
    rowSums((xdiffs %*% inv.cov) * xdiffs)
  }
 
-  
-  ans <- outer(names(trtvar)[trtvar], names(trtvar)[!trtvar],
-               FUN=myMH, inv.cov=inverse.cov, data=dat)
-  dim(ans) <- c(sum(trtvar), sum(!trtvar))
+te <- try(ans <- outer(names(trtvar)[trtvar], names(trtvar)[!trtvar],
+               FUN=myMH, inv.cov=inverse.cov, data=dat), silent=TRUE)
+
+if (inherits(te, 'try-error'))
+  {
+    if (substr(unclass(te),1,29)!="Error: cannot allocate vector")
+      stop(unclass(te))
+ans <- matrix(0,sum(trtvar), sum(!trtvar))
+
+  cblocks <- 1
+while (inherits(te, 'try-error') &&
+       substr(unclass(te),1,29)=="Error: cannot allocate vector" &&
+       (sum(!trtvar)/cblocks)>1)
+  {
+cblocks <- cblocks*2
+bsz <- ceiling(sum(!trtvar)/cblocks)
+trtvar.ctlnms <-
+  split(names(trtvar)[!trtvar],
+        rep(1:cblocks,rep(bsz, cblocks))[1:sum(!trtvar)]
+        )
+te <- try(lapply(trtvar.ctlnms,
+                 function(ynms) outer(names(trtvar)[trtvar],ynms,
+                                      FUN=myMH, inv.cov=inverse.cov,
+                                      data=dat) ), silent=TRUE )
+###for (ii in seq(sum(!trtvar), 1, by=bsz) )
+###  {
+###    ans[,max((ii-bsz+1),1):ii] <-
+###      outer(names(trtvar)[trtvar],
+###           trtvar.ctlnms[max((ii-bsz+1),1):ii],
+###            FUN=myMH, inv.cov=inverse.cov, data=dat)
+###  }, silent=TRUE)
+}
+if (inherits(te, 'try-error') )
+      {stop(unclass(te)) } else ans <- unlist(te)
+          
+  }
+dim(ans) <- c(sum(trtvar), sum(!trtvar))
+
   dimnames(ans) <- list(names(trtvar)[trtvar], names(trtvar)[!trtvar])
   ans
-  
   }

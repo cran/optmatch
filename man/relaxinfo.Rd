@@ -18,7 +18,4 @@ Some information about licences of code and algorithms on which
 }
 \author{Ben B. Hansen }
 
-}
-  }
-}
 \keyword{optimize}% at least one, from doc/KEYWORDS

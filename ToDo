@@ -1,5 +1,21 @@
-2006-07-25
-At present, an expression like 0+mdist (mdist of class optmatch.dlist) fails, although mdist+0 works.  Make the first work also.
+2008-02 
+Finish adding invertCov fct to makedist() ; see R/mahal.dist.Rnew
+2008-01
+Subsetting a vector of class optmatch causes loss of it treatment group attribute.  Write a subsetting method for that class to avoid this.
+2007-08-24
+Following code crashed pscore.dist/makedist:
+> pm2.low <- glm(update.formula(pscore.fmla, .~.*I(si.q1<=10)), [...]
+> pd2.low <- pscore.dist(pm2.low, structure.fmla=~I(si.q1 <= 10))
+(Cf anniAdmissions/stage1/match2007-08-24.Rnw)
+
+Issue is that the model frame of pm2.low doesn't have v-ble 'si.q1',
+rather 'I(si.qi <= 10)'.  Maybe pscore.dist should have an optional
+data argument, just for evaluating structure.fmla?
+
+2007-08-24 Chris Johnson tried to combine pscore.dist() with Harrell's
+lrm() function, from Design package.  No go, b/c lrm() objects don't
+have same value info as glm() objects.  Maybe pscore.dist should really
+have methods for different kinds of fitted propensity models?
 
 2006-04-28
 For future help page/howto regarding makedist():
