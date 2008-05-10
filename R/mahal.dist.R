@@ -40,8 +40,11 @@ if (is.null(inverse.cov))
     zpos <- attr(terms(structure.fmla,data=data), "response")
     vars <- eval(attr(terms(structure.fmla,data=data), "variables"), data, 
                  parent.frame())
-    zz <- vars[[zpos]]>0
-
+    zz <- vars[[zpos]]
+    if (!(is.numeric(zz) || is.logical(zz)))
+      stop("Treatment variable should be logical or numeric")
+    zz <- zz > 0
+    
   cv <- cov(dfr[as.logical(zz), ,drop=FALSE])*(sum(zz)-1)/(length(zz)-2)
   cv <- cv + cov(dfr[!zz,,drop=FALSE])*(sum(!zz)-1)/(length(zz)-2)
   icv <- try( solve(cv), silent=TRUE)

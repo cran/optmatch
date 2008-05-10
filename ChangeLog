@@ -1,3 +1,5 @@
+2008-05-14
+	* Mahal.dist now fails if you give it a factor Tx-vble (w/o also giving it an inverted covariance)
 2008-05-09
 	* Addressed bug in fullmatch() whereby it dies when given distance of mode logical.  
 	* Started test file fullmatch.R 

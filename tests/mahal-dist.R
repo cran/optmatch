@@ -12,3 +12,5 @@ if (require(splines))
 cum.n.q <- cut(nuclear$cum.n, quantile(nuclear$cum.n), include.lowest=TRUE)
 mahal.dist(pr~date+cum.n.q, nuclear)
 mahal.dist(~date+cum.n.q, nuclear, pr~pt)
+### should give error, incorrect mode
+try(mahal.dist(as.factor(pr)~cap, nuclear))
