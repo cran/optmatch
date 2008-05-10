@@ -64,8 +64,8 @@ pscore.dist(glmobject, structure.fmla = NULL)
 
 \seealso{ \code{\link{makedist}}, \code{\link{mahal.dist}}, \code{\link{fullmatch}}, \code{\link{pairmatch}} }
 \examples{
-if (!match('nuclear',ls(),nomatch=0)) data(nuclear, package="boot")
-psm <- glm(pr~.-(pr+cost), family=binomial(), data=nuclear)
+data(nuclearplants)
+psm <- glm(pr~.-(pr+cost), family=binomial(), data=nuclearplants)
 psd <- pscore.dist(psm)
 fullmatch(psd)
 fullmatch(psd/(psd<.25)) # Propensity matching with calipers 

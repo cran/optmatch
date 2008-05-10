@@ -1,3 +1,5 @@
+2008-03-21
+To wishlist of methods for pcscore.dist, add objects from gbm package.  See email of today from sguo@email.unc.edu
 2008-02 
 Finish adding invertCov fct to makedist() ; see R/mahal.dist.Rnew
 2008-01
@@ -15,7 +17,7 @@ data argument, just for evaluating structure.fmla?
 2007-08-24 Chris Johnson tried to combine pscore.dist() with Harrell's
 lrm() function, from Design package.  No go, b/c lrm() objects don't
 have same value info as glm() objects.  Maybe pscore.dist should really
-have methods for different kinds of fitted propensity models?
+have methods for different kinds of fitted propensity models? (See also 2008-03-21 note)
 
 2006-04-28
 For future help page/howto regarding makedist():

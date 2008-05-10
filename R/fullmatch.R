@@ -8,6 +8,11 @@ if (!is.list(distance) & !is.matrix(distance))
   stop("argument \'distance\' must be a matrix or list") 
 if (is.matrix(distance))
   {
+    if (is.logical(distance))
+      distance <- matrix(as.numeric(distance),
+                         nrow(distance), ncol(distance),
+                         dimnames=dimnames(distance))
+    
   if (!is.numeric(distance))
     stop("matrix \'distance\' must be of mode numeric")
   if (is.null(dimnames(distance))) {
@@ -28,6 +33,13 @@ if (!all(unlist(lapply(distance,function(x){is.matrix(x) | is.null(x)}))))
              sep=" "))
    }
 distance[sapply(distance,is.null)] <- NULL
+if (any(lcl <- sapply(distance,is.logical)))
+  distance[lcl] <- lapply(distance[lcl],
+                          function(x) matrix(as.numeric(x),
+                                                nrow(x), ncol(x),
+                                                dimnames=dimnames(x))
+                          )
+
 if (!all(unlist(lapply(distance,is.numeric))))
   stop("elements of list \'distance\' must be of mode numeric")
 if (any(unlist(lapply(distance, function(x){is.null(dimnames(x))}))))

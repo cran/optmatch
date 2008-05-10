@@ -1,35 +1,17 @@
 %\VignetteIndexEntry{Basic uses of optmatch package}
 %\VignetteDepends{boot,optmatch}
 %\VignettePackage{optmatch}
-% This file was converted to LaTeX by Writer2LaTeX ver. 0.4
-% see http://www.hj-gym.dk/~hj/writer2latex for more info
 \documentclass[12pt,twoside]{article}
-%\usepackage[ascii]{inputenc}
-%\usepackage[T1]{fontenc}
-\usepackage[portuges,french,polish,ngerman,english]{babel}
-%\usepackage{amsmath,amssymb,amsfonts,textcomp}
 \usepackage{color}
 \usepackage{calc}
 \usepackage{longtable}
+\usepackage{Sweave}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=blue, filecolor=blue, pagecolor=blue, urlcolor=blue}
 \usepackage{graphicx}
 \usepackage[round]{natbib}
-% Pages styles (master pages)
-\makeatletter
-\newcommand\ps@Standard{%
-\renewcommand\@oddhead{}%
-\renewcommand\@evenhead{}%
-\renewcommand\@oddfoot{}%
-\renewcommand\@evenfoot{}%
+\bibpunct[, ]{(}{)}{,}{a}{}{,}
 \setlength\paperwidth{8.5in}\setlength\paperheight{11in}\setlength\voffset{-1in}\setlength\hoffset{-1in}\setlength\topmargin{1in}\setlength\headheight{12pt}\setlength\headsep{0cm}\setlength\footskip{12pt+0cm}\setlength\textheight{11in-1in-1in-0cm-12pt-0cm-12pt}\setlength\oddsidemargin{1.25in}\setlength\textwidth{8.5in-1.25in-1.25in}
-\renewcommand\thepage{\arabic{page}}
-\setlength{\skip\footins}{0.0398in}\renewcommand\footnoterule{\vspace*{-0.0071in}\noindent\textcolor{black}{\rule{0.25\columnwidth}{0.0071in}}\vspace*{0.0398in}}
-}
-\makeatother
-\pagestyle{Standard}
-\setlength\tabcolsep{1mm}
-\renewcommand\arraystretch{1.3}
 \everymath{\displaystyle}
 
 \title{Basic uses of the \texttt{optmatch} package }
@@ -37,16 +19,17 @@
 \begin{document}
 
 \maketitle
-{\selectlanguage{english}\ttfamily
- \textrm{For case{}-control studies, prospective studies with a
+
+For case{}-control studies, prospective studies with a
 treatment and a control group, and studies of a few other types, a
 statistician may wish to match individuals from one predesignated
 group, the cases or the treatment group, to similar members of another
 group of control subjects in order to reduce treatment selection bias
-and estimate treatment effect. This is bipartite matching. }}
+and estimate treatment effect. This is bipartite matching.
 
-{\selectlanguage{english}\ttfamily
-\textrm{ Matching algorithms fall into two categories: greedy and
+
+
+Matching algorithms fall into two categories: greedy and
 optimal. In each case, there is a need for a criterion of
 discrimination between better and worse matches. Here, it takes form of
 a ``distance''. In greedy matching, treated units are considered in
@@ -62,218 +45,173 @@ similar to sequential pairing procedures that reconsider previously
 made matchings at each new step.) When the number of controls is large,
 greedy and optimal matching often lead to very similar or same sets of
 matches; however optimal matching generally results in smaller
-distances within each pair \citep{gu:rose:1993}.}}
+distances within each pair \citep{gu:rose:1993}
 
-{\selectlanguage{english}\ttfamily
-\textrm{ To see the difference between greedy and optimal matching,
+To see the difference between greedy and optimal matching,
 consider the following example. Below is a table indicating the quality
-of potential pairings among four objects.}}
-
+of potential pairings among four objects.
 
 \bigskip
+
 
 \begin{longtable}[c]{|p{0.25045985in}|p{0.33655986in}|p{0.34205985in}|}
+
+\hline
+\bigskip
+           &          \emph{y}  \par &          \emph{z} \par \\
+\hline
+         \emph{w}  \par &          A \par &         A- \par \\
+\hline
+         \emph{x} \par &         A- \par &          F \par \\
 \hline
 
-\bigskip
-&
-{\centering\selectlanguage{english}\itshape
-y
-\par}
-&
-{\centering\selectlanguage{english}\itshape
-z
-\par}
-\\\hline
-{\centering\selectlanguage{english}\itshape
-w
-\par}
-&
-{\centering\selectlanguage{english}
-A
-\par}
-&
-{\centering\selectlanguage{english}
-A{}-
-\par}
-\\\hline
-{\centering\selectlanguage{english}\itshape
-x
-\par}
-&
-{\centering\selectlanguage{english}
-A{}-
-\par}
-&
-{\centering\selectlanguage{english}
-F
-\par}
-\\\hline
+
 \end{longtable}
 
-\bigskip
+\newpage
 
-{\selectlanguage{english}\ttfamily
-\textrm{ A greedy algorithm for pair matching creates pairs
-sequentially, at each step choosing the pairing that then seems best,
-without attending to its effect on future pairings. A greedy match
-might begin with }\textrm{\textit{w}}\textrm{, in which case
-}\textrm{\textit{w}}\textrm{ would be paired to
-}\textrm{\textit{y}}\textrm{, as }\textrm{\textit{y}}\textrm{ is
-}\textrm{\textit{w}}\textrm{'s nearest available counterpart. In and of
-itself this is a good pairing, as the given distance matrix rates it a
-``A''; but it is bad in that it leaves only
-}\textrm{\textit{z}}\textrm{ as a possible match to
-}\textrm{\textit{x}}\textrm{. \ The average of its two grades is ``C''.
-A luckier implementation would begin with }\textrm{\textit{x}}\textrm{,
-matching it to }\textrm{\textit{y}}\textrm{ and then
-}\textrm{\textit{w}}\textrm{ to }\textrm{\textit{z}}\textrm{, for an
-average of A{}-. Optimal matching removes luck from the picture,
-immediately matching }\textrm{\textit{x}}\textrm{ to
-}\textrm{\textit{y}}\textrm{ and }\textrm{\textit{w}} to \textit{z}. }
+A greedy algorithm for pair matching creates pairs sequentially, at each step
+choosing the pairing that then seems best, without attending to its effect on future
+pairings. A greedy match might begin with \emph{w}, in which case \emph{w} would be paired to
+\emph{y}, as \emph{y} is \emph{w}’s nearest available counterpart. In and of itself this is a good 
+pairing,
+as the given distance matrix rates it a ``A''; but it is bad in that it leaves only \emph{z} as a
+possible match to \emph{x} . The average of its two grades is ``C''. A luckier implementation
+would begin with \emph{x} , matching it to \emph{y} and then \emph{w} to \emph{z} , for an average of 
+``A-''. Optimal
+matching removes luck from the picture, immediately matching \emph{x} to \emph{y} and \emph{w} to 
+\emph{z}.
 
-{\selectlanguage{english}\ttfamily
-\textrm{ Full matching is an especially general form of optimal
+\vspace{\baselineskip}		
+
+Full matching is an especially general form of optimal
 matching. In a full match, some matched sets may contain one treated
 subject (or case) alongside one of more controls, while other matched
 sets may contain multiple treated units (cases) alongside one control.
 This distinguishes full matching from both pair matching, matching with
-}\textrm{ ${k\ge 2}$ }\textrm{controls, and matching with a variable
+ ${k\ge 2}$ controls, and matching with a variable
 number of controls, although full matchings sometimes coincide with
 matches produced by these simpler methods \citep{hansen:klopfer:2006}.
 Among all methods of matching for two groups, full matching alone is
 demonstrably optimal as a method of producing similarity with matched
 sets; this was shown by \citet{rosenbaum:1991a}, who introduced the method. It
-shares these advantages with full matching with restrictions \citep{hansen:klopfer:2006}, a procedure that can also mimic pair matching and
+shares these advantages with full matching with restrictions \citep{hansen:klopfer:2006}, a procedure 
+that can also mimic pair matching and
 matching with a fixed or variable number of controls. The workhorse of
-``optmatch'' is a function, }fullmatch()\textrm{, that performs full
-matching and full matching with restrictions. }}
+``optmatch'' is a function, \texttt{fullmatch()}, that performs full
+matching and full matching with restrictions.
+
+\bigskip
 
 
 \bigskip
 
+The following are the functions contained in ``optmatch'' and their respective purposes:
 
 \bigskip
+\begin{description}
+\item[\texttt{
+fullmatch}]  Optimal full matching
+\item[\texttt{
+pairmatch}] Optimal pair matching
+\item[\texttt{
+matched}]   Identification of units placed into matched sets
+\item[\texttt{
+matchfailed}]  Identification of units/subclasses for which matching
+was infeasible
+\item[\texttt{
+unmatched}]  Identification of units not placed into matched
+sets
+\item[\texttt{
+matched.distances}] 
+\item[\texttt{
+makedist}] 
+\item[\texttt{
+mahal.dist}] 
+\item[\texttt{
+pscore.dist}] 
+\item[\texttt{
+maxControlsCap}]  Set thinning cap for full matching
+\item[\texttt{
+minControlsCap}]  Set thickening cap for full matching
 
-% {\selectlanguage{english}\ttfamily
-% \textrm{The following are the functions contained in ``optmatch'' and
-% their respective purposes:}}
-
-
-% \bigskip
-% \begin{description}
-% \item[\texttt{
-% fullmatch}]  \textrm{Optimal full matching}
-% \item[\texttt{
-% pairmatch}] \textrm{Optimal pair matching}
-% \item[\texttt{
-% matched}]   \textrm{Identification of units placed into matched sets}
-% \item[\texttt{
-% matchfailed}]  \textrm{Identification of units/subclasses for which matching 
-% was infeasible}
-% \item[\texttt{
-% unmatched}]  \textrm{Identification of units not placed into matched
-% sets}
-% \item[\texttt{
-% matched.distances}] \textrm{??}
-% \item[\texttt{
-% makedist}] \textrm{??}
-% \item[\texttt{
-% mahal.dist}] \textrm{??}
-% \item[\texttt{
-% pscore.dist}] \textrm{??}
-% \item[\texttt{
-% maxControlsCap}]  \textrm{Set thinning cap for full matching}
-% \item[\texttt{
-% minControlsCap}]  \textrm{Set thickening cap for full matching}
-% \end{description}
+\end{description}
 
 % \bigskip
 
 <<echo=FALSE, print=FALSE, quiet=TRUE>>=
 library(optmatch)
-library(boot)
-data(nuclear)
-nuclear.nopt <- nuclear[!nuclear$pt,]
+data(nuclearplants)
+nuclear.nopt <- nuclearplants[!nuclearplants$pt,]
 row.names(nuclear.nopt)[as.logical(nuclear.nopt$pr)] <- LETTERS[1:7]
 row.names(nuclear.nopt)[!as.logical(nuclear.nopt$pr)] <- LETTERS[8:26]
 nuclear.nopt <- nuclear.nopt[order(row.names(nuclear.nopt)),]
 attach(nuclear.nopt)
 
-plantdist <- round(
+plant.dist <- round(
                   outer(rank(cap)[as.logical(pr)],
                         rank(cap)[!as.logical(pr)],
                         FUN=function(X,Y){abs(X-Y)}) +
                   outer(rank(date)[as.logical(pr)],
                         rank(date)[!as.logical(pr)],
-                        FUN=function(X,Y){abs(X-Y)}) 
+                        FUN=function(X,Y){abs(X-Y)})
                     )
 
-dimnames(plantdist) <- list(LETTERS[1:7],LETTERS[8:26])
+dimnames(plant.dist) <- list(LETTERS[1:7],LETTERS[8:26])
 detach()
 @
 
-{\selectlanguage{english}\rmfamily\bfseries
-Optimal Full Matching}
+Optimal Full Matching
 
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{To follow this example:}}
+To follow this example:
+
+\bigskip
+
+
+1. Install the \texttt{optmatch} package
+
+
+2. Install the \texttt{boot} package
+
+3. Use command \texttt{
+library(optmatch)}
+
+4. Use command \texttt{help(nuclearplants,
+package='optmatch')}
+
+5. Use command \texttt{
+data(nuclearplants,
+package='optmatch')}
+
+6. Use command \texttt{
+ attach(nuclearplants)} 
+
+7. Use command \texttt{
+help(fullmatch, package='optmatch')}
 
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{1. Install the} {\texttt{optmatch} \textrm{package}}
 
-{\selectlanguage{english}\ttfamily
-\textrm{2. Install the} {\texttt{boot} \textrm{package}}
-
-{\selectlanguage{english}
-\textrm{3. Use command} \texttt{help(nuclear,
-package=boot)}}
-
-{\selectlanguage{english}
-\textrm{4. Use command} \texttt{
-data(nuclear,
-package=boot)}}
-
-{\selectlanguage{english}
-\textrm{5. Use command} \texttt{
- attach(nuclear)} }
-
-{\selectlanguage{english}
-\textrm{6. Use command} \texttt{ 
-library(optmatch)}}
-
-{\selectlanguage{english}
-\textrm{7. Use command} \texttt{
-help(fullmatch, package=optmatch)}}
+The main function is of the following form:
 
 
 \bigskip
 
-{\selectlanguage{english}
-The main function is of the following form:}
-
-
-\bigskip
-
-{\selectlanguage{english}\texttt{
+\texttt{
 fullmatch(distance, subclass.indices = NULL, min.controls = 0,
-max.controls = Inf,omit.fraction = NULL, tol = 0.01)}}
+max.controls = Inf,omit.fraction = NULL, tol = 0.01)}
 
 
 \bigskip
 
-{\selectlanguage{english}
-\textrm{The only mandatory argument is } \texttt{
-distance\textrm{.}}}
 
+The only mandatory argument is  \texttt{
+distance}.
 
-\bigskip
 \begin{description}
 \item[\texttt{distance}:] A matrix of nonnegative
 discrepancies, each indicating the permissibility and
@@ -285,15 +223,38 @@ indicating more desirable matches.  Matrix 'distance', or the
 matrix elements of 'distance', must have row and column names.
 \end{description}
 
+\texttt{Optmatch} has three functions to help create the above-mentioned distance matrix. 
+The functions are listed and explained below.
+
+\begin{description}
+
+\item[\texttt{makedist()}:] A function defined with respect to data and a user-supplied function to 
+compute desired distances. 
+
+\item[\texttt{mahal.dist()}:] Calculates Mahalanobis distances between treatment and control observations on
+ given variables, assembling them into a discrepancy matrix (or matrices) 
+ 
+\item[\texttt{pscore.dist()}:]Extracts scores from a fitted propensity scoring model, 
+assembling them into a discrepancy matrix (or matrices) from which \texttt{pairmatch()}
+or \texttt{fullmatch()} can determine optimal matches. 
+
+\end{description}
+
+
+It is preferable to use these functions rather than to create a distance matrix by other means.
+We will illustrate later that the above methods do the work of keeping track
+of the ordering of observations in a working data frame, while an ordinarily 
+created distance matrix would not.
+
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{\textbf{Example.} The following data relate to the 26 light water reactor (LWR)
+
+\textbf{Example.} The following data relate to the 26 light water reactor (LWR)
 plants constructed in the U.S.A. in the late 1960's and early 1970's.
 The data were collected with the aim of predicting the cost of
-construction of further LWR plants. To illustrate the use of }distance,
-\textrm{consider the problem of matching new to refurbished nuclear
+construction of further LWR plants. To illustrate the use of distance,
+consider the problem of matching new to refurbished nuclear
 plants, for the purpose of comparing their construction costs. In the
 nuclear plans example, seven existing{}-site plans are to be matched to
 19 new{}-site plants, in order to allow an adjusted assessment of the
@@ -302,9 +263,9 @@ use in the analysis are cost and date of issue of construction permit.
 For the illustration, we matched only upon cap and date, but an earnest
 analysis might match on other variables as well. Also, in this
 example, we will use only the first 26 data points in the dataset, for
-which the variable }pt \textrm{(a binary variable where
+which the variable pt (a binary variable where
 '1' indicates those plants
-withpartial turnkey guarantees) is set to zero.}}
+withpartial turnkey guarantees) is set to zero.
 
 
 \bigskip
@@ -369,18 +330,18 @@ New site\\
 \end{center}
 \end{minipage}
 
+\textbf{Creating a distance matrix}
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{The discrepancy matrix should record plants' differences on the
+The discrepancy matrix should record plants' differences on the
 covariates, here date of construction and capacity, but the manner in
 which it combines these differences is at the discretion of the
 analyst. \ To illustrate, we calculate a distance matrix from
-the}\textrm{\textit{ ranks}}\textrm{ of the date and the capacity
+the \textit{ ranks} of the date and the capacity
 variables (following section 10.3.4 of
 \citep{rosenbaum:2002}). This transforms the
-covariates as follows:}}
+covariates as follows:
 
 
 \bigskip
@@ -447,136 +408,151 @@ New site\\
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{Now we create a matrix whose entries are the total differences
+
+Now we create a matrix whose entries are the total differences
 between the ranks of dates and capacities for each pair. For example,
 the difference for the pair AH is (13.5{}-1.5)+(22.5{}-7.0) = 27.5
-(which we round to 28, for simplicity)}.}
+(which we round to 28, for simplicity).
 
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{This matrix, which we name }\texttt{plantdist}\textrm{, is formed as
-follows:}}
+This matrix, which we name \texttt{plant.dist}, is formed as
+follows:
 
+%%% REPLACE WITH AN EXAMPLE USING MAHAL.DIST?
 
 \bigskip
-
+\textbf{Creating a distance matrix: direct method}
 <<>>=
-attach(nuclear.nopt)
+attach(nuclearplants)
 
-plantdist <- round(
-                  outer(rank(cap)[as.logical(pr)],
-                        rank(cap)[!as.logical(pr)],
-                        FUN=function(X,Y){abs(X-Y)}) +
-                  outer(rank(date)[as.logical(pr)],
-                        rank(date)[!as.logical(pr)],
-                        FUN=function(X,Y){abs(X-Y)})
-                  )
-dimnames(plantdist) <- list(LETTERS[1:7],LETTERS[8:26])
+plant.dist <- round(
+                  abs( outer(rank(cap)[pr==1],rank(cap)[pr==0],"-") ) +
+                  abs( outer(rank(date)[pr==1],rank(date)[pr==0],"-") ) 
+                    )
+dimnames(plant.dist) <- list(row.names(nuclearplants)[pr==1],
+                             row.names(nuclearplants)[pr==0])
+detach()
 
-plantdist
+plant.dist
 @
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{Having created the distance matrix, we are in a position to
-match new to refurbished plants. Enter}}
+\textbf{Creating a distance matrix using convenience functions}
 
+Alternatively, we can use an \texttt{optmatch} convenience function, such as \texttt{mahal.dist} or \texttt{pscore.dist} a distance.
+
+\bigskip
+<<>>=
+plant.dist.m <- mahal.dist(pr ~ cap + date, nuclearplants)
+plant.dist.m
+@
+\bigskip
+
+\textbf{Creating an Unrestricted Match}
 
 \bigskip
 
+Having created the distance matrix, we are in a position to
+match new to refurbished plants. Enter
 <<>>=
-plantsfm <- fullmatch(plantdist)
+plants.fm <- fullmatch(plant.dist)
 @
 
-\bigskip
-
-{\selectlanguage{english}\ttfamily
-\textrm{This results in the following match:}}
-
+The result is:
 
 <<echo=FALSE>>=
-plantsfm
+plants.fm
+@
+where \texttt{m.1}, \texttt{m.2}, etc. are the indices for
+matches. \texttt{plants.fm} pairs A to I, B{}- to J, etc.
+
+\textbf{An advantage of the convenience functions for making distances}
+
+Compare \texttt{plants.fm} to 
+<<>>=
+(plants.fm.m <- fullmatch(plant.dist.m))
+@ 
+
+The matches are different, as one would expect, given that the distances they're based on are different.  However, you'll not that the orderings of observations they assume are different, as is indicated by the difference in their row names.  The match based on \texttt{plants.fm.m} is ordered as is the data frame it's based on, \texttt{nuclearplants}.  The ordering of \texttt{plants.fm}, in constrast, is incorrect.  Looking at the first six
+rows of our dataset below, it can be seen that the actual order of
+plants differs from the order of the \texttt{fullmatch} object.
+<<echo=FALSE>>=
+head(nuclearplants)
 @
 
-{\selectlanguage{english}\ttfamily
-\textrm{where m.1, m.2, etc. are the indices for matches. Before
-adjustments are made, the fullmatch command matches A to I, B{}- to J,
-etc.}}
+That's because the distance object \texttt{plant.dist.m} carries the
+metadata needed to reconstruct the proper ordering after matching,
+whereas the matrix \texttt{plant.dist} does not, forcing
+\texttt{fullmatch()} to guess the proper ordering of row names.  (It
+does this by sorting on the row names, which sometimes gets the right
+answer but doesn't here.)
 
-{\selectlanguage{english}\ttfamily
-\textrm{If you adapt this example directly to your problem, then be sure to check after matching that the names of the factor that results from matching are identical with the row names of your working data frame.  Sometimes the observations get scrambled from their original order, and things get confused when you go on to do analysis.  Another way to avoid this problem is to make your distance using the} \texttt{makedist, mahal.dist} \textrm{or} \texttt{pscore.dist} \textrm{functions, which keep track of the order of observations for you.  The help page for } \texttt{makedist}, \textrm{accessible with} \texttt{?makedist},\textrm{shows in its examples how to make the distance given above using it.}}
+\bigskip
 
+\textbf{Matching with Restrictions}
+
+\bigskip
+
+\textbf{Matching within Calipers}
 
 
 \bigskip
 
-{\selectlanguage{english}\rmfamily\bfseries
-Matching within Calipers}
 
-
-\bigskip
-
-{\selectlanguage{english}\ttfamily
- \textrm{The statistician may wish to forbid the matching of certain
+The statistician may wish to forbid the matching of certain
 treatment{}-control pairs, perhaps those that are quite dissimilar. On
 the other hand, it may be too restrictive to insist that matched units
 have the same covariates: for instance, in the nuclear plants example
 only four exactly matched pairs are possible, namely AI, BJ, DQ, and
-ER. \ For continuous covariates, matching within calipers enforces
+ER.  For continuous covariates, matching within calipers enforces
 similarity of matches (if not that they be exactly the same) 
-\citep{hansen:klopfer:2006}. \ }}
+\citep{hansen:klopfer:2006}. 
 
-{\selectlanguage{english}\ttfamily
-\textrm{ Continuing the nuclear plants illustration, we impose a caliper
+Continuing the nuclear plants illustration, we impose a caliper
 of 3 years in the date of construction. This forbids matches between
 plants whose date of construction differs by more than three years.
 Note that this may not minimize total distance, since total distance is
-a combination of date and capacity.}}
+a combination of date and capacity.
 
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{\textbf{Coding a caliper when using optmatch and R:}}}
 
+\textbf{Coding a caliper when using optmatch and R:}
 
-\bigskip
-
-{\selectlanguage{english} \textrm{
 To incorporate such a caliper, invoke \texttt{fullmatch()} after modifying the
-distance matrix as follows,}}
+distance matrix as follows,
 
 
 \bigskip
 
 <<>>=
+attach(nuclearplants)
 datediffs <- outer(date[pr==1], date[pr==0],"-")
-( plantdist <- plantdist/(abs(datediffs)<3) )
+( plant.dist <- plant.dist/(abs(datediffs)<3) )
+plant.dist.m <- plant.dist.m/(abs(datediffs)<3)
 @
 
-{\selectlanguage{english}\ttfamily
-\textrm{The infinite entries occur where the matrix} \texttt{datediffs} \textrm{has an entry less than $-3$ or greater than $+3$, indicating an unwanted match.  (If you had constructed the distance} \texttt{plantdist} \textrm{using} \texttt{makedist}, \textrm{or} \texttt{mahal.dist} \textrm{or} \texttt{pscore.dist}, \textrm{then you may have to use} \texttt{makedist} \textrm{also to create} \texttt{datediffs} \textrm{in order for the division} \texttt{plantdist/(abs(datediffs)<3)} \textrm{to work.)}}
 
-\bigskip
+The infinite entries occur where the matrix \texttt{datediffs} 
+has an entry less than $-3$ or greater than $+3$, indicating an unwanted match. 
 
-{\selectlanguage{english}\rmfamily\bfseries
-Maintaining balance between treatment and control using min.controls and
-max.controls}
+Maintaining balance between treatment and control using \texttt{min.controls} and
+\texttt{max.controls}
 
 
 \bigskip
 
-{\selectlanguage{english}
- \textrm{The statistician may wish to place restrictions on the relative
+
+The statistician may wish to place restrictions on the relative
 proportions with which treated and control subjects are combined into
 matched sets, perhaps to control the variability of an estimate based
 on the matching (See \citealt{Hansen:2004}, {\S}3). The following are two
-arguments of the }\texttt{fullmatch()} \textrm{function that allow that
-adjustment.}}
+arguments of the \texttt{fullmatch()} function that allow that
+adjustment.
 
 
 \bigskip
@@ -598,94 +574,33 @@ whole number.
 \end{description}
 \bigskip
 
-{\selectlanguage{english}\rmfamily\bfseries
-Treatment{}-control balance by matched set}
 
-
-<<>>=
-stratumStructure(plantsfm)
-table(plantsfm,ifelse(pr,'treated', 'control')) 
-@
-
-\bigskip
-
-{\selectlanguage{english}\ttfamily
-\textrm{In this unrestricted match, the number of controls per treatment
-subject varies widely. Such imbalance can be prevented as follows.}}
-
-
-\bigskip
-<<>>=
-plantsfm1 <- fullmatch(plantdist,min.controls=2, max.controls=3)
-stratumStructure(plantsfm1)
-@
-
-{\selectlanguage{english}\ttfamily
-\textrm{Specifying }\texttt{min.controls}\textrm{ and/or }\texttt{max.controls}\textrm{
-amounts to }\textrm{\textit{full matching with restrictions}}\textrm{,
+Specifying \texttt{min.controls} and/or \texttt{max.controls}
+amounts to \textit{full matching with restrictions},
 which improves matched sets' treatment{}-control
-balance.}}
+balance.
 
-{\selectlanguage{english}\ttfamily
-\textrm{To determine the largest value of} min.controls \textrm{with which the
-  matching problem is possible to solve, use}
-minControlsCap. \textrm{To get the smalles feasible value of}
-max.controls, \textrm{use} maxControlsCap. \textrm{(Note: these function calls} fullmatch
-\textrm{repeatedly, in a line search of the positive half-line.  They
-  can be time-consuming in large matching problems.)}}
+
+To determine the largest value of min.controls with which the
+  matching problem is possible to solve, use
+minControlsCap. To get the smalles feasible value of
+max.controls, use maxControlsCap. (Note: these function calls \texttt{fullmatch}
+repeatedly, in a line search of the positive half-line.  They
+  can be time-consuming in large matching problems.)
 <<>>=
-(mincc <- minControlsCap(plantdist))
-maxControlsCap(plantdist, min.controls=mincc$strictest.feasible)
+(mincc <- minControlsCap(plant.dist))
+maxControlsCap(plant.dist, min.controls=mincc$strictest.feasible)
 @ 
-\bigskip
+\bigskip 
 
-{\selectlanguage{english}\rmfamily \bfseries
-Largest treatment{}-control distances, by matched set}
-
-<<>>=
-tapply(names(plantsfm), plantsfm, FUN= function(x, dmat)
-{ max(dmat[match(x, dimnames(dmat)[[1]]),
-           match(x, dimnames(dmat)[[2]])], na.rm=TRUE )
-}, dmat=plantdist)
-@
-
-{\selectlanguage{english}\rmfamily
-This function gives the largest difference in each of the matched sets. }
-
+\textbf{Omitting a fraction of controls}
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{A similar application of the }\texttt{tapply()} \textrm{function gives
-the actual ranges of the }\texttt{date}\textrm{ variable within each match, i.e.
-the biggest difference on the variable }date \textrm{in each match:}}
 
-
-\bigskip
-<<>>=
-tapply(date, plantsfm, FUN= function(x)
-{diff(range(x))})
-@
-\bigskip
-
-{\selectlanguage{english}\rmfamily
-For example, in m.6, we see that the biggest difference in the dates of
-F,U, and Z is the difference between U and Z: 71.08 {}- 69.50 = 1.58.
-
-  The function \texttt{matched.distances} is also useful for determining how close matches are; see its help page for details.
-}
-\bigskip
-
-{\selectlanguage{english}\rmfamily\bfseries
-Omitting a fraction of controls}
-
-
-\bigskip
-
-{\selectlanguage{english}\ttfamily
-\textrm{ The statistician may wish to discard a portion of the control
+ The statistician may wish to discard a portion of the control
 data. This may be done if a cost issue arises or if the statistician
-would like to discard outliers on the distance.}}
+would like to discard outliers on the distance.
 
 
 \bigskip
@@ -713,38 +628,38 @@ respectively, are omitted.
 
 \bigskip
 
-{\selectlanguage{english}\rmfamily
-Suppose we wish to omit 50\% of the control subjects: }
+
+Suppose we wish to omit 50\% of the control subjects: 
 
 
 \bigskip
 
 <<>>=
-(plantsfm2 <- fullmatch(plantdist, omit.fraction=.5))
-table(plantsfm2,ifelse(pr,'treated', 'control'))
+(plants.fm2 <- fullmatch(plant.dist, omit.fraction=.5))
+table(plants.fm2,ifelse(pr,'treated', 'control'))
 @
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{If before we had a total of 19 controls, of them all were
+
+If before we had a total of 19 controls, of them all were
 matched, now we have matched only 10 of them. The first nine rows of
 the above table are not matched sets, but rather indicators for
 unmatched controls. Controls H, K, N, O, P, T, V, Y, and Z are now not
-matched to a treated subject. }}
+matched to a treated subject. 
 
 
 \bigskip
 
-{\selectlanguage{english}\rmfamily\bfseries
-Rounding}
+
+\textbf{Rounding}
 
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{If the matching is taking too long, increasing the }tol\textrm{
-argument may speed up the process.}}
+
+If the matching is taking too long, increasing the \texttt{tol}
+argument may speed up the process.
 
 
 \bigskip
@@ -763,119 +678,177 @@ same matched sets.
 
 \bigskip
 
-{\selectlanguage{english}\rmfamily\bfseries
-Matched, Unmatched, and Matchfailed}
+
+\bigskip
+
+\textbf{Evaluating the quality of the match}
+
+Treatment{}-control balance by matched set
+
+\begin{description}
+\item[\texttt{stratumStructure:}] Tabulate treatment:control ratios occurring
+ in matched sets, and the frequency of their occurrence. 
+\end{description}
+
+<<>>=
+stratumStructure(plants.fm)
+table(plants.fm,ifelse(pr,'treated', 'control')) 
+@
+
+\bigskip
+
+In this unrestricted match, the number of controls per treatment
+subject varies widely. Such imbalance can be prevented as follows.
+
+
+\bigskip
+<<>>=
+plants.fm1 <- fullmatch(plant.dist,min.controls=2, max.controls=3)
+stratumStructure(plants.fm1)
+@
+
+
+
+
+
+Matched treatment{}-control distances:
+<<>>=
+unlist(matched.distances(plants.fm1, plant.dist))
+@
+
+Matched treatment{}-control distances, by matched set:
+<<>>=
+matched.distances(plants.fm1, plant.dist, TRUE)
+@ 
+For example, in m.6, we see that the biggest difference in the dates of
+F,U, and Z is the difference between U and Z: 71.08 {}- 69.50 = 1.58.
+
+\bigskip
+
+
+
+
+\textbf{Matched, Unmatched, and Matchfailed}
 
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily \textrm{ An easy way to check
+An easy way to check
 which plants were matched and unmatched is to use commands
-}\texttt{matched()}\textrm{ and }\texttt{unmatched()}\textrm{. In
+\texttt{matched()} and \texttt{unmatched()}. In
 our original matching attempt, full matching was performed so we
-see:}}
+see:
 
 
 \bigskip
 <<>>=
-matched(plantsfm)
-table(unmatched(plantsfm))
+matched(plants.fm)
+table(unmatched(plants.fm))
 @
 
-{\selectlanguage{english}
-\textrm{After we omitted half of our controls, however, the output is}}
+
+After we omitted half of our controls, however, the output is
 
 <<>>=
-table(matched(plantsfm2))
-table(unmatched(plantsfm2))
+table(matched(plants.fm2))
+table(unmatched(plants.fm2))
 @
 
-{\selectlanguage{english}\ttfamily
-\textrm{Names of the controls that were not matched can be
-  retrieved as follows:}}
+
+Names of the controls that were not matched can be
+  retrieved as follows:
 
 
 \bigskip
 
 <<>>=
-names(plantsfm2)[unmatched(plantsfm2)]
+names(plants.fm2)[unmatched(plants.fm2)]
 @
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
- \textrm{When }fullmatch\textrm{ has been presented with an inconsistent
+
+When \texttt{fullmatch} has been presented with an inconsistent
 combination of constraints and discrepancies between potential matches,
 so that there exists no matching (i) with finite total discrepancy
 within matched sets that (ii) respects the given constraints, then the
-matching problem is said to be infeasible. }TRUE\textrm{s in the output
-of }matchfailed\textrm{ indicate that this has occurred. }}
+matching problem is said to be infeasible. TRUEs in the output
+of matchfailed indicate that this has occurred. 
 
 
 <<>>=
-table(matchfailed(fullmatch(plantdist,min.controls=5)))
+table(matchfailed(fullmatch(plant.dist,min.controls=5)))
 @
 
 
-{\selectlanguage{english}\ttfamily
-\textrm{ To understand the output of }matchfailed\textrm{
-element{}-wise, note that }fullmatch\textrm{ handles a matching problem
-in three steps. First, if }fullmatch\textrm{ has been directed to match
+
+ To understand the output of matchfailed
+element{}-wise, note that \texttt{fullmatch} handles a matching problem
+in three steps. First, if \texttt{fullmatch} has been directed to match
 within subclasses, then it divides its matching problem into a
-subproblem for each subclass. Second, }fullmatch\textrm{ removes from
+subproblem for each subclass. Second, \texttt{fullmatch} removes from
 each subproblem those individual units that lack permissible potential
 matches (i.e. potential matches from which they are separated by a
 finite discrepancy). Such
 ``isolated'' units are flagged in
 such a way as to be indicated by unmatched, but not by
-}matchfailed\textrm{. Third, }fullmatch\textrm{ presents each
+\texttt{matchfailed}. Third, \texttt{fullmatch}  presents each
 subproblem, with isolated elements removed, to an optimal matching
 routine. If such a reduced subproblem is found at this stage to be
 infeasible, then each unit contributing to it is so flagged as to be
-indicated by }matchfailed.\textrm{ }}
+indicated by \texttt{matchfailed.}
 
 
 \bigskip
 
-{\selectlanguage{english}\ttfamily
-\textrm{In this case there were no inconsistencies in the constraints,
-so the command returns:}}
+In this case there were no inconsistencies in the constraints,
+so the command returns:
 
 <<>>=
-table(matchfailed(plantsfm))
+table(matchfailed(plants.fm))
 detach()
 @
 
-{\selectlanguage{english}\rmfamily
-\bibliographystyle{asa}
+\bibliographystyle{plainnat}
+%\bibliography{abbrev_long,causalinference,computing}
 \begin{thebibliography}{5}
-\newcommand{\enquote}[1]{``#1''}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
 
-\bibitem[{Gu and Rosenbaum(1993)}]{gu:rose:1993}
-Gu, X. and Rosenbaum, P.~R. (1993), \enquote{Comparison of Multivariate
-  Matching Methods: Structures, Distances, and Algorithms,} \textit{Journal of
-  Computational and Graphical Statistics}, 2, 405--420.
+\bibitem[Gu and Rosenbaum(1993)]{gu:rose:1993}
+X.S. Gu and Paul~R. Rosenbaum.
+\newblock Comparison of multivariate matching methods: Structures, distances,
+  and algorithms.
+\newblock {\em Journal of Computational and Graphical Statistics}, 2\penalty0
+  (4):\penalty0 405--420, 1993.
 
-\bibitem[{Hansen(2004)}]{Hansen:2004}
-Hansen, B.~B. (2004), \enquote{Full matching in an observational study of
-  coaching for the {SAT},} \textit{Journal of the American Statistical
-  Association}, 99, 609--618.
+\bibitem[Hansen(2004)]{Hansen:2004}
+Ben~B. Hansen.
+\newblock Full matching in an observational study of coaching for the {SAT}.
+\newblock {\em Journal of the American Statistical Association}, 99\penalty0
+  (467):\penalty0 609--618, September 2004.
 
-\bibitem[{Hansen and Klopfer(2006)}]{hansen:klopfer:2006}
-Hansen, B.~B. and Klopfer, S.~O. (2006), \enquote{Optimal full matching and
-  related designs via network flows,} \textit{Journal of Computational and
-  Graphical Statistics}, 15, 609--627.
+\bibitem[Hansen and Klopfer(2006)]{hansen:klopfer:2006}
+Ben~B. Hansen and Stephanie~Olsen Klopfer.
+\newblock Optimal full matching and related designs via network flows.
+\newblock {\em Journal of Computational and Graphical Statistics}, 15\penalty0
+  (3):\penalty0 609--627, 2006.
+\newblock URL
+  \url{http://www.stat.lsa.umich.edu/\%7Ebbh/hansenKlopfer2006.pdf}.
 
-\bibitem[{Rosenbaum(1991)}]{rosenbaum:1991a}
-Rosenbaum, P.~R. (1991), \enquote{A Characterization of Optimal Designs for
-  Observational Studies,} \textit{Journal of the Royal Statistical Society},
-  53, 597-- 610.
+\bibitem[Rosenbaum(1991)]{rosenbaum:1991a}
+Paul~R. Rosenbaum.
+\newblock A characterization of optimal designs for observational studies.
+\newblock {\em Journal of the Royal Statistical Society}, 53:\penalty0 597--
+  610, 1991.
 
-\bibitem[{Rosenbaum(2002)}]{rosenbaum:2002}
---- (2002), \textit{Observational Studies}, Springer-Verlag, 2nd ed.
+\bibitem[Rosenbaum(2002)]{rosenbaum:2002}
+Paul~R. Rosenbaum.
+\newblock {\em Observational Studies}.
+\newblock Springer-Verlag, second edition, 2002.
 
 \end{thebibliography}
 
-}
+
 \end{document}

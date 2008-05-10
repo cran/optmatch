@@ -36,7 +36,7 @@ matched.distances(matchobj, distance,preserve.unit.names=FALSE)
 data(plantdist)
 plantsfm <- fullmatch(plantdist) 
 (plantsfm.d <- matched.distances(plantsfm,plantdist,pres=TRUE))
-unlist(plantsfm.d, max)
+unlist(lapply(plantsfm.d, max))
 mean(unlist(plantsfm.d))
 }
 \keyword{nonparametric }% at least one, from doc/KEYWORDS

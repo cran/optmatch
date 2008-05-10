@@ -61,13 +61,7 @@ that info is lost in the transition to a distance matrix.}
 
 \seealso{\code{\link{fullmatch}}, \code{\link{pscore.dist}}, \code{\link{mahal.dist}}}
 \examples{
-data(nuclear, package='boot')
-##-- A re-ordering of row names helps to illustrate
-##-- the complications that makedist() wards off.
-row.names(nuclear)[nuclear$pr==1 & nuclear$pt==0] <- LETTERS[1:7]
-row.names(nuclear)[nuclear$pr!=1 & nuclear$pt==0] <- LETTERS[8:26]
-row.names(nuclear)[nuclear$pr==1 & nuclear$pt==1] <- letters[1:3]
-row.names(nuclear)[nuclear$pr!=1 & nuclear$pt==1] <- letters[4:6]
+data(nuclearplants)
 
 ##-- A distance function used in P. Rosenbaum's (2002) book
 rankdiffs <- function(trtvar, dat, vars)
@@ -80,13 +74,13 @@ dmt <- dmt + abs(outer(vvr[trtvar], vvr[!trtvar],"-"))
 round(dmt)              
 }
 ##-- Gives a warning because this fn doesn't assign dimnames
-(rdd1 <- makedist(pr~1, nuclear[nuclear$pt==0,], rankdiffs, c("cap","date")))
+(rdd1 <- makedist(pr~1, nuclearplants[nuclearplants$pt==0,], rankdiffs, c("cap","date")))
 fullmatch(rdd1)
-##-- fullmatch() knows its value should be ordered as the nuclear data set is
+##-- fullmatch() knows its value should be ordered as the nuclearplants data set is
 rdd1$m
 ##-- now fullmatch() doesn't know the proper order of units and has to guess
 fullmatch(rdd1$m)
-(rdd2 <- makedist(pr~pt, nuclear, rankdiffs, c("cap","date")))
+(rdd2 <- makedist(pr~pt, nuclearplants, rankdiffs, c("cap","date")))
 fullmatch(rdd2)
 
 ##- Distance on a propensity score
@@ -95,13 +89,13 @@ sclr <- data[names(trtvar), scalarname]
 names(sclr) <- names(trtvar)
 abs(outer(sclr[trtvar],sclr[!trtvar], '-'))
 }
-nuclear$pscore <- glm(pr~.-(pr+cost), family=binomial(),
-                      data=nuclear)$linear.predictors
+nuclearplants$pscore <- glm(pr~.-(pr+cost), family=binomial(),
+                      data=nuclearplants)$linear.predictors
 ##-- Distance for propensity score matching w/o prior stratification
-psd1 <- makedist(pr~1, nuclear, scalardiffs, "pscore")
+psd1 <- makedist(pr~1, nuclearplants, scalardiffs, "pscore")
 fullmatch(psd1)
 ##-- Distance for propensity score matching within levels of "pt"
-psd2 <- makedist(pr~pt, nuclear, scalardiffs, "pscore")
+psd2 <- makedist(pr~pt, nuclearplants, scalardiffs, "pscore")
 fullmatch(psd2)
 
 }

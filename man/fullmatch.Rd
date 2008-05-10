@@ -147,10 +147,13 @@ as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
   \code{fullmatch}.  Such a bound is also printed by
   \code{print.optmatch}.  
 }
-\references{  
+\references{
+  Hansen, B.B. and Klopfer, S.O. (2006), \sQuote{ Optimal full matching and related designs via network flows}, \emph{Journal of
+    Computational and Graphical Statistics}, \bold{15}, 609--627.
+  
   Hansen, B.B. (2004), \sQuote{Full Matching in an Observational Study
   of Coaching for the {SAT}}, \emph{Journal of the American
-  Statistical Association}, \bold{99}, 609--618.  (Cf. especially the Appendix.)
+  Statistical Association}, \bold{99}, 609--618.  
 
   Rosenbaum, P. (1991), 
 \sQuote{A Characterization of Optimal Designs for Observational
@@ -158,27 +161,24 @@ as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
   \bold{53}, 597--610.
 }
 \author{Ben Hansen}
-\note{ \code{fullmatch} is based on an algorithm developed by Stephanie
-  Olsen Klopfer.  Her algorithm translates full matching problems into
-  network flow problems; in the present implementation, the latter are handled
-  by Bertsekas and Tseng's RELAX-IV codes.}
 
-\seealso{\code{\link{matched}}, \code{\link{makedist}}}
+\seealso{\code{\link{matched}}, \code{\link{pscore.dist}},
+  \code{\link{mahal.dist}}, \code{\link{makedist}}}
 \examples{
 data(plantdist)
 round(plantdist)
 plantsfm <- fullmatch(plantdist) # A full match with unrestricted
                                  # treatment-control balance
-pr <- logical(26)
-pr[match(dimnames(plantdist)[[1]], names(plantsfm))] <- TRUE
+PR <- logical(26)
+PR[match(dimnames(plantdist)[[1]], names(plantsfm))] <- TRUE
 
 table(plantsfm,                        # treatment-control balance, 
-ifelse(pr,'treated', 'control'))       # by matched set
+ifelse(PR,'treated', 'control'))       # by matched set
 
 stratumStructure(plantsfm)             # summary of sets' trt-ctl balance
 
 sum(plantdist*                         # sum of matched distances
-    outer(plantsfm[pr], plantsfm[!pr],
+    outer(plantsfm[PR], plantsfm[!PR],
           "==")   )
 
 plantsfm1 <- fullmatch(plantdist, # A full match with 
@@ -188,18 +188,6 @@ min.controls=2, max.controls=3)   # restrictions on matched sets'
 
 stratumStructure(plantsfm1)       # treatment-control balance is 
                                   # improved by restrictions
-
-sum(plantdist*                          # but distances between
-    outer(plantsfm1[pr], plantsfm1[!pr],# matched units increase
-          "==") )                       
-
-tapply(names(plantsfm),                 # largest treatment-control 
-plantsfm1, FUN= function(x, dmat) {     # distances, by matched set
-max(
-    dmat[match(x, dimnames(dmat)[[1]]), 
-         match(x, dimnames(dmat)[[2]])], 
-    na.rm=TRUE )
-}, dmat=plantdist)
 
 }
 

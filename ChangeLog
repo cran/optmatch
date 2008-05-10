@@ -1,3 +1,13 @@
+2008-05-09
+	* Addressed bug in fullmatch() whereby it dies when given distance of mode logical.  
+	* Started test file fullmatch.R 
+	* Update to mahal.dist.Rd -- hint on how to trick it into doing scalar discrepancies
+	* version 0.3-7
+2008-05-09
+	* Bug fix to mahal.dist(): it wasn't accepting an inverse.cov argument.  Also added a test of this (which I informally verified).
+	* Added nuclearplants data frame to /data.  It is very similar to the nuclear data set in the boot package: see its docs.
+2008-02-29
+	* Bug fix to mahal.dist() : got it to accept formulas w/ ns() in them
 2007-10 
 	* New license.
 	* More informative error handling for stratumStructure()

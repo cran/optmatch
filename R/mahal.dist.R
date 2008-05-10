@@ -23,12 +23,14 @@ if (is.null(structure.fmla))
   }
 distance.fmla <- update.formula(distance.fmla, ~-1+.,data=data)
 distance.fmla <- terms(distance.fmla, data=data)
-ds.vars <- attr(distance.fmla, "variables")
+ds.vars <-all.vars(distance.fmla)
 if (length(ds.vars)<2) stop("No variables on RHS of distance.fmla")
 
+inp <- parse(text=paste("list(", paste(ds.vars, collapse = ","), ")")) # from def of get_all_vars()
+
 dfr <- model.matrix(distance.fmla, #model.frame(distance.fmla,data))
-                    structure(eval(ds.vars, data, parent.frame()),
-                              names=as.character(ds.vars[2:length(ds.vars)])))
+                    structure(eval(inp, data, parent.frame()),
+                              names=as.character(ds.vars)))
 sf.vars <- all.vars(structure.fmla)
 sf.vars <- sf.vars[!(sf.vars%in% names(dfr))]
 sf.vars <- sf.vars[sf.vars %in% names(data)]
@@ -64,6 +66,7 @@ stopifnot(is.matrix(inverse.cov),
           dim(inverse.cov)[1]==dim(inverse.cov)[2],
           all.equal(dimnames(inverse.cov)[[1]],dimnames(inverse.cov)[[2]]),
           all.equal(dimnames(inverse.cov)[[1]],dimnames(dfr)[[2]]))
+icv <- inverse.cov
 }
 attr(structure.fmla, 'generation.increment') <- 1
 

@@ -64,13 +64,20 @@ mahal.dist(distance.fmla, data, structure.fmla = NULL, inverse.cov = NULL)
 \seealso{ \code{\link{makedist}}, \code{\link{pscore.dist}}, \code{\link{fullmatch}}, \code{\link{pairmatch}} }
 
 \examples{
-if (!match('nuclear',ls(),nomatch=0)) data(nuclear, package="boot")
-mhd1 <- mahal.dist(pr~date+cum.n, nuclear)
+data(nuclearplants)
+mhd1 <- mahal.dist(pr~date+cum.n, nuclearplants)
 lapply(mhd1, round)
 attributes(mhd1)
 fullmatch(mhd1)
-mhd2 <- mahal.dist(~date+cum.n, nuclear, pr~pt)
+##- Mahalanobis within subclasses defined by levels of pt
+mhd2 <- mahal.dist(~date+cum.n, nuclearplants, pr~pt)
 lapply(mhd2, round)
 fullmatch(mhd2)
+##- Trick mahal.dist into returning absolute differences on a scalar.
+mhd3 <- mahal.dist(pr~date, nuclearplants,
+inverse.cov=matrix(1,1,1,dimnames=list("date", "date")))
+mhd3[[1]]
+##- Matching within calipers of 3 years
+fullmatch(mhd1/(mhd3<3))
 }
 \keyword{nonparametric }% at least one, from doc/KEYWORDS
