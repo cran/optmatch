@@ -33,5 +33,11 @@ tnn[2*(1:length(ans))-1][onez] <- Inf
 tnn[2*(1:length(ans))][onez] <- 1
 }
 ans <- ans[order(-tnn[2*(1:length(ans))-1],tnn[2*(1:length(ans))])]
+### FOLLOWING LINE SHOULD CALCULATE 'EFFECTIVE' SAMPLE SIZE, IN
+### TERMS OF COMPARABLE NUMBER OF PAIRS.  THAT IN TURN ASSUMES
+### EITHER EQUAL VARIANCE OF OUTCOMES IN MATCHED SETS, OR TREATMENT
+### ASSIGNMENT MODEL OF HANSEN & BOWERS 2008 STAT SCI.
+### LOOKS OK WHEN I RUN IT ON RELEVANT TESTS, BUT NEEDS TO BE DOCUMENTED.
+attr(ans, "comparable.num.matched.pairs") <- sum(2/(1/ttab[,1] + 1/ttab[,2]))
 ans
 }  

@@ -1,0 +1,65 @@
+
+R version 2.6.2 (2008-02-08)
+Copyright (C) 2008 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(optmatch)
+You're loading optmatch, by Ben Hansen, a package for flexible
+ and optimal matching.  Important license information:
+ The optmatch package makes essential use of D. P. Bertsekas
+ and P. Tseng's RELAX-IV algorithm and code, as well as
+ Bertsekas' AUCTION algorithm and code.
+ Bertsekas and Tseng freely permit their software to be used for
+ research purposes, but non-research uses, including the use of it
+ to 'satisfy in any part commercial delivery requirements to
+ government or industry,' require a special agreement with them.
+ By extension, this requirement applies to any use of the 
+ fullmatch() function. (If you are using another package that has
+ loaded optmatch, then you will probably be using fullmatch indirectly.)
+ For more information, enter relaxinfo() at the command line
+> data(plantdist)
+> 
+> plantsfm <- fullmatch(plantdist) 
+> plantsfm1 <- fullmatch(plantdist,min.controls=2, max.controls=3)
+> 
+> stratumStructure(plantsfm)
+stratum treatment:control ratios
+1:1 1:2 1:3 1:4 1:6 
+  2   2   1   1   1 
+attr(,"comparable.num.matched.pairs")
+[1] 9.480952
+> stratumStructure(plantsfm1)
+stratum treatment:control ratios
+1:2 1:3 
+  2   5 
+attr(,"comparable.num.matched.pairs")
+[1] 10.16667
+> 
+> data(nuclearplants)
+> psd <- pscore.dist(glm(pr~.-(pr+cost), family=binomial(),
++                        data=nuclearplants))
+> stratumStructure(fullmatch(psd))
+stratum treatment:control ratios
+ 5:1  3:1  1:3 1:17 
+   1    1    1    1 
+attr(,"comparable.num.matched.pairs")
+[1] 6.555556
+> stratumStructure(fullmatch(psd/(psd<.25)))
+stratum treatment:control ratios
+1:0 3:1 2:1 1:2 1:7 0:1 
+  3   1   1   1   1  11 
+attr(,"comparable.num.matched.pairs")
+[1] 5.916667
+> 

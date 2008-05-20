@@ -1,5 +1,8 @@
+2008-05-19
+	* introduced optmatch method for subsetting, so you can retain key metadata (specifically contrast.groups attribute) when you subset an vector produced by fullmatch() or pairmatch(). 
+	* added calculation of effective sample size to stratumStructure, with documentation.
 2008-05-14
-	* Mahal.dist now fails if you give it a factor Tx-vble (w/o also giving it an inverted covariance)
+	* Mahal.dist now fails (with an error message) if you give it a factor Tx-vble (w/o also giving it an inverted covariance)
 2008-05-09
 	* Addressed bug in fullmatch() whereby it dies when given distance of mode logical.  
 	* Started test file fullmatch.R 
