@@ -1,8 +1,8 @@
 "[.optmatch" <-
-  function(x, i, drop=FALSE)
+  function(x, ..., drop=FALSE)
 {
   y <- NextMethod("[")
-  attr(y,"contrast.group") <- "["(attr(x, "contrast.group"),i)
+  attr(y,"contrast.group") <- "["(attr(x, "contrast.group"),...)
   class(y) <- c("optmatch", "factor")
   y
 }

@@ -3,7 +3,7 @@ To wishlist of methods for pcscore.dist, add objects from gbm package.  See emai
 2008-02 
 Finish adding invertCov fct to makedist() ; see R/mahal.dist.Rnew
 2008-01
-Subsetting a vector of class optmatch causes loss of it treatment group attribute.  Write a subsetting method for that class to avoid this.
+Subsetting a vector of class optmatch causes loss of it treatment group attribute.  Write a subsetting method for that class to avoid this. DONE
 2007-08-24
 Following code crashed pscore.dist/makedist:
 > pm2.low <- glm(update.formula(pscore.fmla, .~.*I(si.q1<=10)), [...]

@@ -1,6 +1,6 @@
 
-R : Copyright 2006, The R Foundation for Statistical Computing
-Version 2.3.1 (2006-06-01)
+R version 2.6.1 (2007-11-26)
+Copyright (C) 2007 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -141,4 +141,26 @@ $contrast.group
 [25]  TRUE  TRUE
 
 > 
+> ### arises in lme4:::lmerFactorList , which is called in lme4::lmer 
+> ### at following line:
+> ###
+> ###   fl <- lapply(bars, function(x) eval(substitute(as.factor(fac)[, 
+> ###        drop = TRUE], list(fac = x[[3]])), mf))
+> ###
+> ### (caused [.optmatch to die in optmatch version 0.4-0 on R-2.6.0 +)
+> as.factor(plantsfm)[, drop = TRUE]
+  A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P   Q   R   S   T 
+m.1 m.2 m.3 m.4 m.5 m.6 m.7 m.4 m.1 m.2 m.4 m.3 m.4 m.3 m.4 m.3 m.4 m.5 m.5 m.4 
+  U   V   W   X   Y   Z 
+m.6 m.5 m.5 m.7 m.7 m.6 
+> plantsfm[, drop = TRUE]
+  A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P   Q   R   S   T 
+m.1 m.2 m.3 m.4 m.5 m.6 m.7 m.4 m.1 m.2 m.4 m.3 m.4 m.3 m.4 m.3 m.4 m.5 m.5 m.4 
+  U   V   W   X   Y   Z 
+m.6 m.5 m.5 m.7 m.7 m.6 
+> plantsfm[, drop = FALSE]
+  A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P   Q   R   S   T 
+m.1 m.2 m.3 m.4 m.5 m.6 m.7 m.4 m.1 m.2 m.4 m.3 m.4 m.3 m.4 m.3 m.4 m.5 m.5 m.4 
+  U   V   W   X   Y   Z 
+m.6 m.5 m.5 m.7 m.7 m.6 
 > 

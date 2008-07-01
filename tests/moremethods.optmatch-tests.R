@@ -16,3 +16,13 @@ plantsfm <- fullmatch(plantdist)
 plantsfm[26:1]
 attributes(plantsfm[26:1])
 
+### arises in lme4:::lmerFactorList , which is called in lme4::lmer 
+### at following line:
+###
+###   fl <- lapply(bars, function(x) eval(substitute(as.factor(fac)[, 
+###        drop = TRUE], list(fac = x[[3]])), mf))
+###
+### (caused [.optmatch to die in optmatch version 0.4-0 on R-2.6.0 +)
+as.factor(plantsfm)[, drop = TRUE]
+plantsfm[, drop = TRUE]
+plantsfm[, drop = FALSE]
