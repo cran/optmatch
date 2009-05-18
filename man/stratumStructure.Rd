@@ -6,7 +6,7 @@
    frequency of their occurrence.
 }
 \usage{
-stratumStructure(stratum,trtgrp=NULL)
+stratumStructure(stratum,trtgrp=NULL,min.controls=0,max.controls=Inf)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,6 +15,11 @@ stratumStructure(stratum,trtgrp=NULL)
 \item{trtgrp}{Dummy variable for treatment group membership.  (Not
 required if \code{stratum} is an optmatch object, as returned by
 \code{\link{fullmatch}} or \code{\link{pairmatch}}.) }
+\item{min.controls}{For display, the number of treatment group members
+  per stratum will be truncated at the reciprocal of
+  \code{min.controls}.}
+\item{max.controls}{For display, the number of control group members
+  will be truncated at \code{max.controls}.}
  }
 \value{
   A table showing frequency of occurrence of those treatment:control
@@ -70,11 +75,11 @@ required if \code{stratum} is an optmatch object, as returned by
 \author{Ben Hansen}
 
 \references{
-  Kalton, G. (1968), \sQuote{Standardization: {A} technique to control
+  Kalton, G. (1968), \sQuote{Standardization: A technique to control
     for extraneous variables}, \emph{Applied Statistics}, \bold{17}, 118--136.
 
   Hansen, B.B. (2004), \sQuote{Full Matching in an Observational Study
-  of Coaching for the {SAT}}, \emph{Journal of the American
+  of Coaching for the SAT}, \emph{Journal of the American
   Statistical Association}, \bold{99}, 609--618.
 
   Hansen B.B. and Bowers, J. (2008), \sQuote{Covariate balance in simple, stratified
@@ -91,6 +96,7 @@ plantsfm1 <- fullmatch(plantdist,min.controls=2, max.controls=3)
 
 stratumStructure(plantsfm)
 stratumStructure(plantsfm1)
+stratumStructure(plantsfm, max.controls=4)
 }
 
 \keyword{ misc }% at least one, from doc/KEYWORDS

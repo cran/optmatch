@@ -1,6 +1,6 @@
 
-R version 2.6.1 (2007-11-26)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.7.1 (2008-06-23)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -113,6 +113,34 @@ $contrast.group
  [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE
 [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 [25] FALSE FALSE
+
+$matched.distances
+$matched.distances$m.1
+[1] 0
+
+$matched.distances$m.2
+[1] 0
+
+$matched.distances$m.3
+L N P 
+4 6 9 
+
+$matched.distances$m.4
+H K M O Q T 
+7 8 2 6 0 4 
+
+$matched.distances$m.5
+R S V W 
+0 2 8 4 
+
+$matched.distances$m.6
+ U  Z 
+ 5 12 
+
+$matched.distances$m.7
+X Y 
+4 8 
+
 
 $class
 [1] "optmatch" "factor"  

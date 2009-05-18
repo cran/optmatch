@@ -11,5 +11,7 @@ psm <- glm(pr~.-(pr+cost), family=binomial(),
 ### to
 ###  makedist(structure.fmla,
 ###         data.frame(ZzZz, Ppty,glmobject$data[names(Ppty),]),
-psd <- pscore.dist(psm)
-fullmatch(psd/(psd<.25))
+psd0 <- pscore.dist(psm)
+fullmatch(psd0/(psd0<.25))
+psd1 <- pscore.dist(psm,standardization.scale=mad)
+fullmatch(psd1/(psd1<.25))

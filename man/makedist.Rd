@@ -13,7 +13,7 @@ makedist(structure.fmla, data, fn = function(trtvar, dat, ...) {
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{structure.fmla}{A formula defined w.r.t. data frame \code{data},
-  with a treatment variable on the LHS and either \quote{1}, if no
+  with a treatment variable on the LHS and either \sQuote{1}, if no
   stratification prior to matching, or variables
 defining pre-matching stratification on the RHS.}
   \item{data}{ A data frame in which \code{structure.fmla} is evaluated

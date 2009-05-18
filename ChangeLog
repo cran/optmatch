@@ -1,3 +1,11 @@
+2009-05-18
+	* revised summary.optmatch method.  
+	* objects of class "optmatch" now carry matched.distances information, as attribute "matched.distances".  This is created by a call to matched.distances(), with default setting on preserve.unit.names.
+	* summary.optmatch calls xBalance(), in package RItools, if RItools is loaded and it is given a second argument of class "glm"
+2008-07-24
+	* stratumStructure now doesn't include strata in which matching failed when calculation comparable number of matched pairs.
+2008-07-01
+	* fixed bug in [.optmatch (failed with recent versions of R)
 2008-05-19
 	* introduced optmatch method for subsetting, so you can retain key metadata (specifically contrast.groups attribute) when you subset an vector produced by fullmatch() or pairmatch(). 
 	* added calculation of effective sample size to stratumStructure, with documentation.

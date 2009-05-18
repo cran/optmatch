@@ -1,3 +1,5 @@
+2008-08-16
+maxControlsCap isn't reliable. Example: example(mahal.dist) ; minControlsCap(mhd2/(mhd2<2)).  The cap for '0' should be at least 1; but function returns 0.  
 2008-03-21
 To wishlist of methods for pcscore.dist, add objects from gbm package.  See email of today from sguo@email.unc.edu
 2008-02 

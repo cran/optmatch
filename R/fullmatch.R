@@ -264,6 +264,6 @@ if (sum(err, na.rm=TRUE)>TOL)
 attr(strat.abv, "call") <- match.call()
 
 attr(strat.abv, "contrast.group") <- inrow
-
+attr(strat.abv, "matched.distances") <- matched.distances(strat.abv, distance)
 strat.abv
 }

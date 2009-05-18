@@ -152,7 +152,7 @@ as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
     Computational and Graphical Statistics}, \bold{15}, 609--627.
   
   Hansen, B.B. (2004), \sQuote{Full Matching in an Observational Study
-  of Coaching for the {SAT}}, \emph{Journal of the American
+  of Coaching for the SAT}, \emph{Journal of the American
   Statistical Association}, \bold{99}, 609--618.  
 
   Rosenbaum, P. (1991), 

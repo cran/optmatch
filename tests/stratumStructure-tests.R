@@ -11,4 +11,15 @@ data(nuclearplants)
 psd <- pscore.dist(glm(pr~.-(pr+cost), family=binomial(),
                        data=nuclearplants))
 stratumStructure(fullmatch(psd))
-stratumStructure(fullmatch(psd/(psd<.25)))
+stratumStructure(fm.psd.cal <- fullmatch(psd/(psd<.25)))
+
+psd2 <- pscore.dist(glm(pr~.-(pr+cost), family=binomial(),
+                       data=nuclearplants),structure.fmla=~pt)
+stratumStructure(fullmatch(psd2,min.controls=1,max.controls=1))
+stratumStructure(fullmatch(psd2,min.controls=3,max.controls=3))
+
+
+### Tests of min.controls, max.controls
+stratumStructure(fm.psd.cal, min.controls=.5)
+stratumStructure(fm.psd.cal, max.controls=3)
+stratumStructure(fm.psd.cal, min.controls=.5, max.controls=3)

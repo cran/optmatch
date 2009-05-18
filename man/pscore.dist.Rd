@@ -7,16 +7,24 @@
   \code{pairmatch()} or \code{fullmatch()} can determine optimal matches.
 }
 \usage{
-pscore.dist(glmobject, structure.fmla = NULL)
+pscore.dist(glmobject, structure.fmla = NULL, standardization.scale=sd)
 }
 \arguments{
   \item{glmobject}{ A fitted propensity modeling object, produced by a
-    call to \code{glm()} or, say, \code{brlr()} from the package of the
-    same name. }
+    call to \code{glm()} or, say, \code{bayesglm} (from package
+    \dQuote{arm}) or \code{brglm()} (from the \dQuote{brglm} package). }
   \item{structure.fmla}{ Optional formula argument specifying subclasses
   within which matches are to be performed.  If omitted, no
   subclassification is done. If it is given, the RHS of this formula gives
-    variables on which to stratify the sample prior to matching. }
+  variables on which to stratify the sample prior to matching. }
+  \item{standardization.scale}{Scalar-valued function to be applied
+    separately to
+    treatment and control propensity scores to determine their scale;
+    propensity distances will be scaled by a pooling of these two values.
+    Defaults to \code{\link{sd}}, which gives scaling by the pooled sd
+    of propensity scores.  (Another good choice is \code{\link{mad}},
+    which is robust to outliers but gives results similar to \code{sd}
+    in the absence of outliers.)  }
 }
 \details{
   \code{glmobject} need not necessarily be the result of a call to
