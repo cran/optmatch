@@ -23,3 +23,9 @@ stratumStructure(fullmatch(psd2,min.controls=3,max.controls=3))
 stratumStructure(fm.psd.cal, min.controls=.5)
 stratumStructure(fm.psd.cal, max.controls=3)
 stratumStructure(fm.psd.cal, min.controls=.5, max.controls=3)
+
+### tests of stratumStructure on non-optmatch objects
+fac <- as.factor(fm.psd.cal)
+tvec <- attr(fm.psd.cal, "contrast.group")
+stratumStructure(fac, tvec)
+stratumStructure(as.integer(fac),tvec)

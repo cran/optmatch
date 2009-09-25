@@ -1,7 +1,7 @@
 2008-08-16
-maxControlsCap isn't reliable. Example: example(mahal.dist) ; minControlsCap(mhd2/(mhd2<2)).  The cap for '0' should be at least 1; but function returns 0.  
+maxControlsCap isn't reliable. Example: example(mahal.dist) ; minControlsCap(mhd2/(mhd2<2)).  The cap for '0' should be at least 1; but function returns 0.  -DONE
 2008-03-21
-To wishlist of methods for pcscore.dist, add objects from gbm package.  See email of today from sguo@email.unc.edu
+To wishlist of methods for pcscore.dist, add objects from gbm package.  (Per suggestion from sguo@email.unc.edu)
 2008-02 
 Finish adding invertCov fct to makedist() ; see R/mahal.dist.Rnew
 2008-01
@@ -20,23 +20,6 @@ data argument, just for evaluating structure.fmla?
 lrm() function, from Design package.  No go, b/c lrm() objects don't
 have same value info as glm() objects.  Maybe pscore.dist should really
 have methods for different kinds of fitted propensity models? (See also 2008-03-21 note)
-
-2006-04-28
-For future help page/howto regarding makedist():
-A likely source of errors in writing a function to be called in
-makedist() are errors due to coercion of 1xn or nx1 matrices to
-vectors.  outer() helpfully gives you a matrix rather than a vector in
-this case, but then if you operate on that matrix it tends to get
-coerced to a vector.
-  
-2006-04-19 
-Maybe makedist() should accept as argument a
-distance-making function with 1st and second args Tnms and Cnms.  Can
-this readily be done?  Maybe try it with a new function name, since I
-now seem to have a working makedist().
-
-2006-04-12
-Test makedist().  Some tests: formula with null RHS; non-binary LHS, expression on LHS  
 
 2005
 Consider adding refs to Harrell's matching functions find.matches and

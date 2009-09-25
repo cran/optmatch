@@ -70,8 +70,6 @@ were selected to ease certain demonstrations in \code{optmatch}.)
 This documentation page is also adapted from the \code{boot} package,
 written by Angelo Canty and ported to R by Brian Ripley.
 }
-\note{
-}
 \references{
 Cox, D.R. and Snell, E.J. (1981) 
 \emph{Applied Statistics: Principles and Examples}. Chapman and Hall.

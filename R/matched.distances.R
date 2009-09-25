@@ -26,6 +26,3 @@ return(res[levels(matchobj)])
   }
 
   }
-
-### a (for now) private helper to compute if any matched.distances are considered
-### outliers --Removed in revision 113 (-BH)

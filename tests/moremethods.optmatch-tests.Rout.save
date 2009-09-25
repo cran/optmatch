@@ -1,6 +1,6 @@
 
-R version 2.7.1 (2008-06-23)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.9.0 (2009-04-17)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -47,6 +47,34 @@ $class
 $contrast.group
  [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE
 
+$matched.distances
+$matched.distances$m.1
+[1] 0
+
+$matched.distances$m.2
+[1] 0
+
+$matched.distances$m.3
+L N P 
+4 6 9 
+
+$matched.distances$m.4
+H K M O Q T 
+7 8 2 6 0 4 
+
+$matched.distances$m.5
+R S V W 
+0 2 8 4 
+
+$matched.distances$m.6
+ U  Z 
+ 5 12 
+
+$matched.distances$m.7
+X Y 
+4 8 
+
+
 > attributes(plantsfm[5:10,drop=TRUE])
 $names
 [1] "E" "F" "G" "H" "I" "J"
@@ -59,6 +87,34 @@ $class
 
 $contrast.group
 [1]  TRUE  TRUE  TRUE FALSE FALSE FALSE
+
+$matched.distances
+$matched.distances$m.1
+[1] 0
+
+$matched.distances$m.2
+[1] 0
+
+$matched.distances$m.3
+L N P 
+4 6 9 
+
+$matched.distances$m.4
+H K M O Q T 
+7 8 2 6 0 4 
+
+$matched.distances$m.5
+R S V W 
+0 2 8 4 
+
+$matched.distances$m.6
+ U  Z 
+ 5 12 
+
+$matched.distances$m.7
+X Y 
+4 8 
+
 
 > plantsfm[1:26 <11]
   A   B   C   D   E   F   G   H   I   J 
@@ -76,6 +132,34 @@ $class
 $contrast.group
 [1] TRUE TRUE TRUE TRUE TRUE
 
+$matched.distances
+$matched.distances$m.1
+[1] 0
+
+$matched.distances$m.2
+[1] 0
+
+$matched.distances$m.3
+L N P 
+4 6 9 
+
+$matched.distances$m.4
+H K M O Q T 
+7 8 2 6 0 4 
+
+$matched.distances$m.5
+R S V W 
+0 2 8 4 
+
+$matched.distances$m.6
+ U  Z 
+ 5 12 
+
+$matched.distances$m.7
+X Y 
+4 8 
+
+
 > attributes(plantsfm[1:26 <6,drop=TRUE])
 $names
 [1] "A" "B" "C" "D" "E"
@@ -88,6 +172,34 @@ $class
 
 $contrast.group
 [1] TRUE TRUE TRUE TRUE TRUE
+
+$matched.distances
+$matched.distances$m.1
+[1] 0
+
+$matched.distances$m.2
+[1] 0
+
+$matched.distances$m.3
+L N P 
+4 6 9 
+
+$matched.distances$m.4
+H K M O Q T 
+7 8 2 6 0 4 
+
+$matched.distances$m.5
+R S V W 
+0 2 8 4 
+
+$matched.distances$m.6
+ U  Z 
+ 5 12 
+
+$matched.distances$m.7
+X Y 
+4 8 
+
 
 > 
 > plantsfm[5] <- "m.4"
@@ -167,6 +279,34 @@ $contrast.group
  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
 [25]  TRUE  TRUE
+
+$matched.distances
+$matched.distances$m.1
+[1] 0
+
+$matched.distances$m.2
+[1] 0
+
+$matched.distances$m.3
+L N P 
+4 6 9 
+
+$matched.distances$m.4
+H K M O Q T 
+7 8 2 6 0 4 
+
+$matched.distances$m.5
+R S V W 
+0 2 8 4 
+
+$matched.distances$m.6
+ U  Z 
+ 5 12 
+
+$matched.distances$m.7
+X Y 
+4 8 
+
 
 > 
 > ### arises in lme4:::lmerFactorList , which is called in lme4::lmer 

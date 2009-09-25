@@ -51,8 +51,11 @@ maxControlsCap(distance, min.controls = NULL, subclass.indices = NULL)
 \author{Ben B. Hansen }
 \note{ Essentially this is just a line search.  I've done several things
   to speed it up, but not everything that might be done.  At present,
-  not very thoroughly tested either.  Comments appreciated (but not
-  likely to generate immediate action on my part...).}
+  not very thoroughly tested either: you might check the final results
+    to make sure that \code{\link{fullmatch}} works with the values of
+    \code{min.controls} (or \code{max.controls}) suggested by these
+    functions, and that it ceases to work if you increase (decrease)
+    those values.  Comments appreciated.}
 
 
 \seealso{\code{\link{fullmatch}}}

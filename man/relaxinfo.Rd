@@ -10,8 +10,8 @@ Function to display licence information regarding code embedded
 relaxinfo()
 }
 %- maybe also 'usage' for other objects documented here.
-\details{
-}
+%\details{
+%}
 \value{
 Some information about licences of code and algorithms on which
 \code{fullmatch} depends.

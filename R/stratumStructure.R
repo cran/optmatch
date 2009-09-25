@@ -25,7 +25,7 @@ if (length(max.controls)>1) warning("Only first element of max.controls will be 
 
 notMF <- if (class(stratum)[1]=="optmatch") {
   suppressWarnings(!matchfailed(levels(stratum)))
-} else !logical(nlevels(stratum))
+} else !logical(nlevels(as.factor(stratum)))
 
 stratum <- as.integer(as.factor(stratum))
 if (any(is.na(stratum)))

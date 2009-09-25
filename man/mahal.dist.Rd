@@ -3,10 +3,17 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Assemble Mahalanobis distances and prepare for matching }
 \description{
-  Calculates Mahalanobis distances between treatment and control
+  Calculates squared Mahalanobis distances between treatment and control
   observations on given variables,
   assembling them into a discrepancy matrix (or matrices) from which
-  \code{pairmatch()} or \code{fullmatch()} can determine optimal matches.
+  \code{pairmatch()} or \code{fullmatch()} can determine optimal
+  matches.  (If vectors \code{x} and \code{y} encode two observations'
+  values of the specified variables, then the squared Mahalanobis
+  distance between them is
+  \deqn{
+    D^2 = (x - y)'\Sigma^{-1}(x-y)
+    }
+  .)
 }
 \usage{
 mahal.dist(distance.fmla, data, structure.fmla = NULL, inverse.cov = NULL)

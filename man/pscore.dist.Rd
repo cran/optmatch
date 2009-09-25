@@ -70,12 +70,13 @@ pscore.dist(glmobject, structure.fmla = NULL, standardization.scale=sd)
  \emph{The American Statistician}, \bold{39} 33--38.
 }
 
-\seealso{ \code{\link{makedist}}, \code{\link{mahal.dist}}, \code{\link{fullmatch}}, \code{\link{pairmatch}} }
+\seealso{ \code{\link{makedist}}, \code{\link{mahal.dist}}, \code{\link{fullmatch}}, \code{\link{pairmatch}},
+          \code{\link{caliper}}}
 \examples{
 data(nuclearplants)
 psm <- glm(pr~.-(pr+cost), family=binomial(), data=nuclearplants)
 psd <- pscore.dist(psm)
 fullmatch(psd)
-fullmatch(psd/(psd<.25)) # Propensity matching with calipers 
+fullmatch(caliper(.25, psd)) # Propensity matching with calipers 
 }
 \keyword{nonparametric }% at least one, from doc/KEYWORDS

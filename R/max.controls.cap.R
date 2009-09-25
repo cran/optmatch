@@ -193,7 +193,7 @@ for (i in sfs)
 # IF THE PROBLEM IS FEASIBLE, SET TLMXC TO GREATEST OBTAINED
 # RATIO OF CONTROLS TO TREATED UNITS.  THIS MAY BE MUCH LESS THAN
 # THE GENERIC BOUND WE'D OTHERWISE USE.
-    if (!any(is.na(temp$cells))&& all(temp$cells!="NA") && !all(temp$cells=="0"))
+    if (!all(is.na(temp$cells))&& !all(temp$cells=="NA") && !all(temp$cells=="0"))
        {
        tlmxc <- max(apply(
                       table(temp$cells[temp$cells!='0'],
@@ -203,7 +203,7 @@ for (i in sfs)
     
     # ONLY GO FURTHER IF LEAST RESTRICTIVE TLMXC GAVE FEASIBILITY
     # ALSO, FOR THE TIME BEING, NEGATIVE OMIT.FRACTION NOT DEALT WITH
-    if (!any(is.na(temp$cells))&& all(temp$cells!="NA") && !all(temp$cells=="0") &
+    if (!all(is.na(temp$cells))&& !all(temp$cells=="NA") && !all(temp$cells=="0") &&
         switch(1+is.na(omf[i]), omf[i]>=0, TRUE))
       {
     
@@ -216,7 +216,7 @@ for (i in sfs)
                             max.cpt=min(1/tgmnc, ncol), min.cpt=1,
                             tolerance=.5, omit.fraction=
                             switch(1+is.na(omf[i]), -omf[i], NULL))
-        flipflag <- all(temp$cells!="NA") & !all(temp$cells=="0")
+        flipflag <- !all(is.na(temp$cells)) && !all(temp$cells=="NA") && !all(temp$cells=="0")
       } else {flipflag <- FALSE}
  
     if (flipflag)
@@ -227,10 +227,10 @@ for (i in sfs)
         {
         tlmxc <- 
        optimize( function(invlmxc, rown1, coln1, dist1, gmnc1, omf1) {
-       ifelse(all(SubDivStrat(rown=coln1, coln=rown1, dist=t(dist1),
+       ifelse(!all(SubDivStrat(rown=coln1, coln=rown1, dist=t(dist1),
        max.cpt=min(1/gmnc1, length(rown1)), min.cpt=invlmxc,
        tolerance=.5, omit.fraction= switch(1+is.na(omf[i]), -omf[i],
-       NULL) )$cells!="NA") ,
+       NULL) )$cells=="NA") ,
               invlmxc, -invlmxc)
                   },
                 upper=min(1/tgmnc,length(trnl)), lower=max(1, 1/tlmxc),
@@ -247,10 +247,10 @@ for (i in sfs)
          {
        tlmxc <- ceiling(
        optimize( function(lmxc1, rown1, coln1, dist1, gmnc1, omf1) {
-       ifelse(all(SubDivStrat( rown=rown1, coln=coln1, dist=dist1,
+       ifelse(!all(SubDivStrat( rown=rown1, coln=coln1, dist=dist1,
        min.cpt=max(gmnc1, 1/length(rown1)), max.cpt=lmxc1,
        tolerance=.5, omit.fraction= switch(1+is.na(omf[i]), omf[i],
-       NULL) )$cells!="NA") ,
+       NULL) )$cells=="NA") ,
               lmxc1, 2*length(coln1) - lmxc1)
                   },
                 lower=max(tgmnc,1), upper=min(length(tcnl), tlmxc), tol=1,
@@ -264,3 +264,4 @@ for (i in sfs)
 list(given.min.controls=gmnc, strictest.feasible.max.controls=lmxc)
 
 }
+ 

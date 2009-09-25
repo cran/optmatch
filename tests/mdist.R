@@ -1,0 +1,73 @@
+require("optmatch")
+
+test <- function(t, m = "Test Failed!") {
+  if (!t) {
+    stop(m)
+  } 
+}
+
+### Data ###
+
+data("nuclearplants")
+
+fmla <- pr ~ t1 + t2 + pt
+test.glm <- glm(fmla, family=binomial(), data=nuclearplants)
+
+### Basic Tests ###
+
+result.glm <- mdist(test.glm)
+result.glm2 <- mdist(test.glm, ~pt)
+
+test(inherits(result.glm, "optmatch.dlist"), "Should be a optmatch object")
+test(length(result.glm) == 1)
+test(length(result.glm2) == 2)
+
+result.optmatch.dlist <- mdist(result.glm)
+test(inherits(result.optmatch.dlist, "optmatch.dlist"), "Should be a optmatch object")
+test(length(result.optmatch.dlist) == 1)
+
+result.fmla <- mdist(fmla, data = nuclearplants)
+test(inherits(result.fmla, "optmatch.dlist"), "Should be a optmatch object")
+test(length(result.fmla) == 1)
+
+### Function Tests ###
+
+# first, a simpler version of scalar diffs
+sdiffs <- function(treatments, controls) {
+  abs(outer(treatments$t1, controls$t1, `-`))
+}
+
+result.function <- mdist(sdiffs, pr ~ 1, nuclearplants)
+test(all(dim(result.function) == c(10,22)), "Function not returning right sized data")
+
+test(identical(optmatch:::parseFmla(y ~ a | group), lapply(c("y", "a", "group"), as.name)))
+test(identical(optmatch:::parseFmla(y ~ a), c(as.name("y"), as.name("a"), NULL)))
+
+test(!is.null(rownames(result.function)) && all(rownames(result.function) %in% rownames(nuclearplants[nuclearplants$pr == 1,])))
+
+result.function.a <- mdist(sdiffs, pr ~ 1 | pt, nuclearplants)
+result.function.b <- mdist(sdiffs, pr ~ pt, nuclearplants)
+
+test(identical(result.function.a, result.function.b), "Two ways to specify groupings")
+
+shouldError <- function(expr, msg = "Exception should be thrown") {
+  r <- try(expr, silent = T)
+  if (!inherits(r, "try-error")) {
+    stop(msg)  
+  }
+}
+
+shouldError(mdist(sdiffs, pr ~ pt + t1, nuclearplants))
+
+# the fun part, making a dlist when there are multiple groups
+
+test(length(mdist(sdiffs, pr ~ pt, nuclearplants)) == 2, "Not enough groups")
+
+### Using mad() instead of sd() for GLM distances
+
+result <- mdist(glm(pr ~ t1 + t2 + cost, data = nuclearplants, family = binomial()))
+
+# this is an odd test, but a simple way to make sure mad is running, not SD(). 
+# I would like a better test of the actual values, but it works
+test(mean(result$m) > 2)
+

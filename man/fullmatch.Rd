@@ -18,8 +18,7 @@ omit.fraction = NULL, tol = 0.001, subclass.indices = NULL)
 each indicating the permissibility and desirability of matching the unit 
 corresponding to its row (a 'treatment') to the unit
 corresponding to its column (a 'control'); or, better, a list of such matrices,
-as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
-\code{\link{makedist}}.}
+as produced by \code{\link{mdist}}.}
   \item{min.controls}{ The minimum ratio of controls to
   treatments that is to be permitted within a matched set: should
   be nonnegative and finite.  If
@@ -88,7 +87,7 @@ as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
   discrepancies indicating more desirable matches. 
   Matrix \code{distance} must have row and column names.
   
-  Consider using \code{\link{makedist}} to generate the distances.
+  Consider using \code{\link{mdist}} to generate the distances.
   \code{fullmatch} tries to guess the
   order in which units would have been given in a data frame, and to
   order the factor that it returns accordingly.  If the dimnames of
@@ -96,8 +95,9 @@ as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
   of the data frame you're working with, then you should compare the
   names of fullmatch's output to your row names in order to be sure
   things are in the proper order.  You can relieve yourself of these
-  worries by using \code{\link{makedist}}, \code{\link{pscore.dist}},
-  or \code{\link{mahal.dist}} to produce the distances, as
+  worries by using \code{\link{mdist}} (or \code{\link{makedist}}, \code{\link{pscore.dist}},
+  or \code{\link{mahal.dist}}, which [as of version 0.6] are dispatched
+  as needed by \code{\link{mdist}}) to produce the distances, as
   it passes the ordering of units to \code{fullmatch}, which then uses
   it to order its outputs.
   
@@ -144,8 +144,8 @@ as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
   which the sum of distances between matched units in the result of
   \code{fullmatch} exceeds the least possible sum of distances between
   matched units in a feasible solution to the matching problem given to
-  \code{fullmatch}.  Such a bound is also printed by
-  \code{print.optmatch}.  
+  \code{fullmatch}.  (Such a bound is also printed by
+  \code{print.optmatch} and \code{summary.optmatch}.)  
 }
 \references{
   Hansen, B.B. and Klopfer, S.O. (2006), \sQuote{ Optimal full matching and related designs via network flows}, \emph{Journal of
@@ -162,34 +162,44 @@ as produced by \code{\link{pscore.dist}}, \code{\link{mahal.dist}}, or
 }
 \author{Ben Hansen}
 
-\seealso{\code{\link{matched}}, \code{\link{pscore.dist}},
-  \code{\link{mahal.dist}}, \code{\link{makedist}}}
+\seealso{\code{\link{matched}}, \code{\link{mdist}},
+  \code{\link{caliper}}}
 \examples{
-data(plantdist)
-round(plantdist)
-plantsfm <- fullmatch(plantdist) # A full match with unrestricted
-                                 # treatment-control balance
-PR <- logical(26)
-PR[match(dimnames(plantdist)[[1]], names(plantsfm))] <- TRUE
+data(nuclearplants)
+### Full matching on a Mahalanobis distance
+mhd  <- mdist(pr ~ t1 + t2, data = nuclearplants)
+( fm1 <- fullmatch(mhd) )
+summary(fm1)
+### Full matching with restrictions
+( fm2 <- fullmatch(mhd, min=.5, max=4) )
+summary(fm2)
+### Full matching to half of available controls
+( fm3 <- fullmatch(mhd, omit.fraction=.5) )
+summary(fm3)
+### Full matching within a propensity score caliper.
+ppty <- glm(pr~.-(pr+cost), family=binomial(), data=nuclearplants)
+### Note that units without counterparts within the
+### caliper are automatically dropped.
+( fm4 <- fullmatch(mhd+caliper(1, ppty)) )
+summary(fm4)
 
-table(plantsfm,                        # treatment-control balance, 
-ifelse(PR,'treated', 'control'))       # by matched set
+### Propensity balance assessment. Requires RItools package.
+\dontrun{library(RItools) ; summary(fm4,ppty)}
 
-stratumStructure(plantsfm)             # summary of sets' trt-ctl balance
+### Creating a data frame with the matched sets attached.
+### mdist(), caliper() and the like cooperate with fullmatch()
+### to make sure observations are in the proper order:
+all.equal(names(fm4), row.names(nuclearplants))
+### So our data frame including the matched sets is just
+cbind(nuclearplants, matches=fm4)
 
-sum(plantdist*                         # sum of matched distances
-    outer(plantsfm[PR], plantsfm[!PR],
-          "==")   )
-
-plantsfm1 <- fullmatch(plantdist, # A full match with 
-min.controls=2, max.controls=3)   # restrictions on matched sets' 
-                                  # treatment-control balance
-
-
-stratumStructure(plantsfm1)       # treatment-control balance is 
-                                  # improved by restrictions
+### In contrast, if your matching distance is an ordinary matrix
+### (as earlier versions of optmatch required), you'll
+### have to align it by observation name with your data set. 
+cbind(nuclearplants, matches = fm4[row.names(nuclearplants)])
 
 }
 
 \keyword{ nonparametric }% at least one, from doc/KEYWORDS
 \keyword{ optimize }% __ONLY ONE__ keyword per line
+

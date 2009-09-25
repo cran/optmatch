@@ -111,35 +111,11 @@ rns <- names(idc)
 ############################################################
 # HANDLE DIFFERENT INPUT FORMS FOR MIN.CONTROLS		   #
 ############################################################
-if (is.vector(min.controls) & is.numeric(min.controls))
-   {
-   if (length(min.controls)==1) 
-      {
-      mncpt <- rep(min.controls, nlevels(idc))
-      names(mncpt) <- levels(idc)
-      } else
-      {
-      if (!all(levels(idc) %in% names(min.controls))) {
-	 stop("\'min.controls\' not specified for some subclasses") }
-      mncpt <- min.controls[levels(idc)]
-      } 
-   } else stop("argument \'min.controls\' must be a numeric vector")
+mncpt <- fullmatchNumControlsHandling(min.controls,levels(idc),"min.controls")
 ############################################################
 # HANDLE DIFFERENT INPUT FORMS FOR MAX.CONTROLS		   #
 ############################################################
-if (is.vector(max.controls) & is.numeric(max.controls))
-   {
-   if (length(max.controls)==1) 
-      {
-      mxcpt <- rep(max.controls, nlevels(idc)) 
-      names(mxcpt) <- levels(idc)
-      } else
-      {
-      if (!all(levels(idc) %in% names(max.controls))) {
-	 stop("\'max.controls\' not specified for some subclasses") }
-      mxcpt <- max.controls[levels(idc)]
-      } 
-   } else stop("argument \'max.controls\' must be a numeric vector")
+mxcpt <- fullmatchNumControlsHandling(max.controls,levels(idc),"max.controls")
 ############################################################
 # HANDLE DIFFERENT INPUT FORMS FOR OMIT.FRACTION	   #
 ############################################################

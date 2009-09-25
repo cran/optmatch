@@ -15,7 +15,7 @@ pairmatch(distance, controls = 1, tol = 0.001)
 each indicating the permissibility and desirability of matching the unit 
 corresponding to its row (a 'treatment') to the unit
 corresponding to its column (a 'control'); or a list of such matrices
-made using \code{\link{makedist}}.  Finite
+made using \code{\link{mdist}}.  Finite
 discrepancies indicate permissible matches, with smaller
 discrepancies indicating more desirable matches. 
 Matrix \code{distance}, or the matrix elements of \code{distance},
@@ -34,7 +34,7 @@ more information.
   of the data frame you're working with, then you should compare the
   names of fullmatch's output to your row names in order to be sure
   things are in the proper order.  You can relieve yourself of these
-  worries by using \code{\link{makedist}} to produce the distances, as
+  worries by using \code{\link{mdist}} to produce the distances, as
   it passes the ordering of units to \code{fullmatch}, which then uses
   it to order its outputs.
 
@@ -67,19 +67,43 @@ matched, and \code{NA}
   which the sum of distances between matched units in the result of
   \code{fullmatch} exceeds the least possible sum of distances between
   matched units in a feasible solution to the matching problem given to
-  \code{fullmatch}.  Such a bound is also printed by
-  \code{print.optmatch}.  
+  \code{fullmatch}.  (Such a bound is also printed by
+  \code{print.optmatch} and by \code{summary.optmatch}.)  
 }
 \references{
   Hansen, B.B. and Klopfer, S.O. (2006), \sQuote{Optimal full matching and related designs via network flows}, \emph{Journal of Computational and Graphical Statistics}, \bold{15}, 609--627.
   }
-\seealso{ \code{\link{matched}}, \code{\link{makedist}}, \code{\link{fullmatch}} }
+\seealso{ \code{\link{matched}}, \code{\link{caliper}},
+  \code{\link{fullmatch}}, \code{\link{makedist}} }
 \examples{
-data(plantdist)
-pr <- logical(26)
-pr[match(dimnames(plantdist)[[1]], LETTERS)] <- TRUE
+data(nuclearplants)
+### Pair matching on a Mahalanobis distance
+mhd  <- mdist(pr ~ t1 + t2, data = nuclearplants)
+( pm1 <- pairmatch(mhd) )
+summary(pm1)
+### Pair matching within a propensity score caliper.
+ppty <- glm(pr~.-(pr+cost), family=binomial(), data=nuclearplants)
+(pm2 <- pairmatch(mhd+caliper(1,ppty)))
+summary(pm2)
 
-plantspm <- pairmatch(plantdist)
+### Propensity balance assessment. Requires RItools package.
+\dontrun{library(RItools) ; summary(pm2,ppty)}
+
+### 1:2 matched triples
+tm <- pairmatch(mhd, controls=2)
+summary(tm)
+
+### Creating a data frame with the matched sets attached.
+### mdist(), caliper() and the like cooperate with pairmatch()
+### to make sure observations are in the proper order:
+all.equal(names(tm), row.names(nuclearplants))
+### So our data frame including the matched sets is just
+cbind(nuclearplants, matches=tm)
+
+### In contrast, if your matching distance is an ordinary matrix
+### (as earlier versions of optmatch required), you'll
+### have to align it by observation name with your data set. 
+cbind(nuclearplants, matches = tm[row.names(nuclearplants)])
 
 }
 \keyword{ nonparametric }% at least one, from doc/KEYWORDS
