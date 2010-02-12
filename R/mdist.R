@@ -72,9 +72,20 @@ mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
 mdist.formula <- function(x, structure.fmla = NULL, data = NULL, ...) {
   
   if (is.null(data)) { 
-    stop("Data is required for computing mdists from formulas")
+    stop("data argument is required for computing mdists from formulas")
   }
 
+  if (is.null(structure.fmla)) {
+    # we might need to parse x to get the structure
+    parsed <- parseFmla(x)
+
+    # this block occurs if the grouping factor is present
+    # e.g. z ~ x1 + x2 | grp
+    if (!is.null(unlist(parsed[3]))) {
+      x <- as.formula(paste(as.character(parsed[1:2]), collapse = "~"))
+      structure.fmla <- as.formula(paste("~", parsed[[3]]))
+    }
+  }
   mahal.dist(x, data = data, structure.fmla = structure.fmla, ...)
 }
 
@@ -99,4 +110,56 @@ parseFmla <- function(fmla) {
   
   return(c(treatment, covar, group))
 
+}
+
+# mdist method: bigglm
+mdist.bigglm <- function(x, structure.fmla = NULL, data = NULL, ...)
+{
+  if (is.null(data)) 
+    stop("data argument is required for computing mdists from bigglms")
+  
+  if (!is.data.frame(data))
+    stop("mdist doesn't understand data arguments that aren't data frames.")
+  
+  if (is.null(structure.fmla) | !inherits(structure.fmla, 'formula'))
+    stop("structure.fmla argument required with bigglms.
+(Use form 'structure.fmla=<treatment.variable> ~ 1'
+ for no stratification before matching)")
+
+theps <- predict(x, data, type='link', se.fit=FALSE)
+if (length(theps)!=dim(data)[1])
+stop("predict.bigglm() returns a vector of the wrong length;
+are there missing values in data?")
+
+
+Data <-  model.frame(structure.fmla, data=data)
+treatmentvar <- as.character(structure.fmla[[2]])
+pooled.sd <- szn.scale(theps, Data[[treatmentvar]],...)
+
+Data$tHePs <- theps/pooled.sd
+
+psdiffs <- function(treatments, controls) {
+abs(outer(as.vector(treatments$tHePs),
+as.vector(controls$tHePs), `-`))
+}
+
+mdist(psdiffs, structure.fmla=structure.fmla,
+      data=Data)
+}
+
+### mdist method: numeric.
+### (mdist can't work with numeric vectors at present,
+### but it can return an informative error message).
+
+mdist.numeric <- function(x, structure.fmla = NULL, trtgrp=NULL, ...)
+{
+
+  stop("No mdist method for numerics. 
+  Consider using mdist(z ~ ps | strata, data = your.data) 
+  where ps is your numeric vector, z is your treatment assignment, 
+  and strata (optional) indicates a stratification variable, all 
+  columns in your.data")
+
+###  if (is.null(trtgrp))
+###    stop("Can't turn a numeric vector alone into a dist; give a trtgrp= argument also.")
 }

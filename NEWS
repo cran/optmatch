@@ -1,3 +1,9 @@
+CHANGES IN OPTMATCH VERSION 0.6-1
+NEW FEATURES
+* New mdist method to extract propensity scores from models fitted using bigglm in package "biglm".
+* mdist's formula method now understands grouping factors indicated with a pipe ("|")
+* informative error message for mdist called on numeric vectors
+* updated mdist documentation
 CHANGES IN OPTMATCH VERSION 0.6
 
 NEW FEATURES

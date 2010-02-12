@@ -71,3 +71,30 @@ result <- mdist(glm(pr ~ t1 + t2 + cost, data = nuclearplants, family = binomial
 # I would like a better test of the actual values, but it works
 test(mean(result$m) > 2)
 
+
+### mdist() should informatively complain if passed a numeric vector.
+### (This may change in the future.)
+
+shouldError(mdist(test.glm$linear.predictor))
+
+### Stratifying by a pipe (|) character in formulas
+
+main.fmla <- pr ~ t1 + t2
+strat.fmla <- ~ pt
+combined.fmla <- pr ~ t1 + t2 | pt
+
+result.main <- mdist(main.fmla, structure.fmla = strat.fmla, data = nuclearplants)
+result.combined <- mdist(combined.fmla, data = nuclearplants)
+
+test(identical(result.main, result.combined))
+
+### bigglm method
+if (require('biglm'))
+  {
+bgps <- bigglm(fmla, data=nuclearplants, family=binomial() )
+shouldError(mdist(bgps, structure.fmla=pr ~ 1))
+shouldError(mdist(bgps, data=nuclearplants))
+result.bigglm1 <- mdist(bgps, structure.fmla=pr ~ 1, data=nuclearplants)
+result.bigglm2 <- mdist(bgps, structure.fmla=pr ~ 1, data=nuclearplants,
+                        standardization.scale=sd)
+  }

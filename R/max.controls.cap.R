@@ -98,23 +98,7 @@ rns <- names(idc)
 ############################################################
 # HANDLE DIFFERENT INPUT FORMS FOR MIN.CONTROLS		   #
 ############################################################
-if (is.vector(min.controls) & is.numeric(min.controls))
-   {
-   if (length(min.controls)==1) 
-      {
-      mncpt <- rep(min.controls, nlevels(idc)) 
-      names(mncpt) <- levels(idc)
-      } else
-      {
-      if (!all(levels(idc) %in% names(min.controls))) {
-	 stop("\'min.controls\' not specified for some subclasses") }
-      mncpt <- min.controls[levels(idc)]
-      } 
-   } else 
-   {
-   if (!is.null(min.controls))
-      stop("argument \'min.controls\' must be a numeric vector")
-   }
+mncpt <- fullmatchNumControlsHandling(min.controls, levels(idc), "min.controls")
 ############################################################
 # HANDLE OMIT.FRACTION	                                   #
 ############################################################

@@ -11,12 +11,6 @@ structure.fmla <- update.formula(structure.fmla, ZzZz~.)
 if (!all(all.vars(structure.fmla)%in%c('ZzZz',names(model.frame(glmobject)))))
   warning('stratifying variables (in structure.fmla) not in propensity specification')
 }
-szn.scale <- function(x,Tx,standardizer) {
-sqrt( ((sum(!Tx)-1)*standardizer(x[!Tx])^2 + 
-       (sum(!!Tx)-1)*standardizer(x[!!Tx])^2)/
-     (length(x)-2)
-     )
-}
 ZzZz <- glmobject$y>0
 pooled.sd <- szn.scale(glmobject$linear.predictors,ZzZz,standardization.scale)
 PpTy <- glmobject$linear.predictors/pooled.sd
@@ -33,4 +27,11 @@ makedist(structure.fmla,
          }
            )
 
+}
+
+szn.scale <- function(x,Tx,standardizer=mad,...) {
+sqrt( ((sum(!Tx)-1)*standardizer(x[!Tx])^2 + 
+       (sum(!!Tx)-1)*standardizer(x[!!Tx])^2)/
+     (length(x)-2)
+     )
 }

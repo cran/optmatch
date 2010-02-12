@@ -1,9 +1,18 @@
 fullmatchNumControlsHandling <- function(numcontrols,idclevels,whicharg)
   {
+
+    stopifnot(whicharg %in% c('min.controls', 'max.controls'))
+    
+    if (is.null(numcontrols))
+      numcontrols <- c(0,Inf)[match(whicharg, c('min.controls', 'max.controls'))]
+
 lennumcontrols <- length(numcontrols)
 
 if (!is.numeric(numcontrols))
   stop(paste("is.numeric(",whicharg ,")", " is not TRUE"))
+if (any(is.na(numcontrols)))
+  stop(paste("NAs or NaNs in argument",whicharg))
+
 if (lennumcontrols>1 && length(idclevels)<=1)
   {
     numcontrols <- numcontrols[1]

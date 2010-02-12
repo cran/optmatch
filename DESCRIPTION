@@ -1,6 +1,6 @@
 Package: optmatch
-Version: 0.6-0
-Date: 2009-09-25
+Version: 0.6-1
+Date: 2010-02-12
 Title: Functions for optimal matching
 Author: Ben B. Hansen <ben.hansen@umich.edu> and Mark Fredrickson
         <mark.m.fredrickson@gmail.com>, with embedded Fortran code due
@@ -12,6 +12,6 @@ Description: Functions for optimal matching, including full matching
 License: file LICENSE
 URL: http://www.r-project.org,
         http://www.stat.lsa.umich.edu/~bbh/optmatch.html
-Packaged: 2009-09-25 01:18:55 UTC; bbh
+Packaged: 2010-02-11 18:22:29 UTC; bbh
 Repository: CRAN
-Date/Publication: 2009-09-28 07:51:29
+Date/Publication: 2010-02-11 18:40:52
