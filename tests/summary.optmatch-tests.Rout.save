@@ -1,6 +1,6 @@
 
-R version 2.9.0 (2009-04-17)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.11.0 (2010-04-22)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -88,7 +88,7 @@ sum(matched.distances)=226
 (within 0.0286 of optimum).
 Percentiles of matched distances:
       0%      50%      95%     100% 
-  0.0168   0.9250 102.0000 103.0000 
+  0.0168   1.2100 101.0000 103.0000 
 > summary(psfm, propensity.model=psm)
 Structure of matched sets:
  1:0  3:1  2:1  1:2 1:5+  0:1 
@@ -105,7 +105,7 @@ For covariate balance information, load the RItools package and
 pass a (glm) propensity model to summary() as a second argument.
 > require('RItools')
 Loading required package: RItools
-Package SparseM (0.80) loaded.  
+Package SparseM (0.85) loaded.
 	   To cite, see citation("SparseM")
 
 > summary(psfm, propensity.model='foo')
@@ -167,10 +167,10 @@ sum(matched.distances)=7.56
 (within 0.0272 of optimum).
 Percentiles of matched distances:
     0%    50%    95%   100% 
-0.0419 0.7680 1.5300 1.6600 
+0.0415 0.9140 1.5100 1.6100 
 Balance test overall result:
   chisquare df p.value
-        9.9  9   0.358
+       9.83  9   0.365
 > summary(pspm, propensity.model=psm) # balance checking when matching has failed
 Matching failed in subclasses containing 6 of 32 observations.
 Reporting on subclasses where matching worked. (Enter ?matchfailed for more info.)

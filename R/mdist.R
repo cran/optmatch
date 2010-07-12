@@ -46,7 +46,7 @@ mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
   # call optmatch.dlist maker function on parts, names
   
     # create a function to produce one distance matrix
-  doit <- function(data) {
+  doit <- function(data,...) {
      # indicies are created per chunk to split out treatment and controls
      indices <- data[as.character(treatmentvar)] == 1
      treatments <- data[indices,]
@@ -60,11 +60,19 @@ mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
   }
 
   if (!(identical(strata, 1))) {
-    ss <- factor(eval(strata, data), labels = 'm')
-    return(lapply(split(data, ss), doit))  
+    if(is.factor(eval(strata, data))){
+      ss <- eval(strata, data) ##to preserve existing labels/levels
+    } else {
+      ss <- factor(eval(strata, data), labels = 'm')
+    }
+    ans <- lapply(split(data, ss), doit,...)  
   } else {
-    return(doit(data))
+    ans <- list(m1 = doit(data,...))
   }
+
+  attr(ans, 'row.names') <- row.names(data)
+  class(ans) <- c('optmatch.dlist', 'list')
+  return(ans)
 }
 
 
@@ -112,6 +120,7 @@ parseFmla <- function(fmla) {
 
 }
 
+
 # mdist method: bigglm
 mdist.bigglm <- function(x, structure.fmla = NULL, data = NULL, ...)
 {
@@ -147,6 +156,7 @@ mdist(psdiffs, structure.fmla=structure.fmla,
       data=Data)
 }
 
+
 ### mdist method: numeric.
 ### (mdist can't work with numeric vectors at present,
 ### but it can return an informative error message).
@@ -160,6 +170,4 @@ mdist.numeric <- function(x, structure.fmla = NULL, trtgrp=NULL, ...)
   and strata (optional) indicates a stratification variable, all 
   columns in your.data")
 
-###  if (is.null(trtgrp))
-###    stop("Can't turn a numeric vector alone into a dist; give a trtgrp= argument also.")
 }

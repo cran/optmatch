@@ -1,6 +1,6 @@
 useDynLib(optmatch)
 
-export(fullmatch, pairmatch, makedist, pscore.dist, mahal.dist, matched.distances, matched, matchfailed, unmatched, maxControlsCap, minControlsCap, relaxinfo, stratumStructure, caliper, mdist)
+export(fullmatch, pairmatch, makedist, pscore.dist, mahal.dist, matched.distances, matched, matchfailed, unmatched, maxControlsCap, minControlsCap, relaxinfo, stratumStructure, caliper, mdist, fill.NAs)
 
 S3method(print, optmatch)
 S3method(summary, optmatch)
@@ -15,4 +15,5 @@ S3method(mdist, formula)
 S3method(mdist, "function")
 S3method(mdist, numeric)
 S3method(mdist, bigglm)
+
 

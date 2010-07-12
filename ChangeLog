@@ -1,3 +1,8 @@
+2010-07-15
+	* Simple mean fill-in for missing values, with missingness indicators
+	(see fill.NAs).
+	* bug fixes on mdist.function method: real opmatch.dlist object, labels
+	preserved.
 2010-01-26
 	* Support for propensity models fitted using bigglm (new method for mdist).
 	* Bug fix for maxControlsCap.

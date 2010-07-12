@@ -43,7 +43,7 @@ test(all(dim(result.function) == c(10,22)), "Function not returning right sized 
 test(identical(optmatch:::parseFmla(y ~ a | group), lapply(c("y", "a", "group"), as.name)))
 test(identical(optmatch:::parseFmla(y ~ a), c(as.name("y"), as.name("a"), NULL)))
 
-test(!is.null(rownames(result.function)) && all(rownames(result.function) %in% rownames(nuclearplants[nuclearplants$pr == 1,])))
+test(!is.null(rownames(result.function$m1)) && all(rownames(result.function$m1) %in% rownames(nuclearplants[nuclearplants$pr == 1,])))
 
 result.function.a <- mdist(sdiffs, pr ~ 1 | pt, nuclearplants)
 result.function.b <- mdist(sdiffs, pr ~ pt, nuclearplants)
@@ -77,6 +77,7 @@ test(mean(result$m) > 2)
 
 shouldError(mdist(test.glm$linear.predictor))
 
+
 ### Stratifying by a pipe (|) character in formulas
 
 main.fmla <- pr ~ t1 + t2
@@ -89,12 +90,22 @@ result.combined <- mdist(combined.fmla, data = nuclearplants)
 test(identical(result.main, result.combined))
 
 ### bigglm method
-if (require('biglm'))
-  {
+if (require('biglm')) {
 bgps <- bigglm(fmla, data=nuclearplants, family=binomial() )
 shouldError(mdist(bgps, structure.fmla=pr ~ 1))
 shouldError(mdist(bgps, data=nuclearplants))
 result.bigglm1 <- mdist(bgps, structure.fmla=pr ~ 1, data=nuclearplants)
 result.bigglm2 <- mdist(bgps, structure.fmla=pr ~ 1, data=nuclearplants,
                         standardization.scale=sd)
-  }
+}
+
+### Jake found a bug 2010-06-14
+### Issue appears to be a missing row.names/class
+
+jb.sdiffs <- function(treatments, controls) {
+ abs(outer(treatments$t1, controls$t1, `-`))
+}
+
+absdist1 <- mdist(sdiffs, structure.fmla = pr ~ 1|pt, data = nuclearplants)
+test(length(pairmatch(absdist1)) > 0)
+

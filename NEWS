@@ -1,9 +1,19 @@
+CHANGES IN OPTMATCH VERSION 0.7
+
+NEW FEATURES
+* New function fill.NAs replaces missing observations (ie. NA values) with minimally informative values (ie. the mean of observed columns). Fill.NAs handles functions in formulas intelligently and provides missing indicators for each variable. See the help documentation for more information and examples.
+
+BUG FIXES
+* mdist.function method now properly returns an optmatch.dlist object for use in summary.optmatch, etc.
+* mdist.function maintains label on grouping factor.
+
 CHANGES IN OPTMATCH VERSION 0.6-1
 NEW FEATURES
 * New mdist method to extract propensity scores from models fitted using bigglm in package "biglm".
 * mdist's formula method now understands grouping factors indicated with a pipe ("|")
 * informative error message for mdist called on numeric vectors
 * updated mdist documentation
+
 CHANGES IN OPTMATCH VERSION 0.6
 
 NEW FEATURES
