@@ -1,15 +1,15 @@
 stratumStructure <- function(stratum,trtgrp=NULL,min.controls=0,
                              max.controls=Inf)
 {
-if (class(stratum)[1]!="optmatch" & is.null(trtgrp))
+if (!inherits(stratum,"optmatch") & is.null(trtgrp))
   stop("stratum not of class \'optmatch\'; trtgrp must be specified")
-if (class(stratum)[1]!="optmatch")
+if (!inherits(stratum,"optmatch"))
   warning("stratum not of class optmatch; was this intended?")
-if (class(stratum)[1]=="optmatch" & is.null(attr(stratum, "contrast.group")) & is.null(trtgrp))
+if (inherits(stratum, "optmatch") & is.null(attr(stratum, "contrast.group")) & is.null(trtgrp))
   stop("Argument 1 is of class optmatch but it has lost its contrast.group attribute; must specify trtgrp")
-if (class(stratum)[1]=="optmatch" & !is.null(attr(stratum, "contrast.group")) & !is.null(trtgrp))
+if (inherits(stratum, "optmatch") & !is.null(attr(stratum, "contrast.group")) & !is.null(trtgrp))
   warning("ignoring second argument to stratumStructure")
-if (class(stratum)[1]=="optmatch")
+if (inherits(stratum, "optmatch"))
    {
      tgp <- attr(stratum, "contrast.group")
    } else {
@@ -23,7 +23,7 @@ stopifnot(is.numeric(min.controls), is.numeric(max.controls))
 if (length(min.controls)>1) warning("Only first element of min.controls will be used.")
 if (length(max.controls)>1) warning("Only first element of max.controls will be used.")
 
-notMF <- if (class(stratum)[1]=="optmatch") {
+notMF <- if (inherits(stratum, "optmatch")) {
   suppressWarnings(!matchfailed(levels(stratum)))
 } else !logical(nlevels(as.factor(stratum)))
 

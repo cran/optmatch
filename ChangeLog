@@ -1,3 +1,7 @@
+2010-11-05
+	* Begun version 0.7-1.
+	* Added 'remove.unmatchables' option to pairmatch(); separated out
+	tests of pairmatch().
 2010-07-15
 	* Simple mean fill-in for missing values, with missingness indicators
 	(see fill.NAs).

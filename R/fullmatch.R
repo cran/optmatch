@@ -189,8 +189,8 @@ for (i in sfs)
     	nrow <- length(rnl[[i]])
     	ncol <- length(cnl[[i]])
     	tol.frac <- (nrow+ncol-2)/(sum(mgrp)-2*length(rnl))
-    	temp <- SubDivStrat(rown=rnl[[i]], coln=cnl[[i]], 
-    	dist=switch(mode(distance),list=distance[[i]],numeric=distance),
+    	temp <- SubDivStrat(rownames=rnl[[i]], colnames=cnl[[i]], 
+    	distmat=switch(mode(distance),list=distance[[i]],numeric=distance),
         max.cpt=min(mxcpt[i], ncol), 
     	min.cpt=max(mncpt[i], 1/nrow), tolerance=(TOL*tol.frac), 
     	omit.fraction=switch(1+is.na(omf[i]), omf[i], NULL))
@@ -199,10 +199,10 @@ for (i in sfs)
     	ncol <- length(rnl[[i]])
     	nrow <- length(cnl[[i]])
     	tol.frac <- (nrow+ncol-2)/(sum(mgrp)-2*length(rnl))
-    	temp <- SubDivStrat(rown=cnl[[i]], coln=rnl[[i]], 
-    	dist=t(switch(mode(distance),list=distance[[i]],numeric=distance)),
-        max=min(1/mncpt[i], ncol), 
-    	min=max(1/mxcpt[i], 1/nrow), tolerance=(TOL*tol.frac), 
+    	temp <- SubDivStrat(rownames=cnl[[i]], colnames=rnl[[i]], 
+    	distmat=t(switch(mode(distance),list=distance[[i]],numeric=distance)),
+        max.cpt=min(1/mncpt[i], ncol), 
+    	min.cpt=max(1/mxcpt[i], 1/nrow), tolerance=(TOL*tol.frac), 
     	omit.fraction=switch(1+is.na(omf[i]), -omf[i], NULL))
 	}
 
@@ -218,7 +218,7 @@ for (i in sfs)
     NULL
   }
 strat.abv <- as.factor(strat.abv)
-if ("optmatch.dlist" %in% class(distance))
+if (inherits(distance, "optmatch.dlist"))
   {
   if (all(attr(distance, "row.names")%in%names(strat.abv)))
   {

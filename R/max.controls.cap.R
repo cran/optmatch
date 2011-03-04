@@ -160,7 +160,7 @@ for (i in sfs)
       {
         ncol <- length(tcnl)
         nrow <- length(trnl)
-        temp <- SubDivStrat(rown=trnl, coln=tcnl, dist=tdm,
+        temp <- SubDivStrat(rownames=trnl, colnames=tcnl, distmat=tdm,
        max.cpt=min(tlmxc, ncol),
        min.cpt=max(tgmnc, 1/nrow), tolerance=.5, 
        omit.fraction=switch(1+is.na(omf[i]), omf[i], NULL))
@@ -168,7 +168,7 @@ for (i in sfs)
     {
         ncol <- length(trnl)
         nrow <- length(tcnl)
-        temp <- SubDivStrat(rown=tcnl, coln=trnl, dist=t(tdm),
+        temp <- SubDivStrat(rownames=tcnl, colnames=trnl, distmat=t(tdm),
        max.cpt=min(1/tgmnc, ncol),
        min.cpt=max(1/tlmxc, 1/nrow), tolerance=.5, 
        omit.fraction=switch(1+is.na(omf[i]), -omf[i], NULL))
@@ -196,7 +196,7 @@ for (i in sfs)
         # SHOULD TLMXC ALSO BE SET TO ONE OR LESS?
         ncol <- length(trnl)
         nrow <- length(tcnl)
-        temp <- SubDivStrat(rown=tcnl, coln=trnl, dist=t(tdm),
+        temp <- SubDivStrat(rownames=tcnl, colnames=trnl, distmat=t(tdm),
                             max.cpt=min(1/tgmnc, ncol), min.cpt=1,
                             tolerance=.5, omit.fraction=
                             switch(1+is.na(omf[i]), -omf[i], NULL))
@@ -211,7 +211,7 @@ for (i in sfs)
         {
         tlmxc <- 
        optimize( function(invlmxc, rown1, coln1, dist1, gmnc1, omf1) {
-       ifelse(!all(SubDivStrat(rown=coln1, coln=rown1, dist=t(dist1),
+       ifelse(!all(SubDivStrat(rownames=coln1, colnames=rown1, distmat=t(dist1),
        max.cpt=min(1/gmnc1, length(rown1)), min.cpt=invlmxc,
        tolerance=.5, omit.fraction= switch(1+is.na(omf[i]), -omf[i],
        NULL) )$cells=="NA") ,
@@ -231,7 +231,7 @@ for (i in sfs)
          {
        tlmxc <- ceiling(
        optimize( function(lmxc1, rown1, coln1, dist1, gmnc1, omf1) {
-       ifelse(!all(SubDivStrat( rown=rown1, coln=coln1, dist=dist1,
+       ifelse(!all(SubDivStrat( rownames=rown1, colnames=coln1, distmat=dist1,
        min.cpt=max(gmnc1, 1/length(rown1)), max.cpt=lmxc1,
        tolerance=.5, omit.fraction= switch(1+is.na(omf[i]), omf[i],
        NULL) )$cells=="NA") ,

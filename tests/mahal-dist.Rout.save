@@ -1,6 +1,6 @@
 
-R : Copyright 2006, The R Foundation for Statistical Computing
-Version 2.3.1 (2006-06-01)
+R version 2.11.0 (2010-04-22)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -30,7 +30,6 @@ You're loading optmatch, by Ben Hansen, a package for flexible
  fullmatch() function. (If you are using another package that has
  loaded optmatch, then you will probably be using fullmatch indirectly.)
  For more information, enter relaxinfo() at the command line
-[1] TRUE
 > data(nuclear, package="boot")
 > mahal.dist(pr~cap, nuclear)
 $m
@@ -240,5 +239,5 @@ $`1`
 > ### should give error, incorrect mode
 > try(mahal.dist(as.factor(pr)~cap, nuclear))
 Error in mahal.dist(as.factor(pr) ~ cap, nuclear) : 
-	Treatment variable should be logical or numeric
+  Treatment variable should be logical or numeric
 > 

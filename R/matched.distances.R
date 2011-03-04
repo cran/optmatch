@@ -1,6 +1,6 @@
 matched.distances <- function(matchobj, distance, preserve.unit.names=FALSE)
   {
-stopifnot(class(matchobj)[1]=="optmatch")
+stopifnot(inherits(matchobj,"optmatch"))
 
 finddist.mat <- function(dmat, omobj)
   {
@@ -11,7 +11,7 @@ tapply(names(omobj),omobj, FUN=function(x,DMAT){
 }, dmat)
   }
 
-if (class(distance)[1]!="optmatch.dlist")
+if (!inherits(distance,"optmatch.dlist"))
   {
 return(finddist.mat(distance, matchobj))
   } else {

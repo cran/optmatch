@@ -1,15 +1,15 @@
 citHeader("To cite optmatch in publications use:")
 
 citEntry(entry="Article",
-	Author = personList(as.person("Ben B. Hansen"), as.person("Stephanie Olsen Klopfer")),
-	Title = "Optimal full matching and related designs via network flows",
-	Keywords = "matched sampling, minimum cost flow, nonrandom treatment assignment, observational study, quasiexperiment, subclassification",
+	author = personList(as.person("Ben B. Hansen"), as.person("Stephanie Olsen Klopfer")),
+	title = "Optimal full matching and related designs via network flows",
+	keywords = "matched sampling, minimum cost flow, nonrandom treatment assignment, observational study, quasiexperiment, subclassification",
 #        Url = "http://www.stat.lsa.umich.edu/\\textasciitilde bbh/hansenKlopfer2006.pdf",
-        Journal = "Journal of Computational and Graphical Statistics",
-        Volume = "15",
-        Number = "3",
-        Pages = "609--627",
-        Year = 2006,
+        journal = "Journal of Computational and Graphical Statistics",
+        volume = "15",
+        number = "3",
+        pages = "609--627",
+        year = 2006,
 
 	textVersion = paste("Hansen, B.B. and Klopfer, S.O. (2006)",
 		      "Optimal full matching and related designs via network flows,", "JCGS 15 609-627.")

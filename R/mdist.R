@@ -4,7 +4,7 @@ mdist <- function(x, structure.fmla = NULL, ...) {
 
 # mdist method: optmatch.dlist
 mdist.optmatch.dlist <- function(x, structure.fmla = NULL, ...) {
-  return(x)  
+  return(x)
 } # just return the argument
 
 # mdist method: function
@@ -15,22 +15,22 @@ mdist.optmatch.dlist <- function(x, structure.fmla = NULL, ...) {
 # mdists, which the rest of the function would markup with rownames
 # etc.
 mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
-  
+
   if (is.null(data) || is.null(structure.fmla)) {
     stop("Both data and the structure formula are required for
-    computing mdists from functions.")  
+    computing mdists from functions.")
   }
-  
+
   theFun <- match.fun(x)
   parsedFmla <- parseFmla(structure.fmla)
-  
+
   if(is.null(parsedFmla[[1]])) {
-    stop("Treatment variable required")  
+    stop("Treatment variable required")
   }
-  
+
   if((identical(parsedFmla[[2]], 1) && is.null(parsedFmla[3])) ||
      (length(parsedFmla[[2]]) > 1)) {
-    stop("Please specify the grouping as either: z ~ grp or z ~ 1 | grp")  
+    stop("Please specify the grouping as either: z ~ grp or z ~ 1 | grp")
   }
 
   treatmentvar <- parsedFmla[[1]]
@@ -44,7 +44,7 @@ mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
 
   # split up the dataset by parts
   # call optmatch.dlist maker function on parts, names
-  
+
     # create a function to produce one distance matrix
   doit <- function(data,...) {
      # indicies are created per chunk to split out treatment and controls
@@ -55,7 +55,7 @@ mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
 
      colnames(distances) <- rownames(controls)
      rownames(distances) <- rownames(treatments)
-     
+
      return(distances)
   }
 
@@ -65,7 +65,7 @@ mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
     } else {
       ss <- factor(eval(strata, data), labels = 'm')
     }
-    ans <- lapply(split(data, ss), doit,...)  
+    ans <- lapply(split(data, ss), doit,...)
   } else {
     ans <- list(m1 = doit(data,...))
   }
@@ -77,24 +77,56 @@ mdist.function <- function(x, structure.fmla = NULL, data = NULL, ...) {
 
 
 # mdist method: formula
-mdist.formula <- function(x, structure.fmla = NULL, data = NULL, ...) {
-  
-  if (is.null(data)) { 
-    stop("data argument is required for computing mdists from formulas")
-  }
+mdist.formula <- function(x, structure.fmla = NULL, data = NULL, subset=NULL,...) {
+  mf <- match.call(expand.dots=FALSE)
+  m <- match(c("x", "data", "subset"), # maybe later add "na.action"
+             names(mf), 0L)
+  mf <- mf[c(1L, m)]
+  names(mf)[names(mf)=="x"] <- "formula"
+  mf$drop.unused.levels <- TRUE
+  mf[[1L]] <- as.name("model.frame")
 
-  if (is.null(structure.fmla)) {
-    # we might need to parse x to get the structure
-    parsed <- parseFmla(x)
+  if (length(x)==2)
+      if (!is.null(structure.fmla) && length(structure.fmla)==3)
+          x <- update.formula(structure.fmla, x) else
+  stop("If you give mdist() a formula, it needs to have a left hand side\nin order for mdist.formula() to figure out who is to be matched to whom.",
+       call.=FALSE)
 
+  if (isThereAPipe(x)) {
+      if (!is.null(structure.fmla))
+          warning("I see a pipe, a '|', in the formula you gave as primary argument to mdist().\n So I'm using what's to the right of it in lieu of the RHS of the\n'structure.fmla' argument that you've also given.", call.=FALSE)
+      parsed <- parseFmla(x)
     # this block occurs if the grouping factor is present
     # e.g. z ~ x1 + x2 | grp
     if (!is.null(unlist(parsed[3]))) {
+      xenv <- environment(x)
       x <- as.formula(paste(as.character(parsed[1:2]), collapse = "~"))
+      environment(x) <- xenv
       structure.fmla <- as.formula(paste("~", parsed[[3]]))
     }
   }
-  mahal.dist(x, data = data, structure.fmla = structure.fmla, ...)
+  mf$formula <-  makeJoinedFmla(x, structure.fmla)
+  mf <- eval(mf, parent.frame())
+
+###  return(mf)
+  mahal.dist(x, data = mf, structure.fmla = structure.fmla, ...)
+}
+
+isThereAPipe <- function(fmla)
+{
+    inherits(fmla, "formula") && length(fmla) == 3 && length(fmla[[3]])==3 && fmla[[3]][[1]] == as.name("|")
+}
+# One big formula from a formula plus astructure formula -- for use w/ model.frame
+makeJoinedFmla <- function(fmla, structure.fmla)
+{
+    if (is.null(structure.fmla)) return(fmla)
+    stopifnot(inherits(fmla, "formula"), inherits(structure.fmla, "formula"),
+              length(fmla)==3)
+
+l <- length(structure.fmla)
+structure.fmla[[l]] <- as.call(c(as.name("+"), as.name("."), structure.fmla[[l]]))
+
+update.formula(fmla, structure.fmla)
 }
 
 # mdist method: glm
@@ -113,9 +145,9 @@ parseFmla <- function(fmla) {
 
   } else {
     covar <- rhs
-    group <- NULL 
+    group <- NULL
   }
-  
+
   return(c(treatment, covar, group))
 
 }
@@ -124,12 +156,12 @@ parseFmla <- function(fmla) {
 # mdist method: bigglm
 mdist.bigglm <- function(x, structure.fmla = NULL, data = NULL, ...)
 {
-  if (is.null(data)) 
+  if (is.null(data))
     stop("data argument is required for computing mdists from bigglms")
-  
+
   if (!is.data.frame(data))
     stop("mdist doesn't understand data arguments that aren't data frames.")
-  
+
   if (is.null(structure.fmla) | !inherits(structure.fmla, 'formula'))
     stop("structure.fmla argument required with bigglms.
 (Use form 'structure.fmla=<treatment.variable> ~ 1'
@@ -164,10 +196,10 @@ mdist(psdiffs, structure.fmla=structure.fmla,
 mdist.numeric <- function(x, structure.fmla = NULL, trtgrp=NULL, ...)
 {
 
-  stop("No mdist method for numerics. 
-  Consider using mdist(z ~ ps | strata, data = your.data) 
-  where ps is your numeric vector, z is your treatment assignment, 
-  and strata (optional) indicates a stratification variable, all 
+  stop("No mdist method for numerics.
+  Consider using mdist(z ~ ps | strata, data = your.data)
+  where ps is your numeric vector, z is your treatment assignment,
+  and strata (optional) indicates a stratification variable, all
   columns in your.data")
 
 }

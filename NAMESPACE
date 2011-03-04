@@ -5,6 +5,7 @@ export(fullmatch, pairmatch, makedist, pscore.dist, mahal.dist, matched.distance
 S3method(print, optmatch)
 S3method(summary, optmatch)
 S3method("[", optmatch)
+S3method(print, summary.optmatch)
 S3method(Ops, optmatch.dlist)
 S3method(abs, optmatch.dlist)
 S3method(print, optmatch.dlist)

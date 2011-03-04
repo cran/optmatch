@@ -95,7 +95,7 @@ mdist.examples$ps1 <- mdist(aGlm)
 ### A second approach: first extract propensity scores, then separately
 ### create a distance from them.  (Useful when importing propensity
 ### scores from an external program.)
-plantsPS <- aGlm$linear.predictors
+plantsPS <- predict(aGlm)
 mdist.examples$ps2 <- mdist(pr~plantsPS, data=nuclearplants)^(1/2)
 ### Full matching on the propensity score.
 fullmatch(mdist.examples$ps1)

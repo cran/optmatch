@@ -89,6 +89,37 @@ result.combined <- mdist(combined.fmla, data = nuclearplants)
 
 test(identical(result.main, result.combined))
 
+### Informatively insist that one of formulas specify the treatment group
+shouldError(mdist(~t1+t2, structure.fmla=~pt, data=nuclearplants))
+test(identical(mdist(pr~t1+t2, structure.fmla=~pt, data=nuclearplants),
+               mdist(~t1+t2, structure.fmla=pr~pt, data=nuclearplants))
+     )
+### Finding "data" when it isn't given as an argument
+### Caveats:
+### * data's row.names get lost when you don't pass data as explicit argument;
+### thus testing with 'all.equal(unlist(<...>),unlist(<...>))' rather than 'identical(<...>,<...>)'.
+### * with(nuclearplants, mdist(fmla)) bombs for obscure scoping-related reasons,
+### namely that the environment of fmla is the globalenv rather than that created by 'with'.
+### This despite the facts that identical(fmla,pr ~ t1 + t2 + pt) is TRUE and that
+### with(nuclearplants, mdist(pr ~ t1 + t2 + pt)) runs fine.
+### But then with(nuclearplants, lm(fmla)) bombs too, for same reason, so don't worry be happy.
+attach(nuclearplants)
+test(all.equal(unlist(result.fmla),unlist(mdist(fmla))))
+test(all.equal(unlist(result.main),unlist(mdist(main.fmla, structure.fmla=strat.fmla))))
+test(all.equal(unlist(result.combined),unlist(mdist(combined.fmla))) )
+detach("nuclearplants")
+test(identical(fmla,pr ~ t1 + t2 + pt))
+test(all.equal(unlist(result.fmla),unlist(with(nuclearplants, mdist(pr ~ t1 + t2 + pt)))))
+test(identical(combined.fmla, pr ~ t1 + t2 | pt))
+test(all.equal(unlist(result.combined), unlist(with(nuclearplants, mdist(pr ~ t1 + t2 | pt)))))
+test(all.equal(unlist(result.fmla), unlist(with(nuclearplants[-which(names(nuclearplants)=="pt")],
+                                           mdist(update(pr ~ t1 + t2 + pt,.~.-pt + nuclearplants$pt))
+                                           )
+                                      )
+          )
+     )
+test(all.equal(unlist(result.combined), unlist(with(nuclearplants, mdist(pr ~ t1 + t2, structure.fmla=strat.fmla)))))
+
 ### bigglm method
 if (require('biglm')) {
 bgps <- bigglm(fmla, data=nuclearplants, family=binomial() )

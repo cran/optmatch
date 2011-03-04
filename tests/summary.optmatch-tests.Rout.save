@@ -44,7 +44,8 @@ Percentiles of matched distances:
   0%  50%  95% 100% 
    0    0    0    0 
 > summary(pairmatch(plantdist/(plantdist<1))) # Matching fails everywhere
-[1] "Matching failed.  (Restrictions impossible to meet?) Enter ?matchfailed for more info."
+Matching failed.  (Restrictions impossible to meet?)
+Enter ?matchfailed for more info.
 > data(nuclearplants)
 > psm <- glm(pr~.-(pr+cost), family=binomial(), data=nuclearplants)
 > psd <- pscore.dist(psm)
@@ -101,6 +102,7 @@ sum(matched.distances)=1.02
 Percentiles of matched distances:
     0%    50%    95%   100% 
 0.0110 0.0577 0.1600 0.1660 
+
 For covariate balance information, load the RItools package and
 pass a (glm) propensity model to summary() as a second argument.
 > require('RItools')
@@ -120,6 +122,7 @@ sum(matched.distances)=1.02
 Percentiles of matched distances:
     0%    50%    95%   100% 
 0.0110 0.0577 0.1600 0.1660 
+
 For covariate balance information, load the RItools package and
 pass a (glm) propensity model to summary() as a second argument.
 > summary(psfm, propensity.model=psm)
