@@ -2,7 +2,10 @@
   function(x, ..., drop=FALSE)
 {
   y <- NextMethod("[")
-  attr(y,"contrast.group") <- "["(attr(x, "contrast.group"),...)
+  cgs <- attr(x, "contrast.group")
+  names(cgs) <- names(x)
+  attr(y,"contrast.group") <- "["(cgs,...)
+  names(attr(y, "contrast.group")) <-  NULL
 ### The following is something of a kluge.  It would make more sense
 ### to remove matched distances that have been removed from the optmatch
 ### vector, but doing that is not straightforward, since the distances don't

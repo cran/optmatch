@@ -128,6 +128,8 @@ shouldError(mdist(bgps, data=nuclearplants))
 result.bigglm1 <- mdist(bgps, structure.fmla=pr ~ 1, data=nuclearplants)
 result.bigglm2 <- mdist(bgps, structure.fmla=pr ~ 1, data=nuclearplants,
                         standardization.scale=sd)
+result.bigglm2 <- mdist(bgps, structure.fmla=pr ~ 1, data=nuclearplants,
+                        standardization.scale=NULL)
 }
 
 ### Jake found a bug 2010-06-14

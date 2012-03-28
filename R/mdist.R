@@ -130,8 +130,9 @@ update.formula(fmla, structure.fmla)
 }
 
 # mdist method: glm
-mdist.glm <- function(x, structure.fmla = NULL, ...) {
-  pscore.dist(x,  structure.fmla = structure.fmla, standardization.scale=mad, ...)
+mdist.glm <- function(x, structure.fmla = NULL, standardization.scale=mad, ...)
+{
+  pscore.dist(x,  structure.fmla = structure.fmla, standardization.scale=standardization.scale, ...)
 }
 
 # parsing formulas for creating mdists
@@ -154,7 +155,7 @@ parseFmla <- function(fmla) {
 
 
 # mdist method: bigglm
-mdist.bigglm <- function(x, structure.fmla = NULL, data = NULL, ...)
+mdist.bigglm <- function(x, structure.fmla = NULL, data = NULL, standardization.scale=mad, ...)
 {
   if (is.null(data))
     stop("data argument is required for computing mdists from bigglms")
@@ -175,7 +176,8 @@ are there missing values in data?")
 
 Data <-  model.frame(structure.fmla, data=data)
 treatmentvar <- as.character(structure.fmla[[2]])
-pooled.sd <- szn.scale(theps, Data[[treatmentvar]],...)
+pooled.sd <- if (is.null(standardization.scale)) 1 else
+szn.scale(theps, Data[[treatmentvar]], standardizer=standardization.scale,...)
 
 Data$tHePs <- theps/pooled.sd
 

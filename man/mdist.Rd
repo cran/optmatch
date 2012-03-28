@@ -54,11 +54,12 @@
   An \code{mdist.glm} method takes an argument of class \code{glm} as
   first argument.  It assumes that this object is a fitted propensity
   model, extracting distances on the linear propensity score (logits of
-  the estimated conditional probabilities) and rescaling the distances
+  the estimated conditional probabilities) and, by default, rescaling the distances
   by the reciprocal of the pooled s.d. of treatment- and control-group propensity scores.
-  (By default, these two s.d.s are estimated using \code{mad} rather than
-  \code{sd}, for resistance to outliers.
-  See \code{pscore.dist} for more information.)  The \code{mdist.bigglm}
+  (The scaling uses \code{mad}, for resistance to outliers, by default; this can be
+  changed to the actual s.d., or rescaling can be skipped entirely, by
+  setting argument \code{standardization.scale} to \code{sd} or
+  \code{NULL}, respectively.)  A \code{mdist.bigglm}
   method works analogously with \code{bigglm} objects, created by
   the \code{bigglm} function from package \sQuote{biglm}, which can
   handle bigger data sets than the ordinary glm function can.  In

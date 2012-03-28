@@ -17,14 +17,8 @@ pscore.dist(glmobject, structure.fmla = NULL, standardization.scale=sd)
   within which matches are to be performed.  If omitted, no
   subclassification is done. If it is given, the RHS of this formula gives
   variables on which to stratify the sample prior to matching. }
-  \item{standardization.scale}{Scalar-valued function to be applied
-    separately to
-    treatment and control propensity scores to determine their scale;
-    propensity distances will be scaled by a pooling of these two values.
-    Defaults to \code{\link{sd}}, which gives scaling by the pooled sd
-    of propensity scores.  (Another good choice is \code{\link{mad}},
-    which is robust to outliers but gives results similar to \code{sd}
-    in the absence of outliers.)  }
+  \item{standardization.scale}{Scalar-valued function or \code{NULL},
+    defaulting to \code{sd}.}
 }
 \details{
   \code{glmobject} need not necessarily be the result of a call to
@@ -39,7 +33,18 @@ pscore.dist(glmobject, structure.fmla = NULL, standardization.scale=sd)
   same variables should also have appeared on the RHS of the formula
   used to specify the propensity model.
 
-  This is a wrapper to \code{\link{makedist}}, so it keeps track of
+  If non-null, argument
+    \code{standardization.scale} should be a scalar-valued function of a
+    vector argument.  It is applied separately to
+    treatment and control propensity scores to determine their scale;
+    propensity distances will be scaled by a pooling of these two values.
+    If \code{NULL}, no scaling is supplied, and distances are in terms
+    of the linear propensity score, that is the logits of the
+    conditional probabilities. (Another good choice is \code{\link{mad}},
+    which is robust to outliers but gives results similar to \code{sd}
+    in the absence of outliers.)
+    
+  Underneath, the function makes use of \code{\link{makedist}}. So it keeps track of
   metadata useful for matching, as described on the help page for that function.
 }
 \value{

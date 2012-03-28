@@ -12,7 +12,8 @@ if (!all(all.vars(structure.fmla)%in%c('ZzZz',names(model.frame(glmobject)))))
   warning('stratifying variables (in structure.fmla) not in propensity specification')
 }
 ZzZz <- glmobject$y>0
-pooled.sd <- szn.scale(glmobject$linear.predictors,ZzZz,standardization.scale)
+pooled.sd <- if (is.null(standardization.scale)){
+  1 } else szn.scale(glmobject$linear.predictors,ZzZz,standardization.scale)
 PpTy <- glmobject$linear.predictors/pooled.sd
 
 attr(structure.fmla, 'generation.increment') <- 1
