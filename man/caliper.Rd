@@ -25,11 +25,17 @@ caliper(width, ..., exclude = c(), penalty = Inf)
     
   \code{width} provides the size of the caliper, the allowable distance for
   matching. The unit of width will depend on the additional arguments, used 
-  to create a basic distance matrix using \code{\link{mdist}}. For a
-  forumla, width will be in the unit of the selected covariate. For a GLM
-  \code{x} argument, the width will be relative to the computed propensity
-  score. Careful consideration should be given to what this unit means in
-  your analysis. Similarly, a previous matching matrix will use those units.
+  to create a basic distance matrix using \code{\link{mdist}}. There must be at least one such argument, 
+\code{\link{mdist}}'s \code{x}. For a
+  formula \code{x} argument, width will be in units of the selected covariate(s), specifically squared 
+Mahalanobis distances on those covariates; see Details of \code{\link{mdist}}.
+  For instance, with a formula with a single, non-categorical covariate on its right hand side, 
+  caliper widths are expressed in terms of the variance of that covariate.  For a GLM
+  \code{x} argument, \code{width} is interpreted in pooled standard deviations of the linear propensity
+  score. (If the propensity was fit using \code{glm} or similar, this is the linear predictor from that fit, 
+  not the fitted conditional probability.) If you pass a matching distance as an additional argument -- that is,
+  a matrix or an object that was produced by \code{\link{mdist}} --
+  \code{width} is interpreted in the units of that matching distance.
 
 }
 \value{
@@ -63,8 +69,23 @@ caliper(.2,ppty))        # give your width first.
 ppty.dist <- mdist(ppty) 
 identical(caliper(ppty.dist, width = .2), pptycaliper)
 
-### caliper on the Mahalanobis distance
-caliper(width = 3, pr ~ t1 + t2, data = nuclearplants)             
+### caliper of 1.5 on the _squared_ Mahalanobis distance
+caliper(width = 1.5, pr ~ t1 + t2,
+  data = subset(nuclearplants, subset=(pt==1)))             
+
+### caliper of 1.5 on the Mahalanobis distance
+caliper(width = 1.5^2, pr ~ t1 + t2,
+  data = subset(nuclearplants, subset=(pt==1)))             
+
+
+### caliper of .6 on date, in its original units (here, years):
+caliper(width=.6^2, pr ~ date, inverse.cov=diag(1),
+  data = subset(nuclearplants, subset=(pt==1)))
+
+### caliper of .6 on date, in pooled sd's of date:
+caliper(width=.6^2, pr ~ date, 
+  data = subset(nuclearplants, subset=(pt==1)))
+
 
 ### Mahalanobis distance matching with a caliper
 ### of 1 pooled SD in the propensity score:
