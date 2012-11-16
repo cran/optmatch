@@ -1,0 +1,26 @@
+\name{effectiveSampleSize}
+\alias{effectiveSampleSize}
+\title{(Internal) Compute the effective sample size of a match.}
+\usage{
+  effectiveSampleSize(x, z = NULL)
+}
+\arguments{
+  \item{x}{An \code{optmatch} object, the result of
+  \code{\link{fullmatch}} or \code{\link{pairmatch}}.}
+
+  \item{z}{A treatment indicator, a vector the same length
+  as \code{match}. This is only required if the
+  \code{match} object does not contain the contrast.group'
+  attribute.}
+}
+\value{
+  The equivalent number of pairs in this match.
+}
+\description{
+  The effective sample size is the sum of the harmonic
+  means of the number units in treatment and control for
+  each matched group. For k matched pairs, the effective
+  sample size is k. As matched groups become more
+  unbalanced, the effective sample size decreases.
+}
+

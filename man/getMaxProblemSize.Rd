@@ -1,0 +1,25 @@
+\name{getMaxProblemSize}
+\alias{getMaxProblemSize}
+\title{(Internal) What is the maximum allowed problem size?}
+\usage{
+  getMaxProblemSize()
+}
+\value{
+  logical
+}
+\description{
+  To prevent users from starting excessively large matching
+  problems, the maximum problem size is limited by
+  \code{options("optmatch_max_problem_size")}. This
+  function a quick helper to assist fetching this value as
+  a scalar. If the option isn't set, the function falls
+  back to the default value, hard coded in the
+  \code{optmatch} package.
+}
+\examples{
+optmatch:::getMaxProblemSize() > 1 & optmatch:::getMaxProblemSize() < 1e100
+}
+\seealso{
+  \code{\link{options}}
+}
+
