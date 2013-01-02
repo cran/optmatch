@@ -1,9 +1,9 @@
-483599bdab8335f3410f4ed2790fc62a *DESCRIPTION
+f01cbda4b1eb618af6c39b6a51ef5e49 *DESCRIPTION
 73d3eab9eb500aa3b6e8869c41e58c1b *LICENSE
-01b3eea3c853626802c246dfd0418235 *NAMESPACE
+181e3de5d7910b88894adf052a8d5284 *NAMESPACE
 f868345e36b61806ab6102b819b2d5e3 *NEWS
-0014abf47e2a46afd747b0e7cb7d0f21 *R/DenseMatrix.R
-6ed5e6ff73edf5ff2adaab160a462be1 *R/InfinitySparseMatrix.R
+553313196996a1ba8bd4d3ef597f06c4 *R/DenseMatrix.R
+b58f3dcb32a8f629b9ac1aceabc14a5d *R/InfinitySparseMatrix.R
 68eabf858507ece0ff0baccdec7744ce *R/Ops.optmatch.dlist.R
 9351c870cb57c11df2240731c6abf919 *R/Optmatch.R
 aed617609282d70bdaad78fbd1454c29 *R/SubDivStrat2007-06.R
@@ -90,6 +90,7 @@ c476457b69991961b26d888784739320 *man/setFeasibilityConstants.Rd
 5ab85808c7ce1f3f660abe492c41a5b6 *man/subproblemSuccess.Rd
 c8a75a6e37345290ceff4810e2a4dedc *man/validDistanceSpecification.Rd
 00badb474cc4b9660ee87ff6b77643ae *src/relax4s.f
+df9a568f9ab4f46bdaf8384e50c38dee *tests/exporting-methods.R
 d598e3e10d71bf90177171a060119aa3 *tests/fullmatch.R
 2bbc613a83da2ecca56fcaf1301a0fab *tests/fullmatch.Rout.save
 6fc00b26a27925df5ba21f231eea2d5b *tests/mahal-dist.R
@@ -109,3 +110,9 @@ a7f78bfe34b01f5b761c87114d29f3b3 *tests/pairmatch-tests.Rout.save
 6e0a412531fff75c0b95a3fe1aa99251 *tests/summary.optmatch-tests.Rout.save
 a7e609363fe87e6dd3376d17f716c399 *tests/testthat-tests.R
 fded006047a6abf5f131b81dfe8587ff *tmp.txt
+abfd193bc6da16b8093a132783b5b884 *vignettes/guo.aux
+522082b32b204e2d148298d7b4e24aeb *vignettes/guo.fdb_latexmk
+4aa29e19da292d3651cad59511d68636 *vignettes/guo.fls
+c55ecc913ff5bc6c6deff667c591f052 *vignettes/guo.log
+58a8f664568872970171086d1a5d7fd3 *vignettes/guo.pdf
+d5850a444ff8f389d4cd99a6632e630e *vignettes/guo.tex
