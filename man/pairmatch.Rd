@@ -1,9 +1,13 @@
 \name{pairmatch}
+\alias{pair}
 \alias{pairmatch}
 \title{Optimal 1:1 and 1:k matching}
 \usage{
   pairmatch(distance, controls = 1,
     remove.unmatchables = FALSE, ...)
+
+  pair(distance, controls = 1, remove.unmatchables = FALSE,
+    ...)
 }
 \arguments{
   \item{distance}{A matrix of non-negative discrepancies,

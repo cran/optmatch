@@ -11,28 +11,32 @@
 \alias{match_on,numeric-method}
 \title{Create treated to control distances for matching problems}
 \usage{
-  \S4method{match_on}{function}(x, within = NULL, z = NULL,
-    data = NULL, ...)
+  \S4method{match_on}{function}(x, within = NULL, caliper =
+    NULL, z = NULL, data = NULL, ...)
 
-  \S4method{match_on}{formula}(x, within = NULL, data =
-    NULL, subset = NULL, method = "mahalanobis", ...)
+  \S4method{match_on}{formula}(x, within = NULL, caliper =
+    NULL, data = NULL, subset = NULL, method =
+    "mahalanobis", ...)
 
-  \S4method{match_on}{glm}(x, within = NULL,
-    standardization.scale = mad, ...)
-
-  \S4method{match_on}{bigglm}(x, within = NULL, data =
+  \S4method{match_on}{glm}(x, within = NULL, caliper =
     NULL, standardization.scale = mad, ...)
 
-  \S4method{match_on}{numeric}(x, within = NULL, z, caliper
-    = NULL, ...)
+  \S4method{match_on}{bigglm}(x, within = NULL, caliper =
+    NULL, data = NULL, standardization.scale = mad, ...)
+
+  \S4method{match_on}{numeric}(x, within = NULL, caliper =
+    NULL, z, ...)
 
   \S4method{match_on}{InfinitySparseMatrix}(x,
-    within = NULL, ...)
+    within = NULL, caliper = NULL, ...)
 
-  \S4method{match_on}{matrix}(x, within = NULL, ...)
+  \S4method{match_on}{matrix}(x, within = NULL,
+    caliper = NULL, ...)
 }
 \arguments{
-  \item{x}{An object defining how to create the distances}
+  \item{x}{An object defining how to create the distances.
+  All methods require some form of names (e.g. \code{names}
+  for vectors or \code{rownames} for matrix like objects)}
 
   \item{within}{A valid distance specification, such as the
   result of \code{\link{exactMatch}} or
@@ -40,6 +44,13 @@
   distances to create. Including this argument can
   significantly speed up computation for sparse matching
   problems.}
+
+  \item{caliper}{The width of a caliper to use to exclude
+  treated-control pairs with values greater than the width.
+  For some methods, there may be a speed advantage to
+  passing a width rather than using the
+  \code{\link{caliper}} function on an existing distance
+  specification.}
 
   \item{...}{Other arguments for methods.}
 
@@ -60,11 +71,6 @@
 
   \item{standardization.scale}{Standardizes the data based
   on the median absolute deviation (by default).}
-
-  \item{caliper}{The width of a caliper to fit on the
-  difference of scores.  This can improve efficiency versus
-  first creating all the differences and then filtering out
-  those entries that are larger than the caliper.}
 }
 \value{
   A distance specification (a matrix or similar object)
@@ -142,7 +148,7 @@
   return the distance between the treated unit and control
   unit. This may sound complicated, but is simple to use.
   For example, a function that returned the absolute
-  difference between to units using a vector of data would
+  difference between two units using a vector of data would
   be \code{f <- function(index, data, z) { abs(apply(index,
   1, function(pair) { data[pair[1]] - data[pair[2]] })) }}.
   (Note: This simple case is precisely handled by the
@@ -150,25 +156,63 @@
 
   The formula method produces, by default, a Mahalanobis
   distance specification based on the formula \code{Z ~ X1
-  + X2 + ... }, where \code{Z} the treatment indicator. A
-  Mahalanobis distance scales the Euclidean distance by the
-  inverse of the covariance matrix. Other options can be
-  selected by the \code{method} argument.
+  + X2 + ... }, where \code{Z} is the treatment indicator.
+  The Mahalanobis distance is calculated as the square root
+  of d'Cd, where d is the vector of X-differences on a pair
+  of observations and C is an inverse (generalized inverse)
+  of the pooled covariance of Xes. (The pooling is of the
+  covariance of X within the subset defined by \code{Z==0}
+  and within the complement of that subset. This is similar
+  to a Euclidean distance calculated after reexpressing the
+  Xes in standard units, such that the reexpressed
+  variables all have pooled SDs of 1; except that it
+  addresses redundancies among the variables by scaling
+  down variables contributions in proportion to their
+  correlations with other included variables.)
 
-  The \code{glm} method accepts a fitted propensity model,
-  extracts distances on the linear propensity score (logits
-  of the estimated conditional probabilities), and rescales
-  the distances by the reciprocal of the pooled s.d. of
-  treatment- and control-group propensity scores. (The
-  scaling uses \code{mad}, for resistance to outliers, by
-  default; this can be changed to the actual s.d., or
+  Euclidean distance is also available, via
+  \code{method="euclidean"}. Or, implement your own; for
+  hints as to how, refer to\cr
+  \url{https://github.com/markmfredrickson/optmatch/wiki/How-to-write-your-own-compute-method}
+
+  The \code{glm} method assumes its first argument to be a
+  fitted propensity model. From this it extracts distances
+  on the \emph{linear} propensity score: fitted values of
+  the linear predictor, the link function applied to the
+  estimated conditional probabilities, as opposed to the
+  estimated conditional probabilities themselves (Rosenbaum
+  \& Rubin, 1985). For example, a logistic model
+  (\code{glm} with \code{family=binomial()}) has the logit
+  function as its link, so from such models \code{match_on}
+  computes distances in terms of logits of the estimated
+  conditional probabilities, i.e. the estimated log odds.
+
+  Optionally these distances are also rescaled. The default
+  is to rescale, by the reciprocal of an outlier-resistant
+  variant of the pooled s.d. of propensity scores. (Outlier
+  resistance is obtained by the application of \code{mad},
+  as opposed to \code{sd}, to linear propensity scores in
+  the treatment; this can be changed to the actual s.d., or
   rescaling can be skipped entirely, by setting argument
   \code{standardization.scale} to \code{sd} or \code{NULL},
-  respectively.) The resulting distance matrix is the
-  absolute difference between treated and control units on
-  the rescaled propensity scores. This method relies on the
-  \code{numeric} method, so you may pass a \code{caliper}
-  argument.
+  respectively.) The overall result records absolute
+  differences between treated and control units on linear,
+  possibly rescaled, propensity scores.
+
+  In addition, one can impose a caliper in terms of these
+  distances by providing a scalar as a \code{caliper}
+  argument, forbidding matches between treatment and
+  control units differing in the calculated propensity
+  score by more than the specified caliper.  For example,
+  Rosenbaum and Rubin's (1985) caliper of one-fifth of a
+  pooled propensity score s.d. would be imposed by
+  specifying \code{caliper=.2}, in tandem either with the
+  default rescaling or, to follow their example even more
+  closely, with the additional specification
+  \code{standardization.scale=sd}. Propensity calipers are
+  beneficial computationally as well as statistically, for
+  reasons indicated in the below discussion of the
+  \code{numeric} method.
 
   The \code{bigglm} method works analogously to the
   \code{glm} method, but with \code{bigglm} objects,
@@ -176,10 +220,21 @@
   \sQuote{biglm}, which can handle bigger data sets than
   the ordinary glm function can.
 
-  The \code{numeric} method returns the absolute difference
-  for treated and control units computed using the vector
-  of scores \code{x}. Either \code{x} or \code{z} must have
-  names.
+  The \code{numeric} method returns absolute differences
+  between treated and control units' values of \code{x}. If
+  a caliper is specified, pairings with
+  \code{x}-differences greater than it are forbidden.
+  Conceptually, those distances are set to \code{Inf};
+  computationally, if either of \code{caliper} and
+  \code{within} has been specified then only information
+  about permissible pairings will be stored, so the
+  forbidden pairings are simply omitted. Providing a
+  \code{caliper} argument here, as opposed to omitting it
+  and afterwards applying the \code{\link{caliper}}
+  function, reduces storage requirements and may otherwise
+  improve performance, particularly in larger problems.
+
+  For the numeric method, \code{x} must have names.
 
   The \code{matrix} and \code{InfinitySparseMatrix} just
   return their arguments as these objects are already valid
@@ -203,7 +258,8 @@ fullmatch(match_on.examples$ps2, data = nuclearplants)
 ### Because match_on.glm uses robust estimates of spread, 
 ### the results differ in detail -- but they are close enough
 ### to yield similar optimal matches.
-all(fullmatch(match_on.examples$ps1)==fullmatch(match_on.examples$ps2, data = nuclearplants)) # The same
+all(fullmatch(match_on.examples$ps1) == 
+    fullmatch(match_on.examples$ps2, data = nuclearplants)) # The same
 
 ### Mahalanobis distance:
 match_on.examples$mh1 <- match_on(pr ~ t1 + t2, data = nuclearplants)
@@ -213,7 +269,7 @@ tmp <- nuclearplants$t1
 names(tmp) <- rownames(nuclearplants)
 
 (absdist <- match_on(tmp, z = nuclearplants$pr, 
-                  exclusions = exactMatch(pr ~ pt, nuclearplants)))
+                  within = exactMatch(pr ~ pt, nuclearplants)))
 
 ### Pair matching on the variable `t1`:
 pairmatch(absdist)
@@ -229,7 +285,7 @@ fullmatch(match_on.examples$pscal, data = nuclearplants) # Note that the caliper
 
 ### A Mahalanobis distance for matching within subgroups:
 match_on.examples$mh2 <- match_on(pr ~ t1 + t2 , data = nuclearplants,
-                            excludes = exactMatch(pr ~ pt, nuclearplants))
+                            within = exactMatch(pr ~ pt, nuclearplants))
 
 ### Mahalanobis matching within subgroups, with a propensity score
 ### caliper:
