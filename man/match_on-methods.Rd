@@ -1,37 +1,37 @@
 \name{match_on}
 \alias{InfinitySparseMatrix-class}
 \alias{match_on}
-\alias{match_on-methods}
-\alias{match_on,bigglm-method}
-\alias{match_on,formula-method}
-\alias{match_on,function-method}
-\alias{match_on,glm-method}
-\alias{match_on,InfinitySparseMatrix-method}
-\alias{match_on,matrix-method}
-\alias{match_on,numeric-method}
+\alias{match_on.bigglm}
+\alias{match_on.formula}
+\alias{match_on.function}
+\alias{match_on.glm}
+\alias{match_on.InfinitySparseMatrix}
+\alias{match_on.matrix}
+\alias{match_on.numeric}
 \title{Create treated to control distances for matching problems}
 \usage{
-  \S4method{match_on}{function}(x, within = NULL, caliper =
-    NULL, z = NULL, data = NULL, ...)
+  \method{match_on}{function} (x, within = NULL,
+    caliper = NULL, data = NULL, z = NULL, ...)
 
-  \S4method{match_on}{formula}(x, within = NULL, caliper =
-    NULL, data = NULL, subset = NULL, method =
-    "mahalanobis", ...)
+  \method{match_on}{formula} (x, within = NULL,
+    caliper = NULL, data = NULL, subset = NULL,
+    method = "mahalanobis", ...)
 
-  \S4method{match_on}{glm}(x, within = NULL, caliper =
-    NULL, standardization.scale = mad, ...)
+  \method{match_on}{glm} (x, within = NULL, caliper = NULL,
+    data = NULL, standardization.scale = mad, ...)
 
-  \S4method{match_on}{bigglm}(x, within = NULL, caliper =
-    NULL, data = NULL, standardization.scale = mad, ...)
+  \method{match_on}{bigglm} (x, within = NULL,
+    caliper = NULL, data = NULL,
+    standardization.scale = mad, ...)
 
-  \S4method{match_on}{numeric}(x, within = NULL, caliper =
-    NULL, z, ...)
+  \method{match_on}{numeric} (x, within = NULL,
+    caliper = NULL, data = NULL, z, ...)
 
-  \S4method{match_on}{InfinitySparseMatrix}(x,
-    within = NULL, caliper = NULL, ...)
+  \method{match_on}{InfinitySparseMatrix} (x,
+    within = NULL, caliper = NULL, data = NULL, ...)
 
-  \S4method{match_on}{matrix}(x, within = NULL,
-    caliper = NULL, ...)
+  \method{match_on}{matrix} (x, within = NULL,
+    caliper = NULL, data = NULL, ...)
 }
 \arguments{
   \item{x}{An object defining how to create the distances.
@@ -52,22 +52,21 @@
   \code{\link{caliper}} function on an existing distance
   specification.}
 
+  \item{data}{An optional data frame.}
+
   \item{...}{Other arguments for methods.}
 
   \item{z}{A factor, logical, or binary vector indicating
   treatment (the higher level) and control (the lower
   level) for each unit in the study.}
 
-  \item{data}{A \code{data.frame} or \code{matrix}
-  containing variables used by the method to construct the
-  distance matrix.}
-
   \item{subset}{A subset of the data to use in creating the
   distance specification.}
 
   \item{method}{A string indicating which method to use in
   computing the distances from the data. The current
-  possibilities are \code{"mahalanobis", "euclidean"}.}
+  possibilities are \code{"mahalanobis", "euclidean"}, or
+  pass a user created distance function.}
 
   \item{standardization.scale}{Standardizes the data based
   on the median absolute deviation (by default).}
@@ -230,7 +229,7 @@
   about permissible pairings will be stored, so the
   forbidden pairings are simply omitted. Providing a
   \code{caliper} argument here, as opposed to omitting it
-  and afterwards applying the \code{\link{caliper}}
+  and afterward applying the \code{\link{caliper}}
   function, reduces storage requirements and may otherwise
   improve performance, particularly in larger problems.
 
@@ -253,13 +252,12 @@ match_on.examples$ps1 <- match_on(aGlm)
 plantsPS <- predict(aGlm)
 match_on.examples$ps2 <- match_on(pr~plantsPS, data=nuclearplants)
 ### Full matching on the propensity score.
-fullmatch(match_on.examples$ps1, data = nuclearplants)
-fullmatch(match_on.examples$ps2, data = nuclearplants)
-### Because match_on.glm uses robust estimates of spread, 
+fm1 <- fullmatch(match_on.examples$ps1, data = nuclearplants)
+fm2 <- fullmatch(match_on.examples$ps2, data = nuclearplants)
+### Because match_on.glm uses robust estimates of spread,
 ### the results differ in detail -- but they are close enough
 ### to yield similar optimal matches.
-all(fullmatch(match_on.examples$ps1) == 
-    fullmatch(match_on.examples$ps2, data = nuclearplants)) # The same
+all(fm1 == fm2) # The same
 
 ### Mahalanobis distance:
 match_on.examples$mh1 <- match_on(pr ~ t1 + t2, data = nuclearplants)
@@ -268,11 +266,11 @@ match_on.examples$mh1 <- match_on(pr ~ t1 + t2, data = nuclearplants)
 tmp <- nuclearplants$t1
 names(tmp) <- rownames(nuclearplants)
 
-(absdist <- match_on(tmp, z = nuclearplants$pr, 
+(absdist <- match_on(tmp, z = nuclearplants$pr,
                   within = exactMatch(pr ~ pt, nuclearplants)))
 
 ### Pair matching on the variable `t1`:
-pairmatch(absdist)
+pairmatch(absdist, data = nuclearplants)
 
 
 ### Propensity score matching within subgroups:

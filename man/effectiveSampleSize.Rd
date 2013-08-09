@@ -1,6 +1,6 @@
 \name{effectiveSampleSize}
 \alias{effectiveSampleSize}
-\title{(Internal) Compute the effective sample size of a match.}
+\title{Compute the effective sample size of a match.}
 \usage{
   effectiveSampleSize(x, z = NULL)
 }
@@ -22,5 +22,9 @@
   each matched group. For k matched pairs, the effective
   sample size is k. As matched groups become more
   unbalanced, the effective sample size decreases.
+}
+\seealso{
+  \code{\link{summary.optmatch}},
+  \code{\link{stratumStructure}}
 }
 

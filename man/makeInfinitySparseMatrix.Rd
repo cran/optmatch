@@ -1,7 +1,7 @@
 \name{makeInfinitySparseMatrix}
 \alias{as.InfinitySparseMatrix}
-\alias{dimnames,InfinitySparseMatrix-method}
 \alias{dimnames<-,InfinitySparseMatrix-method}
+\alias{dimnames,InfinitySparseMatrix-method}
 \alias{makeInfinitySparseMatrix}
 \title{(Internal) Creating sparse matching problems}
 \usage{

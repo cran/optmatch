@@ -3,35 +3,32 @@
 \alias{pairmatch}
 \title{Optimal 1:1 and 1:k matching}
 \usage{
-  pairmatch(distance, controls = 1,
+  pairmatch(x, controls = 1, data = NULL,
     remove.unmatchables = FALSE, ...)
 
-  pair(distance, controls = 1, remove.unmatchables = FALSE,
-    ...)
+  pair(x, controls = 1, data = NULL,
+    remove.unmatchables = FALSE, ...)
 }
 \arguments{
-  \item{distance}{A matrix of non-negative discrepancies,
-  each indicating the permissibility and desirability of
-  matching the unit corresponding to its row (a
-  'treatment') to the unit corresponding to its column (a
-  'control'); or a list of such matrices made using
-  \code{\link{match_on}}.  Finite discrepancies indicate
-  permissible matches, with smaller discrepancies
-  indicating more desirable matches. Matrix
-  \code{distance}, or the matrix elements of
-  \code{distance}, must have row and column names.}
+  \item{x}{Any valid input to \code{match_on}. If \code{x}
+  is a numeric vector, there must also be passed a vector
+  \code{z} indicating grouping. Both vectors must be named.
+
+  Alternatively, a precomputed distance may be entered.}
 
   \item{controls}{The number of controls to be matched to
   each treatment}
+
+  \item{data}{Optional data set.}
 
   \item{remove.unmatchables}{Should treatment group members
   for which there are no eligible controls be removed prior
   to matching?}
 
   \item{...}{Additional arguments to pass to
-  \code{\link{fullmatch}}. It is strongly suggested that
-  you pass a \code{data} argument. It is an error to pass
-  \code{min.controls}, \code{max.controls}, or
+  \code{\link{match_on}} or \code{\link{fullmatch}}.  It is
+  an error to pass \code{min.controls},
+  \code{max.controls}, \code{mean.controls} or
   \code{omit.fraction} as \code{pairmatch} must set these
   values.}
 }
@@ -41,14 +38,18 @@
 }
 \description{
   Given a treatment group, a larger control reservoir, and
-  discrepancies between each treatment and control unit,
-  finds a pairing of treatment units to controls that
-  minimizes the sum of discrepancies.
+  a method for creating discrepancies between each
+  treatment and control unit (or optionally an already
+  created such discrepancy matrix), finds a pairing of
+  treatment units to controls that minimizes the sum of
+  discrepancies.
 }
 \details{
   This is a wrapper to \code{\link{fullmatch}}; see its
   documentation for more information, especially on
-  additional arguments to pass.
+  additional arguments to pass, additional discussion of
+  valid input for parameter \code{x}, and feasibility
+  recovery.
 
   If \code{remove.unmatchables} is \code{FALSE}, then if
   there are unmatchable treated units then the matching as
@@ -59,48 +60,50 @@
   if there is too much competition for certain controls; if
   you find yourself in that situation you should consider
   full matching, which necessarily finds a match for
-  everyone with an eligible match somewhere.) The units of
-  the \code{optmatch} object returned correspond to members
-  of the treatment and control groups in reference to which
-  the matching problem was posed, and are named
-  accordingly; the names are taken from the row and column
-  names of \code{distance} (with possible additions from
-  the optional \code{data} argument).  Each element of the
-  vector is the concatenation of: (i) a character
-  abbreviation of \code{subclass.indices}, if that argument
-  was given, or the string '\code{m}' if it was not; (ii)
-  the string \code{.}; and (iii) a non-negative integer.
-  Unmatched units have \code{NA} entries. Secondarily,
-  \code{fullmatch} returns various data about the matching
-  process and its result, stored as attributes of the named
-  vector which is its primary output.  In particular, the
-  \code{exceedances} attribute gives upper bounds, not
-  necessarily sharp, for the amount by which the sum of
-  distances between matched units in the result of
-  \code{fullmatch} exceeds the least possible sum of
-  distances between matched units in a feasible solution to
-  the matching problem given to \code{fullmatch}.  (Such a
-  bound is also printed by \code{print.optmatch} and by
-  \code{summary.optmatch}.)
+  everyone with an eligible match somewhere.)
+
+  The units of the \code{optmatch} object returned
+  correspond to members of the treatment and control groups
+  in reference to which the matching problem was posed, and
+  are named accordingly; the names are taken from the row
+  and column names of \code{distance} (with possible
+  additions from the optional \code{data} argument).  Each
+  element of the vector is the concatenation of: (i) a
+  character abbreviation of \code{subclass.indices}, if
+  that argument was given, or the string '\code{m}' if it
+  was not; (ii) the string \code{.}; and (iii) a
+  non-negative integer. Unmatched units have \code{NA}
+  entries. Secondarily, \code{fullmatch} returns various
+  data about the matching process and its result, stored as
+  attributes of the named vector which is its primary
+  output.  In particular, the \code{exceedances} attribute
+  gives upper bounds, not necessarily sharp, for the amount
+  by which the sum of distances between matched units in
+  the result of \code{fullmatch} exceeds the least possible
+  sum of distances between matched units in a feasible
+  solution to the matching problem given to
+  \code{fullmatch}.  (Such a bound is also printed by
+  \code{print.optmatch} and by \code{summary.optmatch}.)
 }
 \examples{
-data(nuclearplants) 
+data(nuclearplants)
 
-### Pair matching on a Mahalanobis distance 
-mhd <- match_on(pr ~ t1 + t2, data = nuclearplants) 
-( pm1 <- pairmatch(mhd) ) 
-summary(pm1) 
+### Pair matching on a Mahalanobis distance
+( pm1 <- pairmatch(pr ~ t1 + t2, data = nuclearplants) )
+summary(pm1)
 
-### Pair matching within a propensity score caliper.  
-ppty <- glm(pr~.-(pr+cost), family=binomial(), data=nuclearplants) 
-( pm2 <- pairmatch(mhd + caliper(match_on(ppty), 2)) ) 
+### Pair matching within a propensity score caliper.
+ppty <- glm(pr ~ . - (pr + cost), family = binomial(), data = nuclearplants)
+### For more complicated models, create a distance matrix and pass it to fullmatch.
+mhd <- match_on(pr ~ t1 + t2, data = nuclearplants) + caliper(match_on(ppty), 2)
+( pm2 <- pairmatch(mhd, data = nuclearplants) )
 summary(pm2)
 
 ### Propensity balance assessment. Requires RItools package.
 if(require(RItools)) summary(pm2, ppty)
 
 ### 1:2 matched triples
-tm <- pairmatch(mhd, controls = 2)
+( tm <- pairmatch(pr ~ t1 + t2, controls = 2, data = nuclearplants) )
 summary(tm)
 
 ### Creating a data frame with the matched sets attached.
@@ -112,9 +115,8 @@ cbind(nuclearplants, matches=tm)
 
 ### In contrast, if your matching distance is an ordinary matrix
 ### (as earlier versions of optmatch required), you'll
-### have to align it by observation name with your data set. 
+### have to align it by observation name with your data set.
 cbind(nuclearplants, matches = tm[row.names(nuclearplants)])
-
 }
 \references{
   Hansen, B.B. and Klopfer, S.O. (2006), \sQuote{Optimal

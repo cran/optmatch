@@ -82,4 +82,7 @@
   bound is also printed by \code{print.optmatch} and
   \code{summary.optmatch}.)
 }
+\seealso{
+  \code{\link{print.optmatch}}
+}
 
