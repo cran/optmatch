@@ -1,8 +1,18 @@
 \name{subdim}
 \alias{subdim}
+\alias{subdim.BlockedInfinitySparseMatrix}
+\alias{subdim.InfinitySparseMatrix}
+\alias{subdim.matrix}
+\alias{subdim.optmatch.dlist}
 \title{Returns the dimension of each valid subproblem}
 \usage{
-  subdim(x)
+  \method{subdim}{InfinitySparseMatrix} (x)
+
+  \method{subdim}{matrix} (x)
+
+  \method{subdim}{BlockedInfinitySparseMatrix} (x)
+
+  \method{subdim}{optmatch.dlist} (x)
 }
 \arguments{
   \item{x}{A distance specification to get the

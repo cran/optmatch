@@ -1,8 +1,18 @@
 \name{num_eligible_matches}
 \alias{num_eligible_matches}
+\alias{num_eligible_matches.BlockedInfinitySparseMatrix}
+\alias{num_eligible_matches.InfinitySparseMatrix}
+\alias{num_eligible_matches.matrix}
+\alias{num_eligible_matches.optmatch.dlist}
 \title{Returns the number of eligible matches for the distance.}
 \usage{
-  num_eligible_matches(x)
+  \method{num_eligible_matches}{optmatch.dlist} (x)
+
+  \method{num_eligible_matches}{matrix} (x)
+
+  \method{num_eligible_matches}{InfinitySparseMatrix} (x)
+
+  \method{num_eligible_matches}{BlockedInfinitySparseMatrix}(x)
 }
 \arguments{
   \item{x}{Any distance object.}
