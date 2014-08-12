@@ -65,8 +65,9 @@
 
   \item{method}{A string indicating which method to use in
   computing the distances from the data. The current
-  possibilities are \code{"mahalanobis", "euclidean"}, or
-  pass a user created distance function.}
+  possibilities are \code{"mahalanobis", "euclidean",
+  "rank_mahalanobis"}, or pass a user created distance
+  function.}
 
   \item{standardization.scale}{Standardizes the data based
   on the median absolute deviation (by default).}
@@ -170,8 +171,9 @@
   correlations with other included variables.)
 
   Euclidean distance is also available, via
-  \code{method="euclidean"}. Or, implement your own; for
-  hints as to how, refer to\cr
+  \code{method="euclidean"}, and ranked, Mahalanobis
+  distance, via \code{method="rank_mahalanobis"}. Or,
+  implement your own; for hints as to how, refer to\cr
   \url{https://github.com/markmfredrickson/optmatch/wiki/How-to-write-your-own-compute-method}
 
   The \code{glm} method assumes its first argument to be a

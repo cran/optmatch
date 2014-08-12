@@ -79,14 +79,23 @@ test_that("Compute omit fraction based on reachable treated units", {
 
   expect_true(!all(is.na(pairmatch(m[,1:4]))))
 
+  ## 12/3/13: The below is no longer correct. Per issue #74, 0.4 is the correct omit.fraction,
+  ## since subDivStrat now handles adjusting it for unmatchable controls automatically.
   # when the wrong omit.fraction value is computed both of these tests should fail
   # note: the correct omit.fraction to pass to fullmatch is 0.25
   # it is wrong to pass 0.4
   # and remove.unmatchables does not solve the problem
-  expect_true(!all(is.na(pairmatch(m))))
-  expect_true(!all(is.na(pairmatch(m, remove.unmatchables = TRUE))))
+  # expect_true(!all(is.na(pairmatch(m))))
+  # expect_true(!all(is.na(pairmatch(m, remove.unmatchables = TRUE))))
 
+  ## 12/3/13: With the update, 0.4 is correct. Remove.unmatchables = TRUE should operate the same here
+  p1 <- pairmatch(m)
+  p2 <- pairmatch(m, remove.unmatchables=TRUE)
 
+  expect_true(sum(is.na(p1)) == 2)
+  expect_true(all(p1==p2, na.rm=TRUE))
+  attr(p1, "call") <- attr(p2, "call") <- NULL
+  expect_true(identical(p1, p2))
 })
 
 test_that("Pass additional arguments to fullmatch", {
@@ -214,4 +223,27 @@ test_that("pairmatch UI cleanup", {
   expect_error(pairmatch(TRUE), "Invalid input, must be a potential argument to match_on")
 
 
+})
+
+test_that("pairmatch warns when given a 'within' arg that it's going to ignore", {
+    m <- matrix(1, nrow = 2, ncol = 3,
+                dimnames = list(c("a", "b"), c('d', 'e', 'f')))
+    B <- rep(1:3, each = 2)
+    names(B) <- letters[1:6]
+    em <- exactMatch(B, rep(c(0,1), 3))
+    expect_warning(pairmatch(m, within=em), "gnor")    
+    expect_warning(pairmatch(as.InfinitySparseMatrix(m), within=em), "gnor")    
+})
+
+test_that("NAs in irrelevant data slots don't trip us up", {
+  n <- 16
+  Z <- c(rep(0, n/2), rep(1, n/2))
+  X1 <- rep(c(1,2,3,4), each = n/4)
+  B <- rep(c(0,1), n/2)
+  B[1] <- NA
+  test.data <- data.frame(Z, X1, B)
+  rm(Z)
+  rm(X1)
+  rm(B)
+  expect_equal(length(pairmatch(Z~X1, data=test.data)), n)
 })

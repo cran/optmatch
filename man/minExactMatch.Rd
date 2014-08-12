@@ -1,8 +1,10 @@
 \name{minExactMatch}
 \alias{minExactMatch}
-\title{Find the minimal exact match factors that will be feasible.}
+\title{Find the minimal exact match factors that will be feasible for a
+given maximum problem size.}
 \usage{
-  minExactMatch(x, scores = NULL, width = NULL, ...)
+  minExactMatch(x, scores = NULL, width = NULL,
+    maxarcs = 1e+07, ...)
 }
 \arguments{
   \item{x}{The object for dispatching.}
@@ -12,6 +14,9 @@
 
   \item{width}{Optional width of a caliper to place on the
   scores.}
+
+  \item{maxarcs}{The maximum problem size to attempt to
+  fit.}
 
   \item{...}{Additional arguments for methods.}
 }

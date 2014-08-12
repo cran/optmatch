@@ -28,7 +28,8 @@ getMaxProblemSize <- function() {
   return(tmp[[1]])
 }
 
-#' Find the minimal exact match factors that will be feasible.
+#' Find the minimal exact match factors that will be feasible for a
+#' given maximum problem size.
 #'
 #' The \code{\link{exactMatch}} function creates a smaller matching problem by
 #' stratifying observations into smaller groups. For a problem that is larger
@@ -47,10 +48,11 @@ getMaxProblemSize <- function() {
 #' @param x The object for dispatching.
 #' @param scores Optional vector of scores that will be checked against a caliper width.
 #' @param width Optional width of a caliper to place on the scores.
+#' @param maxarcs The maximum problem size to attempt to fit.
 #' @param ... Additional arguments for methods.
 #' @return A factor grouping units, suitable for \code{\link{exactMatch}}.
 #' @export
-minExactMatch <- function(x, scores = NULL, width = NULL, ...) {
+minExactMatch <- function(x, scores = NULL, width = NULL, maxarcs = 1e07, ...) {
 
   if (length(x) < 3) {
     stop("Formula must be of the form Z ~ X1 + X2 + ...")  
@@ -67,6 +69,17 @@ minExactMatch <- function(x, scores = NULL, width = NULL, ...) {
   k <- length(rhs)
 
   bigzb <- fmla2treatedblocking(x, ...)
+
+  unblockedarcs <- sum(bigzb$Z) * sum(1 - bigzb$Z)
+  if (unblockedarcs < maxarcs) {
+    return(as.factor(rep(1, dim(bigzb)[1])))
+  }
+
+  msg <- getOption("optmatch_verbose_messaging")
+  if (msg) {
+    warning("minExactMatch: problem is large enough to require blocking. Entering loop.", date())
+  }
+
   previous <- rep(NA, dim(bigzb)[1]) # we store good subgroups here
 
   for(i in 1:k) {
@@ -87,9 +100,13 @@ minExactMatch <- function(x, scores = NULL, width = NULL, ...) {
       arcs <- tapply(z.b$Z, list(B), function(grp) { sum(grp) * sum(1 - grp) })
     }
 
-    good <- arcs < getMaxProblemSize()
+    good <- arcs <= maxarcs
 
     if (all(good[!is.na(good)])) { # some levels may be NAs
+        if (msg) {
+            warning("minExactMatch: exiting loop. Arcs:", arcs, "Selected levels:" , levels(B), date())
+        }
+
       names(B) <- rownames(z.b)
       return(B)  
     }

@@ -190,12 +190,12 @@ fullmatch.default <- function(x,
   }
 
   mfd <- if (!is.null(data)) {
-    model.frame(data)
+    model.frame(data, na.action=na.pass)
   } else {
     if (inherits(x, "function")) {
       stop("A data argument must be given when passing a function")
     }
-    model.frame(x)
+    model.frame(x, na.action=na.pass)
   }
   if (!class(mfd) == "data.frame") {
     stop("Please pass data argument")
@@ -246,6 +246,7 @@ fullmatch.matrix <- fullmatch.optmatch.dlist <- fullmatch.InfinitySparseMatrix <
     mean.controls = NULL,
     tol = .001,
     data = NULL,
+    within = NULL,
     ...) {
 
   ### Checking Input ###
@@ -263,6 +264,8 @@ fullmatch.matrix <- fullmatch.optmatch.dlist <- fullmatch.InfinitySparseMatrix <
     stop("dimnames of argument \'x\' contain duplicates")
   }
 
+  if (!is.null(within)) warning("Ignoring non-null 'within' argument.  When using 'fullmatch' with\n pre-formed distances, please combine them using '+'.")
+  
   nmtrt <- dnms[[1]]
   nmctl <- dnms[[2]]
 
@@ -279,12 +282,17 @@ fullmatch.matrix <- fullmatch.optmatch.dlist <- fullmatch.InfinitySparseMatrix <
     stop("argument \'max.controls\' must be numeric")
   }
   if (!is.null(omit.fraction)) {
-    if (any(abs(omit.fraction) > 1, na.rm = TRUE) | !is.numeric(omit.fraction)) {
+    # A vector of all NA's is logical, not numeric, so the first condition is needed.
+    if (all(is.na(omit.fraction))) {
+      omit.fraction <- NULL
+    } else if (any(abs(omit.fraction) > 1, na.rm = TRUE) | !is.numeric(omit.fraction)) {
       stop("omit.fraction must be NULL or numeric between -1 and 1")
     }
   }
   if (!is.null(mean.controls)) {
-    if (any(mean.controls <= 0, na.rm = TRUE) | !is.numeric(mean.controls)) {
+    if (all(is.na(mean.controls))) {
+      mean.controls <- NULL
+    } else if (any(mean.controls <= 0, na.rm = TRUE) | !is.numeric(mean.controls)) {
       stop("mean.controls must be NULL or numeric greater than 0")
     }
   }
@@ -395,9 +403,9 @@ fullmatch.matrix <- fullmatch.optmatch.dlist <- fullmatch.InfinitySparseMatrix <
 
     tol.frac <- (nrow + ncol - 2)/(total.n - 2 * np)
 
-    # if omf is specified (i.e. not NA), see if is greater than 0
+    # if omf is specified (i.e. not NA), see if is non-negative
     # if omf is not specified, check to see if mxctl is > .5
-    if (switch(1 + is.na(omf), omf > 0,  mxctl > .5)) {
+    if (switch(1 + is.na(omf), omf >= 0,  mxctl > .5)) {
       maxc <- min(mxctl, ncol)
       minc <- max(mnctl, 1/nrow)
       omf.calc <- omf

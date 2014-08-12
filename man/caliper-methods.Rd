@@ -7,20 +7,24 @@
 \title{Prepare matching distances suitable for matching within calipers.}
 \usage{
   \S4method{caliper}{InfinitySparseMatrix}(x, width = 1,
-    exclude = c(), compare = `<=`)
+    exclude = c(), compare = `<=`, values = FALSE)
 
   \S4method{caliper}{matrix}(x, width = 1, exclude = c(),
-    compare = `<=`)
+    compare = `<=`, values = FALSE)
 
   \S4method{caliper}{optmatch.dlist}(x, width = 1,
-    exclude = c(), compare = `<=`)
+    exclude = c(), compare = `<=`, values = FALSE)
 }
 \arguments{
   \item{x}{A distance specification created with
   \code{\link{match_on}} or similar.}
 
   \item{width}{The width of the caliper: how wide of a
-  margin to allow in matches. Must be a scalar value.}
+  margin to allow in matches. Be careful in setting the
+  width. Vector valued arguments will be recycled for each
+  of the finite entries in \code{x} (and no order is
+  guaranteed for \code{x} for some types of distance
+  objects).}
 
   \item{exclude}{(Optional) A character vector of
   observations (corresponding to row and column names) to
@@ -29,6 +33,11 @@
   \item{compare}{A function that decides that whether two
   observations are with the caliper. The default is
   \code{`<=`}. \code{`<`} is a common alternative.}
+
+  \item{values}{Should the returned object be made of all
+  zeros (\code{values = FALSE}, the default) or should the
+  object include the values of the original object
+  (\code{values = TRUE})?}
 }
 \value{
   A matrix like object that is suitable to be given as
@@ -97,6 +106,11 @@ pairmatch(mhd.pptyc, data = nuclearplants)
 
 ### Excluding observations from caliper requirements:
 caliper(match_on(pr ~ t1 + t2, data = nuclearplants), width = 3, exclude = c("A", "f"))
+
+### Returning values directly (equal up to the the attributes)
+all.equal(caliper(ppty.dist) + ppty.dist,
+          caliper(ppty.dist, values = TRUE),
+          check.attributes = FALSE)
 }
 \author{
   Mark M. Fredrickson and Ben B. Hansen

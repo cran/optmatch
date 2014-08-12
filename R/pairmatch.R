@@ -91,12 +91,12 @@ pairmatch.default <- function(x,
   }
 
   mfd <- if (!is.null(data)) {
-    model.frame(data)
+    model.frame(data, na.action=na.pass)
   } else {
     if (inherits(x, "function")) {
       stop("A data argument must be given when passing a function")
     }
-    model.frame(x)
+    model.frame(x, na.action=na.pass)
   }
   if (!class(mfd) == "data.frame") {
     stop("Please pass data argument")
@@ -136,6 +136,7 @@ pairmatch.matrix <- pairmatch.optmatch.dlist <- pairmatch.InfinitySparseMatrix <
                       controls = 1,
                       data = NULL,
                       remove.unmatchables = FALSE,
+                      within = NULL,
                       ...) {
 
   validDistanceSpecification(x) # will stop() on error
@@ -150,6 +151,8 @@ pairmatch.matrix <- pairmatch.optmatch.dlist <- pairmatch.InfinitySparseMatrix <
     stop(paste("Controls argument must have same length as the number of subproblems (",
       length(subprobs), ")", sep = ""))
   }
+
+    if (!is.null(within)) warning("Ignoring non-null 'within' argument. When using 'pairmatch' with\n pre-formed distances, please combine them using '+'.")
 
   omf <- mapply(controls, subprobs, FUN = function(control, prob) {
     # hard coding type based trimming for now. this should probably
@@ -167,19 +170,8 @@ pairmatch.matrix <- pairmatch.optmatch.dlist <- pairmatch.InfinitySparseMatrix <
       }
     }
 
-    # a similar procedure is used to remove all control cols that
-    # are unreachable
-
-    if (inherits(prob, "matrix")) {
-      # drop any cols that are entirely NA
-      prob <- prob[, apply(prob, 2, function(col) {
-        any(is.finite(col)) })]
-    } else {
-        # assuming an InfinitySparseMatrix here
-        validcols <- which(1:(ncol(prob)) %in% prob@cols)
-        prob@dimension <- c(nrow(prob), length(validcols))
-        prob@colnames <- prob@colnames[validcols]
-    }
+    # No longer need to remove all controls that are unreachable because
+    # subDivStrat adjust omit.fraction automatically to accomodate them.
 
     nt <- nrow(prob)
     nc <- ncol(prob)
