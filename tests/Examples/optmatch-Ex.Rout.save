@@ -1,6 +1,6 @@
 
-R version 3.1.0 (2014-04-10) -- "Spring Dance"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,16 +21,8 @@ Type 'q()' to quit R.
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
 > library('optmatch')
-Loading required package: digest
-You're loading optmatch, by B. Hansen and M. Fredrickson.
- The optmatch package makes essential use of D. P. Bertsekas
- and P. Tseng's RELAX-IV algorithm and code, as well as
- Bertsekas' AUCTION algorithm and code.  Using the software
- to 'satisfy in any part commercial delivery requirements to
- government or industry' requires a special agreement with
- Dr. Bertsekas. For more information, enter
- relaxinfo() at the command line.
-
+Loading required package: survival
+The optmatch package has an academic license. Enter relaxinfo() for more information.
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > cleanEx()
@@ -78,7 +70,7 @@ You're loading optmatch, by B. Hansen and M. Fredrickson.
 > ### Title: Prepare matching distances suitable for matching within
 > ###   calipers.
 > ### Aliases: caliper caliper,InfinitySparseMatrix-method
-> ###   caliper,matrix-method caliper-methods caliper,optmatch.dlist-method
+> ###   caliper,matrix-method caliper,optmatch.dlist-method
 > ### Keywords: nonparametric
 > 
 > ### ** Examples
@@ -199,9 +191,7 @@ treated   H   I   J   K   L M N   O   P Q   R S   T   U V   W X   Y   Z d   e f
       c Inf   0   0 Inf Inf 0 0   0 Inf 0 Inf 0   0 Inf 0   0 0 Inf Inf 0 Inf 0
 > 
 > ### Returning values directly (equal up to the the attributes)
-> all.equal(caliper(ppty.dist) + ppty.dist,
-+           caliper(ppty.dist, values = TRUE),
-+           check.attributes = FALSE)
+> all(abs((caliper(ppty.dist) + ppty.dist) - caliper(ppty.dist, values = TRUE)) < .Machine$Double.eps)
 [1] TRUE
 > 
 > 
@@ -332,12 +322,12 @@ Warning in fullmatch(ppty.distances + pt.em) :
 Call:  glm(formula = fill.NAs(pr ~ t1 * t2, data = np.missing), family = binomial)
 
 Coefficients:
-(Intercept)           t1           t2      `t1:t2`    t1.NATRUE    t2.NATRUE  
-  -51.65113      2.39779      0.66981     -0.02909     -3.30070    -11.55494  
+(Intercept)           t1           t2    t1.NATRUE    t2.NATRUE        t1:t2  
+   -49.4826       2.2029       0.6321      -0.2053     -15.1006      -0.0257  
 
 Degrees of Freedom: 31 Total (i.e. Null);  26 Residual
 Null Deviance:	    39.75 
-Residual Deviance: 20.07 	AIC: 32.07
+Residual Deviance: 21.04 	AIC: 33.04
 > 
 > # the previous call is equivalent to:
 > # glm(pr ~ t1 + t2 + `t1:t2` + t1.NA + t2.NA, fill.NAs(np.missing), family =
@@ -350,9 +340,9 @@ Warning in fullmatch(x = x, min.controls = controls, max.controls = controls,  :
   Without 'data' argument the order of the match is not guaranteed
     to be the same as your original data.
    A    B    C    D    E    F    G    a    b    c    H    I    J    K    L    M 
- 1.1  1.2  1.3  1.4  1.5  1.6  1.7  1.8  1.9 1.10 <NA>  1.7 <NA> <NA> <NA> <NA> 
+ 1.1  1.2  1.3  1.4  1.5  1.6  1.7  1.8  1.9 1.10 <NA>  1.8 <NA> <NA> <NA> <NA> 
    N    O    P    Q    R    S    T    U    V    W    X    Y    Z    d    e    f 
-<NA> <NA> <NA>  1.1  1.5  1.8  1.4  1.2 1.10 <NA>  1.9  1.6 <NA> <NA> <NA>  1.3 
+<NA> <NA> <NA>  1.9  1.1  1.2  1.6  1.4 1.10 <NA>  1.7  1.5 <NA> <NA> <NA>  1.3 
 > 
 > ## fill NAs without using treatment contrasts by making a list of contrasts for
 > ## each factor ## following hints from http://stackoverflow.com/a/4569239/161808
@@ -566,54 +556,13 @@ detaching ‘package:RItools’
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: getMaxProblemSize
-> ### Title: (Internal) What is the maximum allowed problem size?
+> ### Title: What is the maximum allowed problem size?
 > ### Aliases: getMaxProblemSize
 > 
 > ### ** Examples
 > 
 > optmatch:::getMaxProblemSize() > 1 & optmatch:::getMaxProblemSize() < 1e100
 [1] TRUE
-> 
-> 
-> 
-> cleanEx()
-> nameEx("makeInfinitySparseMatrix")
-> ### * makeInfinitySparseMatrix
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: makeInfinitySparseMatrix
-> ### Title: (Internal) Creating sparse matching problems
-> ### Aliases: as.InfinitySparseMatrix dimnames<-,InfinitySparseMatrix-method
-> ###   dimnames,InfinitySparseMatrix-method makeInfinitySparseMatrix
-> 
-> ### ** Examples
-> 
-> example.matrix <- matrix(c(1,2,Inf, 3,Inf,4, Inf,Inf,Inf), byrow = TRUE, nrow = 3,
-+                           dimnames = list(letters[1:3], LETTERS[24:26]))
-> 
-> optmatch:::as.InfinitySparseMatrix(example.matrix)
-       control
-treated   X   Y   Z
-      a   1   2 Inf
-      b   3 Inf   4
-      c Inf Inf Inf
-> 
-> # create the same sparse matrix directly, function will create the appropriate dims
-> # the data are in a different order, but the indices are correct
-> (example.ism <- 
-+   optmatch:::makeInfinitySparseMatrix(c(1,2,3,4), 
-+                                       c(1,2,1,3), 
-+                                       c(1,1,2,2), 
-+                                       LETTERS[24:26],
-+                                       letters[1:3]))
-       control
-treated   X   Y   Z
-      a   1   2 Inf
-      b   3 Inf   4
-      c Inf Inf Inf
->   
-> 
 > 
 > 
 > 
@@ -625,9 +574,9 @@ treated   X   Y   Z
 > 
 > ### Name: match_on
 > ### Title: Create treated to control distances for matching problems
-> ### Aliases: InfinitySparseMatrix-class match_on match_on.bigglm
-> ###   match_on.formula match_on.function match_on.glm
-> ###   match_on.InfinitySparseMatrix match_on.matrix match_on.numeric
+> ### Aliases: match_on match_on.InfinitySparseMatrix match_on.bigglm
+> ###   match_on.formula match_on.function match_on.glm match_on.matrix
+> ###   match_on.numeric
 > 
 > ### ** Examples
 > 
@@ -862,148 +811,6 @@ X Y
   0   0   9   8   8  12   8 
 > mean(unlist(plantsfm.d))
 [1] 4.684211
-> 
-> 
-> 
-> cleanEx()
-> nameEx("mdist")
-> ### * mdist
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: mdist
-> ### Title: (Deprecated, in favor of 'match_on') Create matching distances
-> ### Aliases: mdist
-> ### Keywords: nonparametric
-> 
-> ### ** Examples
-> 
-> data(nuclearplants)
-> mdist.examples <- list()
-> ### Propensity score distances.
-> ### Recommended approach:
-> (aGlm <- glm(pr~.-(pr+cost), family=binomial(), data=nuclearplants))
-
-Call:  glm(formula = pr ~ . - (pr + cost), family = binomial(), data = nuclearplants)
-
-Coefficients:
-(Intercept)         date           t1           t2          cap           ne  
-  43.909419    -1.220088     0.938645     0.396002     0.001197    -0.995651  
-         ct           bw        cum.n           pt  
-  -2.615671    -0.088696     0.033575    -0.352112  
-
-Degrees of Freedom: 31 Total (i.e. Null);  22 Residual
-Null Deviance:	    39.75 
-Residual Deviance: 20.92 	AIC: 40.92
-> mdist.examples$ps1 <- mdist(aGlm)
-> ### A second approach: first extract propensity scores, then separately
-> ### create a distance from them.  (Useful when importing propensity
-> ### scores from an external program.)
-> plantsPS <- predict(aGlm)
-> mdist.examples$ps2 <- mdist(pr~plantsPS, data=nuclearplants)^(1/2)
-> ### Full matching on the propensity score.
-> fullmatch(mdist.examples$ps1)
-Warning in fullmatch(mdist.examples$ps1) :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-  A   B   C   D   E   F   G   a   b   c   H   I   J   K   L   M   N   O   P   Q 
-m.1 m.2 m.3 m.1 m.5 m.1 m.2 m.1 m.1 m.2 m.3 m.5 m.3 m.3 m.3 m.3 m.3 m.3 m.3 m.3 
-  R   S   T   U   V   W   X   Y   Z   d   e   f 
-m.3 m.5 m.3 m.2 m.1 m.3 m.3 m.3 m.3 m.5 m.3 m.3 
-> fullmatch(mdist.examples$ps2)
-Warning in fullmatch(mdist.examples$ps2) :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-  A   B   C   D   E   F   G   a   b   c   H   I   J   K   L   M   N   O   P   Q 
-m.1 m.2 m.3 m.1 m.5 m.1 m.2 m.1 m.1 m.2 m.3 m.5 m.3 m.3 m.3 m.3 m.3 m.3 m.3 m.3 
-  R   S   T   U   V   W   X   Y   Z   d   e   f 
-m.3 m.5 m.3 m.2 m.1 m.3 m.3 m.3 m.3 m.5 m.3 m.3 
-> ### Because mdist.glm uses robust estimates of spread, 
-> ### the results differ in detail -- but they are close enough
-> ### to yield similar optimal matches.
-> all(fullmatch(mdist.examples$ps1)==fullmatch(mdist.examples$ps2)) # The same
-Warning in fullmatch(mdist.examples$ps1) :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-Warning in fullmatch(mdist.examples$ps2) :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-[1] TRUE
-> 
-> ### Mahalanobis distance:
-> mdist.examples$mh1 <- mdist(pr ~ t1 + t2, data = nuclearplants)
-> 
-> ### Absolute differences on a scalar:
-> 
-> sdiffs <- function(treatments, controls) {
-+   abs(outer(treatments$t1, controls$t1, `-`))
-+ }
-> 
-> (absdist <- mdist(sdiffs, structure.fmla = pr ~ 1, data = nuclearplants))
-$m
-  H  I  J K  L M  N  O P Q  R S  T  U V  W X  Y  Z d  e  f
-A 4  0  1 3  2 4  2  2 3 5  7 3  1  8 5  1 6  9 10 3  1  2
-B 3  1  0 2  1 3  1  1 2 4  6 2  0  7 4  0 5  8  9 2  2  1
-C 1  5  4 2  3 1  3  3 2 0  2 2  4  3 0  4 1  4  5 2  6  3
-D 1  5  4 2  3 1  3  3 2 0  2 2  4  3 0  4 1  4  5 2  6  3
-E 2  6  5 3  4 2  4  4 3 1  1 3  5  2 1  5 0  3  4 3  7  4
-F 8 12 11 9 10 8 10 10 9 7  5 9 11  4 7 11 6  3  2 9 13 10
-G 5  9  8 6  7 5  7  7 6 4  2 6  8  1 4  8 3  0  1 6 10  7
-a 2  2  1 1  0 2  0  0 1 3  5 1  1  6 3  1 4  7  8 1  3  0
-b 1  3  2 0  1 1  1  1 0 2  4 0  2  5 2  2 3  6  7 0  4  1
-c 7  3  4 6  5 7  5  5 6 8 10 6  4 11 8  4 9 12 13 6  2  5
-
-> 
-> ### Pair matching on the variable `t1`:
-> pairmatch(absdist)
-Warning in fullmatch(x = x, min.controls = controls, max.controls = controls,  :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-   A    B    C    D    E    F    G    a    b    c    H    I    J    K    L    M 
- m.1  m.2  m.3  m.4  m.5  m.6  m.7  m.8  m.9 m.10 <NA>  m.1 <NA> <NA> <NA> <NA> 
-   N    O    P    Q    R    S    T    U    V    W    X    Y    Z    d    e    f 
-<NA> <NA> <NA>  m.3 <NA> <NA> <NA> <NA>  m.4  m.2  m.5  m.7  m.6  m.9 m.10  m.8 
-> 
-> 
-> ### Propensity score matching within subgroups:
-> mdist.examples$ps3 <- mdist(aGlm, structure.fmla=~pt)
-> fullmatch(mdist.examples$ps3)
-Warning in fullmatch(mdist.examples$ps3) :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-  A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P   Q   R   S   T 
-0.1 0.2 0.3 0.1 0.5 0.1 0.2 0.3 0.5 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.5 0.3 
-  U   V   W   X   Y   Z   a   b   c   d   e   f 
-0.2 0.1 0.3 0.3 0.3 0.3 1.1 1.2 1.3 1.2 1.3 1.1 
-> 
-> ### Propensity score matching with a propensity score caliper:
-> mdist.examples$pscal <- mdist.examples$ps1 + caliper(mdist.examples$ps1, 1)
-> fullmatch(mdist.examples$pscal) # Note that the caliper excludes some units
-Warning in fullmatch(mdist.examples$pscal) :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-   A    B    C    D    E    F    G    a    b    c    H    I    J    K    L    M 
-<NA>  1.1  1.2  1.3  1.4  1.3  1.1  1.3  1.3  1.1 <NA>  1.4  1.2 <NA> <NA>  1.2 
-   N    O    P    Q    R    S    T    U    V    W    X    Y    Z    d    e    f 
- 1.2  1.2 <NA>  1.2  1.2  1.4  1.2  1.1  1.3  1.2  1.2 <NA>  1.2  1.4 <NA>  1.2 
-> 
-> ### A Mahalanobis distance for matching within subgroups:
-> mdist.examples$mh2 <- mdist(pr ~ t1 + t2 | pt, data = nuclearplants)
-> all.equal(mdist.examples$mh2,
-+           mdist(pr ~ t1 + t2, structure.fmla = ~ pt, data = nuclearplants))
-[1] "Attributes: < Component “call”: target, current do not match when deparsed >"
-> 
-> ### Mahalanobis matching within subgroups, with a propensity score
-> ### caliper:
-> fullmatch(mdist.examples$mh2 + caliper(mdist.examples$ps3, 1))
-Warning in fullmatch(mdist.examples$mh2 + caliper(mdist.examples$ps3, 1)) :
-  Without 'data' argument the order of the match is not guaranteed
-    to be the same as your original data.
-   A    B    C    D    E    F    G    a    b    c    H    I    J    K    L    M 
-<NA>  1.1  1.2  1.3  1.4  1.5  1.5  1.7 <NA>  1.7 <NA>  1.1  1.2 <NA> <NA>  1.2 
-   N    O    P    Q    R    S    T    U    V    W    X    Y    Z    d    e    f 
- 1.2  1.2 <NA>  1.2  1.2  1.4  1.2  1.5  1.3  1.2  1.2 <NA>  1.4  1.7 <NA> <NA> 
-> 
 > 
 > 
 > 
@@ -1266,8 +1073,7 @@ detaching ‘package:RItools’
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: scores
-> ### Title: Wrapper for 'predict' to cleanly look for new data to predict
-> ###   on.
+> ### Title: Extract scores (propensity, prognostic,...) from a fitted model
 > ### Aliases: scores
 > 
 > ### ** Examples
@@ -1275,11 +1081,12 @@ detaching ‘package:RItools’
 > data(nuclearplants)
 > pg <- lm(cost~., data=nuclearplants, subset=(pr==0))
 > # The following two lines produce identical results.
-> ps1 <- glm(pr~cap+date+t1+bw+predict(pg, newdata=nuclearplants), data=nuclearplants)
+> ps1 <- glm(pr~cap+date+t1+bw+predict(pg, newdata=nuclearplants),
++            data=nuclearplants)
 Warning in predict.lm(pg, newdata = nuclearplants) :
   prediction from a rank-deficient fit may be misleading
 > ps2 <- glm(pr~cap+date+t1+bw+scores(pg), data=nuclearplants)
-Warning in predict.lm(object, newdata = newdata, ...) :
+Warning in predict.lm(newobject, newdata = newdata2, ...) :
   prediction from a rank-deficient fit may be misleading
 > 
 > 
@@ -1312,18 +1119,12 @@ Warning in fullmatch(plantdist, min.controls = 2, max.controls = 3) :
 > stratumStructure(plantsfm)
 1:1 1:2 1:3 1:4 1:6 
   2   2   1   1   1 
-attr(,"comparable.num.matched.pairs")
-[1] 9.480952
 > stratumStructure(plantsfm1)
 1:2 1:3 
   2   5 
-attr(,"comparable.num.matched.pairs")
-[1] 10.16667
 > stratumStructure(plantsfm, max.controls=4)
  1:1  1:2  1:3 1:4+ 
    2    2    1    2 
-attr(,"comparable.num.matched.pairs")
-[1] 9.480952
 > 
 > 
 > 
@@ -1331,7 +1132,7 @@ attr(,"comparable.num.matched.pairs")
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  2.22 0.03 2.253 0 0 
+Time elapsed:  1.897 0.03 1.927 0 0 
 > grDevices::dev.off()
 null device 
           1 

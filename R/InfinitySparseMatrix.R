@@ -20,42 +20,29 @@ NA
 setOldClass(c("optmatch.dlist", "list"))
 
 setClassUnion("OptionalCharacter", c("character", "NULL"))
-setClass("InfinitySparseMatrix",
-  representation(cols = "numeric", rows = "numeric", dimension = "numeric",
-    colnames = "OptionalCharacter", rownames = "OptionalCharacter",
-    call = "OptionalCall"),
-  contains = "vector")
 
-# using a maker function for now, probably should be an initialize function
-#' (Internal) Creating sparse matching problems
+#' Objects for sparse matching problems.
 #'
-#' Create \code{InfinitySparseMatrix} distance specifications. Finite entries
+#' \code{InfinitySparseMatrix} is a special class of distance specifications. Finite entries
 #' indicate possible matches, while infinite entries indicated non-allowed
 #' matches. This data type can be more space efficient for sparse matching
 #' problems.
 #'
 #' Usually, users will create distance specification using \code{\link{match_on}}, \code{\link{caliper}}, or
-#' \code{\link{exactMatch}}, but if you need to generate sparse matching
-#' problems directly, use this function.
-#' If the data are already in a matrix form, use \code{as.InfinitySparseMatrix}. If you have the
-#' finite entries in a vector format, use \code{makeInfinitySparseMatrix}.
+#' \code{\link{exactMatch}}.
 #'
-#' @param data  A vector of distances for the finite (allowed) treatment-control pairs.
-#' @param cols  A vector indicating the column number for each entry in \code{data}.
-#' @param rows  A vector indicating the row number for each entry in \code{data}.
-#' @param colnames  A optional character vector with the columns names of the matrix.
-#' @param rownames  A optional character vector with the row names of the matrix.
-#' @param dimension  An optional vector giving the dimensions of the matrix, which can be useful for indicating
-#' matrices with entirely \code{Inf} rows or columns. If supplied with row and columns names, it must match.
-#' @param x A matrix to be converted to an \code{InfinitySparseMatrix}.
-#' @param call Optional \code{call} object to store with the distance
-#' specification. Allows calling \code{\link{update}} on the distance object at
-#' later points.
-#' @return An object of class \code{InfinitySparseMatrix}, which will work as a distance argument
-#' to \code{\link{fullmatch}} or \code{\link{pairmatch}}
 #' @author Mark M. Fredrickson
 #' @seealso \code{\link{match_on}}, \code{\link{caliper}}, \code{\link{exactMatch}}, \code{\link{fullmatch}},  \code{\link{pairmatch}}
-#' @example inst/examples/makeInfinitySparseMatrix.R
+setClass("InfinitySparseMatrix",
+  representation(cols = "integer",
+                 rows = "integer",
+                 dimension = "integer",
+                 colnames = "OptionalCharacter",
+                 rownames = "OptionalCharacter",
+                 call = "OptionalCall"),
+  contains = "vector")
+
+# using a maker function for now, probably should be an initialize function
 makeInfinitySparseMatrix <- function(data, cols, rows, colnames = NULL,
                                      rownames = NULL, dimension = NULL,
                                      call = NULL) {
@@ -76,8 +63,13 @@ makeInfinitySparseMatrix <- function(data, cols, rows, colnames = NULL,
   # }
 
 
-  return(new("InfinitySparseMatrix", data, cols = cols, rows = rows, colnames = colnames, rownames =
-    rownames, dimension = dimension, call = call))
+  return(new("InfinitySparseMatrix",
+             data,
+             cols = as.integer(cols),
+             rows = as.integer(rows),
+             colnames = colnames, rownames = rownames,
+             dimension = as.integer(dimension),
+             call = call))
 }
 
 ### Basic Matrix-like Operations and Conversions ###
@@ -122,13 +114,20 @@ setAs("matrix", "InfinitySparseMatrix", function(from) {
   return(x)
 })
 
-#' @rdname makeInfinitySparseMatrix
 as.InfinitySparseMatrix <- function(x) { as(x, "InfinitySparseMatrix") }
 
 # dimnames implementation
-
-#' @rdname makeInfinitySparseMatrix
-#' @aliases dimnames,InfinitySparseMatrix-method
+#' Get and set dimnames for InfinitySparseMatrix objects
+#'
+#' InfinitySparseMatrix objects represent sparse matching problems
+#' with treated units as rows of a matrix and controls units as
+#' the columns of the matrix. The names of the units can be retrieved
+#' and set using these methods.
+#'
+#' @param x An InfinitySparseMatrix object.
+#' @param value A list with two entries: the treated names and control names, respectively.
+#' @return A list with treated and control names.
+#' @rdname dimnames-InfinitySparseMatrix
 setMethod("dimnames", "InfinitySparseMatrix", function(x) {
   if (is.null(x@rownames) & is.null(x@colnames)) {
     return(NULL)
@@ -136,8 +135,7 @@ setMethod("dimnames", "InfinitySparseMatrix", function(x) {
   list(treated = x@rownames, control = x@colnames)
 })
 
-#' @rdname makeInfinitySparseMatrix
-#' @aliases dimnames<-,InfinitySparseMatrix-method
+#' @rdname dimnames-InfinitySparseMatrix
 setMethod("dimnames<-", "InfinitySparseMatrix", function(x, value) {
   if (length(value) != 2) {
     # message copied from matrix method
@@ -148,11 +146,13 @@ setMethod("dimnames<-", "InfinitySparseMatrix", function(x, value) {
   x
 })
 
+#' @importFrom Rcpp sourceCpp
+NULL
+
 ################################################################################
 # Infinity Sparse Matrix: Binary Ops
 ################################################################################
-setMethod("Ops", signature(e1 = "InfinitySparseMatrix", e2 = "InfinitySparseMatrix"),
-function(e1, e2) {
+ismOpHandler <- function(binOp, e1, e2) {
   if (!identical(dim(e1), dim(e2))) {
     stop(paste("non-conformable matrices"))
   }
@@ -178,26 +178,66 @@ function(e1, e2) {
     }
   }
 
-  # even if in the same row, column order the two matrices might also be in different data order
-  pairs1 <- mapply(c, e1@rows, e1@cols, SIMPLIFY = F)
-  pairs2 <- mapply(c, e2@rows, e2@cols, SIMPLIFY = F)
+  return(
+    .Call('ismOps', binOp, e1, e2)
+  )
+}
 
-  # Note: This might be expensive. There may be a way to do this in one pass if the data
-  # were pre-sorted in into row/column order
-  idx1 <- which(pairs1 %in% pairs2)
-  idx2 <- match(pairs1, pairs2)
+#' Element-wise addition
+#'
+#' \code{e1 + e2} returns the element-wise sum of
+#'   two InfinitySparseMatrix objects.
+#'   If either element is inf then
+#'   the resulting element will be inf.
+#'
+#' @param e1 an InfinitySparseMatrix object
+#' @param e2 an InfinitySparseMatrix object
+#' @return an InfinitySparseMatrix object representing
+#'   the element-wise sum of the two ISM objects
+#' @docType methods
+#' @rdname ismBinaryOps
+#' @export
+setMethod("+", signature(e1 = "InfinitySparseMatrix", e2 = "InfinitySparseMatrix"),
+  function(e1, e2) ismOpHandler('+', e1, e2))
 
-  data1 <- e1@.Data[idx1]
-  data2 <- e2@.Data[idx2[!is.na(idx2)]]
+#' Elementwise subtraction
+#'
+#' \code{e1 - e2} returns the element-wise subtraction of
+#'   two InfinitySparseMatrix objects.
+#'   If either element is inf then
+#'   the resulting element will be inf.
+#'
+#' @docType methods
+#' @rdname ismBinaryOps
+#' @export
+setMethod("-", signature(e1 = "InfinitySparseMatrix", e2 = "InfinitySparseMatrix"),
+  function(e1, e2) ismOpHandler('-', e1, e2))
 
-  res <- callGeneric(data1, data2)
+#' Elementwise multiplication
+#'
+#' \code{e1 * e2} returns the element-wise multiplication of
+#'   two InfinitySparseMatrix objects.
+#'   If either element is inf then
+#'   the resulting element will be inf.
+#'
+#' @docType methods
+#' @rdname ismBinaryOps
+#' @export
+setMethod("*", signature(e1 = "InfinitySparseMatrix", e2 = "InfinitySparseMatrix"),
+  function(e1, e2) ismOpHandler('*', e1, e2))
 
-  tmp <- e1
-  tmp@.Data <- res
-  tmp@cols <- e1@cols[idx1]
-  tmp@rows <- e1@rows[idx1]
-  return(tmp)
-})
+#' Elementwise division
+#'
+#' \code{e1 / e2} returns the element-wise division of
+#'   two InfinitySparseMatrix objects.
+#'   If either element is inf then
+#'   the resulting element will be inf.
+#'
+#' @docType methods
+#' @rdname ismBinaryOps
+#' @export
+setMethod("/", signature(e1 = "InfinitySparseMatrix", e2 = "InfinitySparseMatrix"),
+  function(e1, e2) ismOpHandler('/', e1, e2))
 
 setMethod("Ops", signature(e1 = "InfinitySparseMatrix", e2 = "matrix"),
 function(e1, e2) {
@@ -269,7 +309,10 @@ subset.InfinitySparseMatrix <- function(x, subset, select, ...) {
     stop("Subset and select must be same length as rows and columns, respectively.")
   }
 
-  subset.data <- .Call(subsetInfSparseMatrix, subset, select, x)
+  subset.data <- .Call(subsetInfSparseMatrix,
+                       as.integer(subset),
+                       select,
+                       x)
   return(makeInfinitySparseMatrix(subset.data[, 3],
                                   subset.data[, 2],
                                   subset.data[, 1],

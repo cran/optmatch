@@ -1,29 +1,36 @@
 Package: optmatch
-Version: 0.9-3
-Date: 2014-08-12
-Title: Functions for optimal matching
+Version: 0.9-5
+Date: 2015-07-30
+Title: Functions for Optimal Matching
+Description: Provides routines for distance based bipartite matching to reduce
+    covariate imbalance between treatment and control groups in observational
+    studies. Routines are provided to generate distances from GLM models (propensity
+    score matching) and formulas (Euclidean and Mahalanobis matching), stratified
+    matching (exact matching), and calipers. Results of the fullmatch routine are
+    guaranteed to provide minimum average within matched set distance.
 Author: Ben B. Hansen <ben.hansen@umich.edu>, Mark Fredrickson
     <mark.m.fredrickson@gmail.com>, Josh Buckner, Josh Errickson, and Peter
     Solenberger, with embedded Fortran code due to Dimitri P. Bertsekas
     <dimitrib@mit.edu> and Paul Tseng
 Maintainer: Mark M. Fredrickson <mark.m.fredrickson@gmail.com>
-Depends: R (>= 2.15.1), stats, methods, graphics, digest
-Suggests: boot, RItools, biglm, testthat, survival, brglm, arm
-Description: Functions for optimal matching, including full matching
+Depends: R (>= 2.15.1), stats, methods, graphics, survival
+LinkingTo: Rcpp
+Imports: Rcpp, RItools, digest
+Suggests: boot, biglm, testthat, brglm, arm
 License: file LICENSE
 URL: http://www.r-project.org,
         https://github.com/markmfredrickson/optmatch
-Collate: 'abs.optmatch.dlist.R' 'boxplot-methods.R' 'DenseMatrix.R'
-        'InfinitySparseMatrix.R' 'caliper.R' 'deprecated.R'
-        'distUnion.R' 'exactMatch.R' 'feasible.R' 'fill.NAs.R'
-        'fmatch.R' 'fullmatch.R' 'makedist.R' 'matched.distances.R'
-        'matched.R' 'matchfailed.R' 'match_on.R' 'max.controls.cap.R'
-        'mdist.R' 'min.controls.cap.R' 'Ops.optmatch.dlist.R'
-        'Optmatch.R' 'pairmatch.R' 'print.optmatch.dlist.R'
-        'print.optmatch.R' 'relaxinfo.R' 'scores.R'
+Collate: 'DenseMatrix.R' 'InfinitySparseMatrix.R'
+        'Ops.optmatch.dlist.R' 'Optmatch.R' 'abs.optmatch.dlist.R'
+        'boxplotMethods.R' 'caliper.R' 'deprecated.R' 'distUnion.R'
+        'exactMatch.R' 'feasible.R' 'fill.NAs.R' 'fmatch.R'
+        'fullmatch.R' 'makedist.R' 'match_on.R' 'matched.R'
+        'matched.distances.R' 'matchfailed.R' 'max.controls.cap.R'
+        'mdist.R' 'min.controls.cap.R' 'pairmatch.R' 'print.optmatch.R'
+        'print.optmatch.dlist.R' 'relaxinfo.R' 'scores.R'
         'stratumStructure.R' 'subDivStrat.R' 'summary.optmatch.R'
-        'utilities.R' 'zzzDistanceSpecification.R' 'zzz.R'
-Packaged: 2014-08-12 15:35:12 UTC; mark
+        'utilities.R' 'zzz.R' 'zzzDistanceSpecification.R'
 NeedsCompilation: yes
+Packaged: 2015-07-30 19:44:16 UTC; mark
 Repository: CRAN
-Date/Publication: 2014-08-12 18:43:00
+Date/Publication: 2015-07-31 01:06:41
