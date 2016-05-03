@@ -1,6 +1,6 @@
-# (Internal) Sets up option to try recovery in \code{fullmatch}.
-#
-# @return NULL
+#' (Internal) Sets up option to try recovery in \code{fullmatch}.
+#'
+#' @return NULL
 setTryRecovery <- function() {
   options("fullmatch_try_recovery" = TRUE)
 }
@@ -161,13 +161,13 @@ setTryRecovery <- function() {
 #' @keywords nonparametric optimize
 #' @export
 fullmatch <- function(x,
-    min.controls = 0,
-    max.controls = Inf,
-    omit.fraction = NULL,
-    mean.controls = NULL,
-    tol = .001,
-    data = NULL,
-    ...) {
+                      min.controls = 0,
+                      max.controls = Inf,
+                      omit.fraction = NULL,
+                      mean.controls = NULL,
+                      tol = .001,
+                      data = NULL,
+                      ...) {
 
   # if x does not exist then print helpful error msg
   x_str <- deparse(substitute(x))
@@ -177,21 +177,25 @@ fullmatch <- function(x,
 
   cl <- match.call()
   if (is.null(data)) {
+    if (is(x, "InfinitySparseMatrix") |
+        is(x, "matrix") |
+        is(x, "optmatch.dlist") )
     warning("Without 'data' argument the order of the match is not guaranteed
     to be the same as your original data.")
   }
   UseMethod("fullmatch")
 }
 
+#' @export
 fullmatch.default <- function(x,
-    min.controls = 0,
-    max.controls = Inf,
-    omit.fraction = NULL,
-    mean.controls = NULL,
-    tol = .001,
-    data = NULL,
-    within = NULL,
-    ...) {
+                              min.controls = 0,
+                              max.controls = Inf,
+                              omit.fraction = NULL,
+                              mean.controls = NULL,
+                              tol = .001,
+                              data = NULL,
+                              within = NULL,
+                              ...) {
 
   if (!inherits(x, gsub("match_on.","",methods("match_on")))) {
     stop("Invalid input, must be a potential argument to match_on")
@@ -222,16 +226,17 @@ fullmatch.default <- function(x,
   out
 }
 
+#' @export
 fullmatch.numeric <- function(x,
-    min.controls = 0,
-    max.controls = Inf,
-    omit.fraction = NULL,
-    mean.controls = NULL,
-    tol = .001,
-    data = NULL,
-    z,
-    within = NULL,
-    ...) {
+                              min.controls = 0,
+                              max.controls = Inf,
+                              omit.fraction = NULL,
+                              mean.controls = NULL,
+                              tol = .001,
+                              data = NULL,
+                              z,
+                              within = NULL,
+                              ...) {
 
   m <- match_on(x, within=within, z=z, ...)
   out <- fullmatch(m,
@@ -247,15 +252,16 @@ fullmatch.numeric <- function(x,
   out
 }
 
-fullmatch.matrix <- fullmatch.optmatch.dlist <- fullmatch.InfinitySparseMatrix <- fullmatch.BlockedInfinitySparseMatrix <- function(x,
-    min.controls = 0,
-    max.controls = Inf,
-    omit.fraction = NULL,
-    mean.controls = NULL,
-    tol = .001,
-    data = NULL,
-    within = NULL,
-    ...) {
+#' @export
+fullmatch.matrix <- function(x,
+                             min.controls = 0,
+                             max.controls = Inf,
+                             omit.fraction = NULL,
+                             mean.controls = NULL,
+                             tol = .001,
+                             data = NULL,
+                             within = NULL,
+                             ...) {
 
   ### Checking Input ###
 
@@ -307,6 +313,18 @@ fullmatch.matrix <- fullmatch.optmatch.dlist <- fullmatch.InfinitySparseMatrix <
 
   if (!is.null(omit.fraction) & !is.null(mean.controls)) {
     stop("omit.fraction and mean.controls cannot both be specified")
+  }
+
+  # Issue #56: Checking for sane input in data
+  if (!is.null(data)) {
+    if (!is.vector(data)) {
+      dnames <- rownames(data)
+    } else {
+      dnames <- names(data)
+    }
+    if (any(!unlist(dimnames(x)) %in% dnames)) {
+      stop("Some elements of the distance matrix are not found in the data argument.")
+    }
   }
 
   # problems is guaranteed to be a list of DistanceSpecifictions
@@ -536,6 +554,13 @@ fullmatch.matrix <- fullmatch.optmatch.dlist <- fullmatch.InfinitySparseMatrix <
   return(mout)
 }
 
+
+#' @export
+fullmatch.optmatch.dlist <- fullmatch.matrix
+#' @export
+fullmatch.InfinitySparseMatrix <- fullmatch.matrix
+#' @export
+fullmatch.BlockedInfinitySparseMatrix <- fullmatch.matrix
 
 #' @aliases fullmatch
 #' @rdname fullmatch

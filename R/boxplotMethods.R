@@ -1,3 +1,5 @@
+#' @importFrom graphics boxplot
+#' @export
 boxplot.glm <- function(x, data=NULL, xlab="Group", ylab=expression(paste(X, symbol("\242"), hat(beta))), main="Overlap on fitted scores",varwidth=TRUE,...)
   {
     if (is.null(data))
@@ -9,9 +11,10 @@ boxplot.glm <- function(x, data=NULL, xlab="Group", ylab=expression(paste(X, sym
   Data <- model.frame(terms(x), data)
   dependent.variable <- as.numeric(model.response(Data))
 }
-boxplot(linear.score ~ dependent.variable, xlab=xlab, ylab=ylab,main=main,...)
+boxplot(linear.score ~ dependent.variable, xlab=xlab, ylab=ylab,main=main, varwidth=varwidth,...)
   }
 
+#' @export
 boxplot.bigglm <- function(x, data,xlab="Group", ylab=expression(paste(X, symbol("\242"), hat(beta))), main="Overlap on fitted scores",varwidth=TRUE,...)
   {
   if (is.null(data)) {
@@ -35,5 +38,5 @@ are there missing values in data?")
 
   Data <-  model.frame(x$terms, data = data)
   dependent.variable <- as.numeric(model.response(Data))
-boxplot(linear.score ~ dependent.variable, xlab=xlab, ylab=ylab,main=main,...)
+boxplot(linear.score ~ dependent.variable, xlab=xlab, ylab=ylab,main=main, varwidth=varwidth,...)
   }

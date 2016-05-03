@@ -83,6 +83,7 @@ pairmatch <- function(x,
   UseMethod("pairmatch")
 }
 
+#' @export
 pairmatch.default <- function(x,
                       controls = 1,
                       data = NULL,
@@ -90,10 +91,7 @@ pairmatch.default <- function(x,
                       within = NULL,
                       ...) {
 
-  klass <- class(x)[1]
-  if (is.object(x)) klass <- oldClass(x)[1]
-
-  if (is.null(getS3method("match_on", klass, optional = T))) {
+  if (!inherits(x, gsub("match_on.","",methods("match_on")))) {
     stop("Invalid input, must be a potential argument to match_on")
   }
 
@@ -119,6 +117,7 @@ pairmatch.default <- function(x,
   out
 }
 
+#' @export
 pairmatch.numeric <- function(x,
                       controls = 1,
                       data = NULL,
@@ -138,13 +137,13 @@ pairmatch.numeric <- function(x,
   out
 }
 
-
-pairmatch.matrix <- pairmatch.optmatch.dlist <- pairmatch.InfinitySparseMatrix <- pairmatch.BlockedInfinitySparseMatrix <- function(x,
-                      controls = 1,
-                      data = NULL,
-                      remove.unmatchables = FALSE,
-                      within = NULL,
-                      ...) {
+#' @export
+pairmatch.matrix <- function(x,
+                             controls = 1,
+                             data = NULL,
+                             remove.unmatchables = FALSE,
+                             within = NULL,
+                             ...) {
 
   validDistanceSpecification(x) # will stop() on error
 
@@ -207,6 +206,12 @@ pairmatch.matrix <- pairmatch.optmatch.dlist <- pairmatch.InfinitySparseMatrix <
   return(out)
 }
 
+#' @export
+pairmatch.optmatch.dlist <- pairmatch.matrix
+#' @export
+pairmatch.InfinitySparseMatrix <- pairmatch.matrix
+#' @export
+pairmatch.BlockedInfinitySparseMatrix <- pairmatch.matrix
 
 #' @aliases pairmatch
 #' @rdname pairmatch

@@ -5,17 +5,31 @@
 #' match reduces average differences.
 #'
 #' @param object The \code{optmatch} object to summarize.
-#' @param propensity.model An optional propensity model (the result of a call to \code{glm}) to use when summarizing the match. Using the \code{RItools} package, an additional chi-squared test will be performed on the average differences between treated and control units on each variable used in the model. See the \code{xBalance} function in the \code{RItools} package for more details.
-#' @param ... Additional arguments to pass to \code{xBalance} when also passing a propensity model.
-#' @param min.controls To minimize the the display of a groups with many treated and few controls, all groups with more than 5 treated units will be summarized as \dQuote{5+}. This is the reciprocal of the default value (1/5 = 0.2). Lower this value to see more groups.
-#' @param max.controls Like \code{min.controls} sets maximum group sized displayed with respect to the number of controls. Raise this value to see more groups.
-#' @param quantiles A points in the ECDF at which the distances between units will be displayed.
+#' @param propensity.model An optional propensity model (the result of
+#'   a call to \code{glm}) to use when summarizing the match. Using
+#'   the \code{RItools} package, an additional chi-squared test will
+#'   be performed on the average differences between treated and
+#'   control units on each variable used in the model. See the
+#'   \code{xBalance} function in the \code{RItools} package for more
+#'   details.
+#' @param ... Additional arguments to pass to \code{xBalance} when
+#'   also passing a propensity model.
+#' @param min.controls To minimize the the display of a groups with
+#'   many treated and few controls, all groups with more than 5
+#'   treated units will be summarized as \dQuote{5+}. This is the
+#'   reciprocal of the default value (1/5 = 0.2). Lower this value to
+#'   see more groups.
+#' @param max.controls Like \code{min.controls} sets maximum group
+#'   sized displayed with respect to the number of controls. Raise
+#'   this value to see more groups.
+#' @param quantiles A points in the ECDF at which the distances
+#'   between units will be displayed.
 #' @return \code{optmatch.summary}
 #' @seealso \code{\link{print.optmatch}}
 #' @method summary optmatch
-#' @S3method summary optmatch
 #' @rdname optmatch
 #' @importFrom RItools xBalance
+#' @export
 summary.optmatch <- function(object,
                              propensity.model = NULL, ...,
                              min.controls=.2, max.controls=5,
@@ -50,11 +64,14 @@ summary.optmatch <- function(object,
   so$matched.set.structures <- stratumStructure(object,min.controls=min.controls,max.controls=max.controls)
   so$effective.sample.size <- attr(so$matched.set.structures, "comparable.num.matched.pairs")
 
-  matchdists <- attr(object, "matched.distances")[levels(object[!mfd, drop=TRUE])]
-  matchdists <- unlist(matchdists)
-  so$total.distance <- sum(matchdists)
-  so$total.tolerances <- sum(unlist(attr(object, "exceedances")))
-  so$matched.dist.quantiles <- quantile(matchdists, prob=quantiles)
+  # Per issue #106, allow the object to not carry a `matched.distances` attribute.
+  if (!is.null(attr(object, "matched.distances"))) {
+    matchdists <- attr(object, "matched.distances")[levels(object[!mfd, drop=TRUE])]
+    matchdists <- unlist(matchdists)
+    so$total.distance <- sum(matchdists)
+    so$total.tolerances <- sum(unlist(attr(object, "exceedances")))
+    so$matched.dist.quantiles <- quantile(matchdists, prob=quantiles)
+  }
 
   if(!is.null(propensity.model) &&
      inherits(propensity.model, "glm")) {
@@ -69,7 +86,7 @@ summary.optmatch <- function(object,
     # we need to handle the different ways of creating glm objects
     # 1: glm(Z ~ f(X), data = mydata)
     # 2: glm(Z ~ f(X)) # uses environment
-    # 3: glm(fill.NAs(Z ~ f(x), data = mydata))
+    # 3: glm(fill.NAs(Z ~ f(x), data = mydata)) # This is no longer explicitly supported, see #103
     # each stores its data in different places.
 
     modelData <- NULL # be explicit for safety
@@ -110,8 +127,8 @@ summary.optmatch <- function(object,
   so
 }
 
-print.summary.optmatch <- function(x,  digits= max(3, getOption("digits")-4),...)
-  {
+#' @export
+print.summary.optmatch <- function(x,  digits= max(3, getOption("digits")-4),...) {
   if ('warnings' %in% names(x)) warns <- c(x$warnings, sep="\n")
 
   numsubprob <- length(levels(attr(x$thematch, "subproblem")))
@@ -135,13 +152,15 @@ print.summary.optmatch <- function(x,  digits= max(3, getOption("digits")-4),...
   print(x$matched.set.structures)
   cat("Effective Sample Size: ", signif(x$effective.sample.size, digits), "\n")
   cat("(equivalent number of matched pairs).\n\n")
-  cat("sum(matched.distances)=",
-      signif(x$total.distance, digits),"\n",sep="")
-  cat("(within",
-      signif(x$total.tolerances,digits),
-      "of optimum).\n")
-  cat("Percentiles of matched distances:\n")
-  print(signif(x$matched.dist.quantiles, digits))
+  if (!is.null(x$total.distance)) {
+    cat("sum(matched.distances)=",
+        signif(x$total.distance, digits),"\n",sep="")
+    cat("(within",
+        signif(x$total.tolerances,digits),
+        "of optimum).\n")
+    cat("Percentiles of matched distances:\n")
+    print(signif(x$matched.dist.quantiles, digits))
+  }
 
   if ('balance' %in% names(x))
     {
@@ -157,4 +176,4 @@ print.summary.optmatch <- function(x,  digits= max(3, getOption("digits")-4),...
       do.call(cat, warns)
     }
   invisible(x)
-  }
+}

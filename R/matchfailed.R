@@ -1,9 +1,11 @@
+#' @export
+#' @rdname matched
 matchfailed <- function(x) {
   failed <- !subproblemSuccess(x)
   grps <- attr(x, "subproblem")
   levels(grps) <- failed
   return(as.logical(grps))
-} 
+}
 
 #' (Internal) Report successful subproblems.
 #'
@@ -17,6 +19,6 @@ matchfailed <- function(x) {
 #' @return A named logical vector indicating either success or failure for each subproblem.
 subproblemSuccess <- function(x) {
   grps <- attr(x, "subproblem")
-  failed <- sapply(split(x, grps), function(x) { all(is.na(x)) })    
+  failed <- sapply(split(x, grps), function(x) { all(is.na(x)) })
   return(!failed)
 }

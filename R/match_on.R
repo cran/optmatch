@@ -114,11 +114,17 @@ match_on <- function(x, within = NULL, caliper = NULL, data=NULL, ...) {
 #'   beneficial computationally as well as statistically, for reasons indicated
 #'   in the below discussion of the \code{numeric} method.
 #'
+#'   One can also specify exactMatching criteria by using `strata(foo)` inside
+#'   the formula to build the `glm`. For example, passing
+#'   `glm(y ~ x + strata(s))` to `match_on` is equivalent to passing
+#'   `within=exactMatch(y ~ strata(s))`.
+#'
 #' @param standardization.scale Function for rescaling of \code{scores(x)}, or
 #'   \code{NULL}; defaults to \code{mad}.  (See Details.)
 #' @seealso \code{\link{scores}}
 #' @method match_on glm
 #' @rdname match_on-methods
+#' @export
 match_on.glm <- function(x, within = NULL, caliper = NULL, data = NULL, standardization.scale = mad, ...) {
 
   stopifnot(all(c('y', 'linear.predictors','data') %in% names(x)))
@@ -144,7 +150,8 @@ match_on.glm <- function(x, within = NULL, caliper = NULL, data = NULL, standard
   }
   lp.adj <- lp/pooled.sd
 
-  if (any(grepl("strata", formula(x)))) {
+  if (!is.null(attr(terms(formula(x), special = "strata", data = data),
+                    "specials")$strata)) {
     newwithin <- makeWithinFromStrata(formula(x), data)
     if (is.null(within)) {
       within <- newwithin$within
@@ -175,6 +182,7 @@ match_on_szn_scale <- function(x, Tx, standardizer = mad, ...) {
 #'
 #' @method match_on bigglm
 #' @rdname match_on-methods
+#' @export
 match_on.bigglm <- function(x, within = NULL, caliper = NULL, data = NULL, standardization.scale = mad, ...) {
   if (is.null(data)) {
     stop("data argument is required for computing match_ons from bigglms")
@@ -239,6 +247,7 @@ are there missing values in data?")
 #'   created distance function.
 #' @method match_on formula
 #' @rdname match_on-methods
+#' @export
 match_on.formula <- function(x, within = NULL, caliper = NULL, data = NULL, subset = NULL, method = "mahalanobis", ...) {
   if (length(x) != 3) {
     stop("Formula must have a left hand side.")
@@ -253,7 +262,9 @@ match_on.formula <- function(x, within = NULL, caliper = NULL, data = NULL, subs
 
   rm(m)
 
-  if (any(grepl("strata", x))) {
+  # Get terms, with flags for any strata (to handle) or caliper (to break)
+  t <- terms(x, specials = c("strata","caliper"), data = data)
+  if (!is.null(attr(t, "specials")$strata)) {
     newwithin <- makeWithinFromStrata(x, data)
     x <- newwithin$x
     mf[[2]] <- x
@@ -262,6 +273,21 @@ match_on.formula <- function(x, within = NULL, caliper = NULL, data = NULL, subs
     } else {
       within <- newwithin$within + within
     }
+  }
+
+  # #114 - Catching user input of caliper in formula
+  if (!is.null(attr(t, "specials")$caliper)) {
+    calnames <- rownames(attr(t, 'factors'))[attr(t, "specials")$caliper]
+    withinname <- as.list(match.call())$within
+    if (is.null(withinname)) {
+      withinname <- ""
+    } else {
+      withinname <- paste0(deparse(substitute(withinname)), " + ")
+    }
+
+    stop(paste0("Calipers should be applied via the `within` argument instead of in the formula.\n",
+                "\tE.g. `within = ", ifelse(is.null(withinname), "", withinname),
+                paste(calnames, collapse = " + "), "`"))
   }
 
   names(mf)[names(mf) == "x"] <- "formula"
@@ -273,21 +299,21 @@ match_on.formula <- function(x, within = NULL, caliper = NULL, data = NULL, subs
   if (dim(mf)[2] < 2) {
     stop("Formula must have a right hand side with at least one variable.")
   }
-  
+
   # we want to use our own contrasts creating function
   isF <- colnames(mf)[vapply(mf, is.factor, TRUE)]
   c.arg <- lapply(isF, function(fname) {
     if (nlevels(mf[[fname]]) < 2) {
       return(NULL)
-    } 
+    }
     contr.match_on(nlevels(mf[[fname]]))
   })
-                
+
   names(c.arg) <- isF
 
   tmpz <- toZ(mf[,1])
   tmpn <- rownames(mf)
-  
+
   mf <- na.omit(mf)
 
   dropped.t <- setdiff(tmpn[tmpz],  rownames(mf))
@@ -340,7 +366,7 @@ match_on.formula <- function(x, within = NULL, caliper = NULL, data = NULL, subs
 makeWithinFromStrata <- function(x, data)
 {
   xs <- findStrata(x, data)
-  
+
   em <- unlist(sapply(strsplit(xs$strata, "\\(|)|,"), "[", -1))
   within <- exactMatch(as.formula(paste(xs$newx[[2]], "~", paste(em, collapse="+"))),
                              data=data)
@@ -407,7 +433,7 @@ compute_mahalanobis <- function(index, data, z) {
 
     rm(cv)
 
-    return(.Call(mahalanobisHelper, data, index, inv.scale.matrix))
+    return(mahalanobisHelper(data, index, inv.scale.matrix))
 }
 
 
@@ -415,7 +441,7 @@ compute_euclidean <- function(index, data, z) {
 
   if (!all(is.finite(data))) stop("Infinite or NA values detected in data for distance computations.")
 
-  return(.Call(mahalanobisHelper, data, index, diag(ncol(data))))
+  return(mahalanobisHelper(data, index, diag(ncol(data))))
 }
 
 
@@ -425,7 +451,7 @@ compute_rank_mahalanobis <- function(index, data, z) {
     }
 
     return(
-        .Call('r_smahal', index, data, z, PACKAGE='optmatch')
+        r_smahal(index, data, z)
     )
 }
 
@@ -449,6 +475,7 @@ compute_rank_mahalanobis <- function(index, data, z) {
 #'   level) and control (the lower level) for each unit in the study.
 #' @method match_on function
 #' @rdname match_on-methods
+#' @export
 match_on.function <- function(x, within = NULL, caliper = NULL, data = NULL, z = NULL, ...) {
 
   if (is.null(data) | is.null(z)) {
@@ -483,6 +510,7 @@ match_on.function <- function(x, within = NULL, caliper = NULL, data = NULL, z =
 #' For the numeric method, \code{x} must have names.
 #' @method match_on numeric
 #' @rdname match_on-methods
+#' @export
 match_on.numeric <- function(x, within = NULL, caliper = NULL, data = NULL, z, ...) {
 
   if(missing(z) || is.null(z)) {
@@ -534,14 +562,16 @@ match_on.numeric <- function(x, within = NULL, caliper = NULL, data = NULL, z, .
   return(tmp)
 }
 
-# (Internal) Helper function to create an InfinitySparseMatrix from a set of
-# scores, a treatment indicator, and a caliper width.
-#
-# @param x The scores, a vector indicating the 1-D location of each unit.
-# @param z The treatment assignment vector (same length as \code{x})
-# @param caliper The width of the caliper with respect to the scores \code{x}.
-# @return An \code{InfinitySparseMatrix} object, suitable to be passed to
-#   \code{\link{match_on}} as an \code{within} argument.
+#' (Internal) Helper function to create an InfinitySparseMatrix from a set of
+#' scores, a treatment indicator, and a caliper width.
+#'
+#' @param x The scores, a vector indicating the 1-D location of each
+#'   unit.
+#' @param z The treatment assignment vector (same length as \code{x})
+#' @param caliper The width of the caliper with respect to the scores
+#'   \code{x}.
+#' @return An \code{InfinitySparseMatrix} object, suitable to be
+#'   passed to \code{\link{match_on}} as an \code{within} argument.
 scoreCaliper <- function(x, z, caliper) {
   z <- toZ(z)
 
@@ -581,6 +611,7 @@ scoreCaliper <- function(x, z, caliper) {
 #'
 #' @rdname match_on-methods
 #' @method match_on InfinitySparseMatrix
+#' @export
 match_on.InfinitySparseMatrix <- function(x, within = NULL, caliper = NULL, data = NULL, ...) {
 
   if (!is.null(data)) {
@@ -594,6 +625,7 @@ match_on.InfinitySparseMatrix <- function(x, within = NULL, caliper = NULL, data
 
 #' @rdname match_on-methods
 #' @method match_on matrix
+#' @export
 match_on.matrix <- function(x, within = NULL, caliper = NULL, data = NULL, ...) {
 
   if (!is.null(data)) {

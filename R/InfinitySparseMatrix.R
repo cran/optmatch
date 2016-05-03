@@ -73,11 +73,12 @@ makeInfinitySparseMatrix <- function(data, cols, rows, colnames = NULL,
 }
 
 ### Basic Matrix-like Operations and Conversions ###
+#' @export
 dim.InfinitySparseMatrix <- function(x) {
   return(x@dimension)
 }
 
-#' @S3method as.matrix InfinitySparseMatrix
+#' @export
 as.matrix.InfinitySparseMatrix <- function(x, ...) {
   dims <- dim(x) ; nrow <- dims[1] ; ncol <- dims[2]
   v <- matrix(Inf, nrow = nrow, ncol = ncol, dimnames = list(treated = x@rownames, control = x@colnames))
@@ -114,6 +115,11 @@ setAs("matrix", "InfinitySparseMatrix", function(from) {
   return(x)
 })
 
+##' Convert an object to InfinitySparseMatrix
+##'
+##' @param x An object which can be coerced into InfinitySparseMatrix, typically a matrix.
+##' @return An InfinitySparseMatrix
+##' @export
 as.InfinitySparseMatrix <- function(x) { as(x, "InfinitySparseMatrix") }
 
 # dimnames implementation
@@ -128,6 +134,7 @@ as.InfinitySparseMatrix <- function(x) { as(x, "InfinitySparseMatrix") }
 #' @param value A list with two entries: the treated names and control names, respectively.
 #' @return A list with treated and control names.
 #' @rdname dimnames-InfinitySparseMatrix
+#' @export
 setMethod("dimnames", "InfinitySparseMatrix", function(x) {
   if (is.null(x@rownames) & is.null(x@colnames)) {
     return(NULL)
@@ -136,13 +143,22 @@ setMethod("dimnames", "InfinitySparseMatrix", function(x) {
 })
 
 #' @rdname dimnames-InfinitySparseMatrix
-setMethod("dimnames<-", "InfinitySparseMatrix", function(x, value) {
+#' @export
+setMethod("dimnames<-", c("InfinitySparseMatrix", "list"), function(x, value) {
   if (length(value) != 2) {
     # message copied from matrix method
     stop(paste("length of 'dimnames' [", length(value), "] not equal to dims [2]", sep = ""))
   }
   x@rownames <- value[[1]]
   x@colnames <- value[[2]]
+  x
+})
+
+#' @rdname dimnames-InfinitySparseMatrix
+#' @export
+setMethod("dimnames<-", c("InfinitySparseMatrix", "NULL"), function(x, value) {
+  x@rownames <- NULL
+  x@colnames <- NULL
   x
 })
 
@@ -179,7 +195,7 @@ ismOpHandler <- function(binOp, e1, e2) {
   }
 
   return(
-    .Call('ismOps', binOp, e1, e2)
+    ismOps(binOp, e1, e2)
   )
 }
 
@@ -288,7 +304,17 @@ function(e1, e2) {
 # Manipulating matrices: subset, cbind, rbind, etc
 ################################################################################
 
-# we match the subset.matrix semantics: subset = rows, select = columns, both logical
+##' This matches the syntax and semantics of
+##' subset for matrices.
+##'
+##' @title Subsetting for InfinitySparseMatrices
+##' @param x InfinitySparseMatrix to be subset or bound.
+##' @param subset Logical expression indicating rows to keep.
+##' @param select Logical expression indicating columns to keep.
+##' @param ... Other arguments are ignored.
+##' @return An InfinitySparseMatrix with only the selected elements.
+##' @author Mark Fredrickson
+##' @export
 subset.InfinitySparseMatrix <- function(x, subset, select, ...) {
 
   xdim <- dim(x)
@@ -309,10 +335,9 @@ subset.InfinitySparseMatrix <- function(x, subset, select, ...) {
     stop("Subset and select must be same length as rows and columns, respectively.")
   }
 
-  subset.data <- .Call(subsetInfSparseMatrix,
-                       as.integer(subset),
-                       select,
-                       x)
+  subset.data <- subsetInfSparseMatrix( as.integer(subset),
+                                       select,
+                                       x)
   return(makeInfinitySparseMatrix(subset.data[, 3],
                                   subset.data[, 2],
                                   subset.data[, 1],
@@ -333,6 +358,20 @@ discardOthers <- function(x, index) {
 }
 
 
+##' This matches the syntax and semantics of
+##' cbind and rbind for matrices.
+##'
+##' @title Combine InfinitySparseMatrices or
+##'   BlockedInfinitySparseMatrices by row or column
+##' @param x An InfinitySparseMatrix or BlockedInfinitySparseMatrix,
+##'   agreeing with \code{y} in the appropriate dimension.
+##' @param y An InfinitySparseMatrix or BlockedInfinitySparseMatrix,
+##'   agreeing with \code{x} in the appropriate dimension.
+##' @param ... Other arguments ignored.
+##' @return A combined InfinitySparseMatrix or BlockedInfinitySparseMatrix
+##' @author Mark Fredrickson
+##' @export
+##' @rdname cbindrbind
 cbind.InfinitySparseMatrix <- function(x, y, ...) {
   y <- as.InfinitySparseMatrix(y) # this is a noop if y is an ISM
 
@@ -371,6 +410,8 @@ cbind.InfinitySparseMatrix <- function(x, y, ...) {
 # I don't know that calling t(cbind(t(x), t(y))) is the correct solution
 # (at least the error messages will be wrong)
 
+##' @export
+##' @rdname cbindrbind
 rbind.InfinitySparseMatrix <- function(x, y, ...) {
   y <- as.InfinitySparseMatrix(y) # this is a noop if y is an ISM
 
@@ -405,12 +446,66 @@ rbind.InfinitySparseMatrix <- function(x, y, ...) {
 
 }
 
+#' @export
 t.InfinitySparseMatrix <- function(x) {
   makeInfinitySparseMatrix(x@.Data, cols = x@rows, rows = x@cols,
                            colnames = x@rownames, rownames = x@colnames)
 }
 
+##' Displays an InfinitySparseMatrix
+##'
+##' Specifically, displays an InfinitySparseMatrix by converting it to
+##' a matrix first.
+##' @param object An InfinitySparseMatrix to print.
+##' @return NULL
+##' @export
 setMethod("show", "InfinitySparseMatrix", function(object) { show(as.matrix(object)) })
+
+##' Sort the internal structure of an InfinitySparseMatrix.
+##'
+##' Internally, an InfinitySparseMatrix (Blocked or non) comprises of
+##' vectors of values, row positions, and column positions. The
+##' ordering of these vectors is not enforced. This function sorts the
+##' internal structure, leaving the external structure unchanged
+##' (e.g. `as.matrix(ism)` and `as.matrix(sort(ism))` will look
+##' identical despite sorting.)
+##'
+##' By default, the InfinitySparseMatrix is row-dominant, meaning the
+##' row positions are sorted first, then column positions are sorted
+##' within each row. Use argument `byCol` to change this.
+##' @param x An InfinitySparseMatrix or BlockedInfinitySparseMatrix.
+##' @param decreasing Logical. Should the sort be increasing or
+##'   decreasing?
+##' @param ... Additional arguments ignored.
+##' @param byCol Logical. Defaults to FALSE, so the returned ISM is
+##'   row-dominant. TRUE returns a column-dominant ISM.
+##' @return An object of the same class as `x` which is sorted
+##'   according to `byCol`.
+##' @rdname sort.ism
+##' @export
+sort.InfinitySparseMatrix <- function(x,
+                                      decreasing=FALSE,
+                                      ...,
+                                      byCol = FALSE) {
+  byCol <- as.logical(byCol)
+  if (is.na(byCol)) {
+    stop("byCol must be TRUE or FALSE.")
+  }
+
+  sorter <- order(attr(x, ifelse(byCol, "cols", "rows")),
+                  attr(x, ifelse(byCol, "rows", "cols")),
+                  decreasing=decreasing)
+
+  makeInfinitySparseMatrix(x[sorter],
+                           cols = attr(x, "cols")[sorter],
+                           rows = attr(x, "rows")[sorter],
+                           rownames = attr(x, "rownames"),
+                           colnames = attr(x, "colnames"),
+                           dimension = attr(x, "dimension"),
+                           call = attr(x, "call"))
+
+}
+
 
 ################################################################################
 # Blocked Infinity Sparse Matrix
@@ -449,6 +544,7 @@ function(e1, e2) {
 })
 
 # BISMs need to maintain grouping info when getting flipped
+#' @export
 t.BlockedInfinitySparseMatrix <- function(x) {
   tmp <- t.InfinitySparseMatrix(x)
   tmp <- as(tmp, "BlockedInfinitySparseMatrix")
@@ -456,45 +552,49 @@ t.BlockedInfinitySparseMatrix <- function(x) {
   return(tmp)
 }
 
-### Cbind/rbind
+##' @export
+##' @rdname cbindrbind
 cbind.BlockedInfinitySparseMatrix <- function(x, y, ...) {
   # demote the blocked representation to a regular ISM and call the usual cbind method
   cbind(as.InfinitySparseMatrix(x), y, ...)
 }
 
+##' @export
+##' @rdname cbindrbind
 rbind.BlockedInfinitySparseMatrix <- function(x, y, ...) {
   # demote the blocked representation to a regular ISM and call the usual cbind method
   rbind(as.InfinitySparseMatrix(x), y, ...)
 }
 
-##' Returns the dimension of each valid subproblem
-##'
-##' Returns a list containing the dimensions of all valid subproblems.
-##' @param x A distance specification to get the sub-dimensions of.
-##' @return A list of the dimensions of each valid subproblem. Any subproblems with 0 controls
-##' or 0 treatments will be ignored. The names of the entries in the list will be the names of the
-##' subproblems, if they exist.
-##' @export
-##' @docType methods
-##' @rdname subdim-methods
+#' Returns the dimension of each valid subproblem
+#'
+#' Returns a list containing the dimensions of all valid subproblems.
+#' @param x A distance specification to get the sub-dimensions of.
+#' @return A list of the dimensions of each valid subproblem. Any subproblems with 0 controls
+#' or 0 treatments will be ignored. The names of the entries in the list will be the names of the
+#' subproblems, if they exist.
+#' @export
+#' @docType methods
+#' @rdname subdim-methods
+#' @export
 subdim <- function(x) {
   UseMethod("subdim")
 }
 
-##' @method subdim InfinitySparseMatrix
-##' @rdname subdim-methods
+#' @rdname subdim-methods
+#' @export
 subdim.InfinitySparseMatrix <- function(x) {
   list(dim(x))
 }
 
-##' @method subdim matrix
-##' @rdname subdim-methods
+#' @rdname subdim-methods
+#' @export
 subdim.matrix <- function(x) {
   list(dim(x))
 }
 
-##' @method subdim BlockedInfinitySparseMatrix
-##' @rdname subdim-methods
+#' @rdname subdim-methods
+#' @export
 subdim.BlockedInfinitySparseMatrix <- function(x) {
   out <- lapply(levels(x@groups), function(k) c(sum(row.names(x) %in% names(x@groups)[x@groups == k]),
                                                 sum(colnames(x) %in% names(x@groups)[x@groups == k])))
@@ -503,47 +603,65 @@ subdim.BlockedInfinitySparseMatrix <- function(x) {
   out[unlist(lapply(out, function(t) all(t > 0)))]
 }
 
-##' Returns the number of eligible matches for the distance.
-##'
-##' This will return a list of the number of finite entries in a distance
-##' matrix. If the distance has no subgroups, it will be a list of length 1. If
-##' the distance has subgroups (i.e. \code{x} is an
-##' \code{BlockedInfinitySparseMatrix}, it will be a named list.)
-##' @param x Any distance object.
-##' @return A list counting the number of eligible matches in the distance.
+##' @rdname sort.ism
 ##' @export
-##' @docType methods
-##' @rdname num_eligible_matches-methods
+sort.BlockedInfinitySparseMatrix <- function(x,
+                                             decreasing=FALSE,
+                                             ...,
+                                             byCol=FALSE) {
+  y <- sort.InfinitySparseMatrix(x, decreasing=decreasing, byCol=byCol)
+  attr(y, "groups") <- attr(x, "groups")
+  class(y) <- class(x)
+  y
+}
+
+
+#' Returns the number of eligible matches for the distance.
+#'
+#' This will return a list of the number of finite entries in a distance
+#' matrix. If the distance has no subgroups, it will be a list of length 1. If
+#' the distance has subgroups (i.e. \code{x} is an
+#' \code{BlockedInfinitySparseMatrix}, it will be a named list.)
+#' @param x Any distance object.
+#' @return A list counting the number of eligible matches in the distance.
+#' @export
+#' @docType methods
+#' @rdname num_eligible_matches-methods
 num_eligible_matches <- function(x) {
   UseMethod("num_eligible_matches")
 }
 
-##' @method num_eligible_matches optmatch.dlist
-##' @rdname num_eligible_matches-methods
+#' @rdname num_eligible_matches-methods
+#' @export
 num_eligible_matches.optmatch.dlist <-function(x) {
     lapply(x, function(x) sum(is.finite(x)))
 }
 
-##' @method num_eligible_matches matrix
-##' @rdname num_eligible_matches-methods
+#' @rdname num_eligible_matches-methods
+#' @export
 num_eligible_matches.matrix <- function(x) {
   list(sum(is.finite(x)))
 }
 
-##' @method num_eligible_matches InfinitySparseMatrix
-##' @rdname num_eligible_matches-methods
+#' @rdname num_eligible_matches-methods
+#' @export
 num_eligible_matches.InfinitySparseMatrix <- function(x) {
-  list(length(x@.Data))
+  list(sum(is.finite(x@.Data)))
 }
 
-##' @method num_eligible_matches BlockedInfinitySparseMatrix
-##' @usage \method{num_eligible_matches}{BlockedInfinitySparseMatrix}(x)
-##' @rdname num_eligible_matches-methods
+#' @usage \method{num_eligible_matches}{BlockedInfinitySparseMatrix}(x)
+#' @rdname num_eligible_matches-methods
+#' @export
 num_eligible_matches.BlockedInfinitySparseMatrix <- function(x) {
-  out <- lapply(levels(x@groups), function(k) length(x[x@groups == k]@.Data))
+  out <- lapply(levels(x@groups), function(k) sum(is.finite(x[x@groups == k]@.Data)))
   names(out) <- levels(x@groups)
   out
 }
 
-# Splits out the blocked matrix into its consitutent parts
+##' Displays a BlockedInfinitySparseMatrix
+##'
+##' Displays each block of the BlockedInfinitySparseMatrix separately.
+##' @param object An BlockedInfinitySparseMatrix to print.
+##' @return NULL
+##' @export
 setMethod("show", "BlockedInfinitySparseMatrix", function(object) { show(findSubproblems(object)) })
