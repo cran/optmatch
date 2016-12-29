@@ -1,5 +1,5 @@
 Package: optmatch
-Version: 0.9-6
+Version: 0.9-7
 Title: Functions for Optimal Matching
 Description: Distance based bipartite matching using the RELAX-IV minimum cost flow solver,
     oriented to matching of treatment and control groups in observational
@@ -17,8 +17,9 @@ LinkingTo: Rcpp
 Imports: Rcpp, RItools, digest, stats, methods, graphics
 Suggests: boot, biglm, testthat (>= 0.11.0), roxygen2, brglm, arm,
         knitr, rmarkdown, pander, xtable
+Enhances: CBPS
 License: file LICENSE
-URL: http://www.r-project.org,
+URL: https://www.r-project.org,
         https://github.com/markmfredrickson/optmatch
 Collate: 'DenseMatrix.R' 'InfinitySparseMatrix.R'
         'Ops.optmatch.dlist.R' 'Optmatch-package.R' 'Optmatch.R'
@@ -35,6 +36,6 @@ Collate: 'DenseMatrix.R' 'InfinitySparseMatrix.R'
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2016-05-02 21:37:01 UTC; mark
+Packaged: 2016-12-29 21:45:37 UTC; mark
 Repository: CRAN
-Date/Publication: 2016-05-03 08:26:12
+Date/Publication: 2016-12-30 00:13:46

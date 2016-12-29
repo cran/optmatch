@@ -149,7 +149,7 @@ summary(mhpc.pm) # better!
 #           data = nuclearplants)
 
 ## ---- fig.width=5, fig.height=5------------------------------------------
-myb <- xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + 
+myb <- xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
                 strata(ps.pm2),
                 data = nuclearplants,
                 report = c("adj.means", "std.diffs",
