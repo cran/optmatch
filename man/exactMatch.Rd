@@ -3,8 +3,8 @@
 \docType{methods}
 \name{exactMatch}
 \alias{exactMatch}
-\alias{exactMatch,formula-method}
 \alias{exactMatch,vector-method}
+\alias{exactMatch,formula-method}
 \title{Generate an exact matching set of subproblems.}
 \usage{
 exactMatch(x, ...)
@@ -19,9 +19,10 @@ exactMatch(x, ...)
 
 \item{...}{Additional arguments for methods.}
 
-\item{treatment}{A vector the same length as \code{x} that can be
-coerced to a two level factor (e.g. a vector of 1s and 0s or a
-logical vector).}
+\item{treatment}{A logical or binary vector the same length as \code{x}
+indicating treatment and control for each unit in the study.
+TRUE or 1 represents a treatment unit, FALSE or 0 represents
+a control unit. NA units are excluded.}
 
 \item{data}{A \code{data.frame} or \code{matrix} that contains the
 variables used in the formula \code{x}.}
@@ -84,13 +85,12 @@ match.ppty.em <- fullmatch(ppty.distances + pt.em)
 print(match.ppty.em, grouped = TRUE)
 
 }
-\author{
-Mark M. Fredrickson
-}
 \seealso{
 \code{\link{caliper}}, \code{\link{antiExactMatch}},
   \code{\link{match_on}}, \code{\link{fullmatch}},
   \code{\link{pairmatch}}
 }
+\author{
+Mark M. Fredrickson
+}
 \keyword{nonparametric}
-

@@ -6,11 +6,6 @@
 ### accepts a variety of inputs and keeps names/rownames if present
 
 setGeneric("toZ", function(x) {
-
-  if (any(is.na(x))) {
-    stop("NAs not allowed in treatment indicator.")
-  }
-
   if (is.data.frame(x) | is.matrix(x)) {
     if (dim(x)[2] > 1) {
       stop("Treatment indicators must be vectors or single column
@@ -22,27 +17,45 @@ setGeneric("toZ", function(x) {
     names(x) <- nms
   }
 
-  if (length(unique(x)) != 2) {
-    stop(paste("Treatment indicator must have exactly 2 levels not",
-      length(unique(x))))
-  }
-
   nms <- names(x)
   tmp <- standardGeneric("toZ")
   names(tmp) <- nms
   return(tmp)
 })
 
-# a noop
-setMethod("toZ", "logical", identity)
+setMethod("toZ", "logical", function(x) {
+  u <- unique(x)
+  if (!(TRUE %in% u)) {
+    stop("There must be at least one treatment unit.")
+  }
+  if (!(FALSE %in% u)) {
+    stop("There must be at least one control unit.")
+  }
+  x
+})
 
-# we already know it has two levels, so just call as.logical
-setMethod("toZ", "numeric", function(x) as.logical(x))
+setMethod("toZ", "numeric", function(x) {
+  u <- unique(x)
+  if (any(!(u[!is.na(u)] %in% 0:1))) {
+    stop("Numeric treatment indicators can only take on values 1 (treatment) and 0 (control).")
+  }
+  if (!(1 %in% u)) {
+    stop("There must be at least one treatment unit.")
+  }
+  if (!(0 %in% u)) {
+    stop("There must be at least one control unit.")
+  }
+  as.logical(x)
+})
 
-setMethod("toZ", "character", function(x) toZ(as.factor(x)))
+setMethod("toZ", "character", function(x) {
+  stop(paste("Character treatment indicators no longer supported.\n",
+             "Convert into a numeric or logical vector."))
+})
 
 setMethod("toZ", "factor", function(x) {
-  toZ(as.numeric(x) - 1)
+  stop(paste("Factor treatment indicators no longer supported.\n",
+             "Convert into a numeric or logical vector."))
 })
 
 #' (Internal) Remove the call before digesting a distance so things
@@ -53,6 +66,7 @@ setMethod("toZ", "factor", function(x) {
 #'   \code{DenseMatrix}, \code{matrix}, or \code{distmatch.dlist}.
 #' @return Hash on the distance object with a null \code{call}
 #' @import digest
+#' @keywords internal
 dist_digest <- function(dist) {
   if (class(dist)[1] %in% c("InfinitySparseMatrix", "BlockedInfinitySparseMatrix", "optmatch.dlist", "DenseMatrix", "matrix")) {
     csave <- attr(dist, "call")
@@ -73,6 +87,7 @@ dist_digest <- function(dist) {
 #' @param ... will look for 'z = <stuff>' in the extra args of caller
 #' @return string a helpful error message
 #' @author Josh Buckner
+#' @keywords internal
 missing_x_msg <- function(x_str, data_str, ...) {
   if(data_str == "NULL")
     data_str <- "<data argument>"

@@ -3,6 +3,7 @@ MAX_FEASIBLE <- 1e07
 
 #' (Internal) Sets up the default values for maximum feasible problems
 #'
+#' @keywords internal
 #' @return NULL
 setFeasibilityConstants <- function() {
   options("optmatch_warn_on_big_problem" = TRUE)
@@ -17,7 +18,7 @@ setFeasibilityConstants <- function() {
 #' option isn't set, the function falls back to the default value, hard coded in
 #' the \code{optmatch} package.
 #'
-#' @seealso \code{\link{options}}
+#' @seealso \code{\link{options}}, \code{\link{setMaxProblemSize}}
 #' @return logical
 #' @examples optmatch:::getMaxProblemSize() > 1 & optmatch:::getMaxProblemSize() < 1e100
 #' @export
@@ -28,6 +29,46 @@ getMaxProblemSize <- function() {
   }
   return(tmp[[1]])
 }
+
+
+##' Helper function to ease setting the largest problem size to be
+##' accepted by \code{pairmatch} or \code{fullmatch}.
+##'
+##' The function sets the optmatch_max_problem_size global option. The
+##' option ships with the option pre-set to a value that's relatively small,
+##' smaller than what most modern computers can handle.  Invoking this
+##' function with no argument
+##' re-sets the optmatch_max_problem_size option to \code{Inf}, effectively
+##' disabling checks on problem size.  Unless you're working with an older
+##' computer, it probably makes sense for most users to do this, at least
+##' until they determine what problem sizes are too large for their machines.
+##' (You'll know that when your R crashes, or simply takes too long for
+##' your taste.)
+##'
+##' To determine the size of a problem without subproblems, i.e. exact
+##' matching categories, use \code{\link{match_on}} to set up and store
+##' the problem distance, then apply \code{length} to the result. If
+##' there were exact matching constraints imposed during the creation
+##' of the distance, then you'll want to look at the largest size of a
+##' subproblem.  Apply \code{\link{findSubproblems}} to your distance,
+##' creating a list, say \code{dlist}, of your distances; then do
+##' \code{sapply(dlist, length)} to determine the sizes of the subproblems.
+##'
+##' @title Set the maximum problem size
+##' @param size Positive integer, or \code{Inf}
+##' @seealso \code{\link{getMaxProblemSize}}
+##' @return NULL
+##' @author Ben B. Hansen
+##' @export
+setMaxProblemSize <- function(size=Inf) {
+
+ stopifnot(is.numeric(size), length(size)==1,
+           floor(size)==size, size>0)
+
+  options("optmatch_max_problem_size" =size)
+}
+
+
 
 #' Find the minimal exact match factors that will be feasible for a
 #' given maximum problem size.
@@ -128,6 +169,7 @@ minExactMatch <- function(x, scores = NULL, width = NULL, maxarcs = 1e07, ...) {
 #' @param ... Arguments to be passed to model.frame (e.g. \code{data})
 #' @return data.frame containing two columns: \code{Z} is a treatment indicator,
 #' \code{B} is a blocking factor
+#' @keywords internal
 fmla2treatedblocking <- function(x, ...) {
 
   mf <- model.frame(x, ...)
@@ -156,6 +198,7 @@ fmla2treatedblocking <- function(x, ...) {
 #' @param width Width of caliper, must be positive
 #' @param structure Grouping factor to use in computation
 #' @return numeric Total number of pairwise distances remaining after the caliper is placed.
+#' @keywords internal
 caliperSize <- function(scores, z, width, structure = NULL) {
   if (width <= 0) {
     stop("Invalid caliper width. Width must be positive.")
@@ -227,6 +270,7 @@ caliperSize <- function(scores, z, width, structure = NULL) {
 #' calipers.
 #' @importFrom graphics hist
 #' @return numeric Total number of pairwise distances remaining after the caliper is placed.
+#' @keywords internal
 caliperUpperBound <- function(scores, z, width, structure = NULL) {
 
   if (width <= 0) {
