@@ -194,6 +194,9 @@ fullmatch <- function(x,
     warning("Without 'data' argument the order of the match is not guaranteed
     to be the same as your original data.")
   }
+  if (is(x, "optmatch.dlist")) {
+    warning("The use of 'optmatch.dlist' objects created by 'mdist()' is deprecated.\nPlease use 'match_on()' instead.")
+  }
   UseMethod("fullmatch")
 }
 
@@ -549,7 +552,10 @@ fullmatch.matrix <- function(x,
     attr(mout, "omit.fraction") <- out.omit.fraction
   }
 
-  if(length(new.omit.fraction) > 0 & !identical(new.omit.fraction, omit.fraction) & !all(is.na(new.omit.fraction))) {
+  if(length(new.omit.fraction) > 0 &
+     !identical(new.omit.fraction, omit.fraction) &
+     !all(is.na(new.omit.fraction)) &
+     getOption("optmatch_verbose_messaging", FALSE)) {
     if(!any(is.na(new.omit.fraction)) & all(new.omit.fraction == 1)) {
       # If we never got a feasible subproblem
       warning("The problem appears infeasible with the given constraints.")

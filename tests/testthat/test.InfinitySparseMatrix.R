@@ -350,14 +350,6 @@ test_that("Get subproblem size of each block", {
   expect_equivalent(as.list(subdim(m)), list(dim(m)))
   expect_equivalent(as.list(subdim(a)), list(dim(a)))
 
-  # test on optmatch.dlist
-  od <- list(matrix(c(0,0,0,0, Inf,Inf,Inf,Inf, rep(0, 12)), nrow = 2, ncol = 10, dimnames = list(letters[1:2], letters[3:12])),
-             matrix(c(0,0,0,0, rep(Inf, 16)), byrow = T, nrow = 5, ncol = 4, dimnames = list(letters[10:14], letters[15:18])))
-
-  class(od) <- c("optmatch.dlist", "list")
-
-  expect_equal(subdim(od), list(c(2, 10), c(5, 4)))
-
   # test on DenseMatrix
   W <- rnorm(16)
 
@@ -421,7 +413,7 @@ test_that("ISM sorting", {
   # Checking for bad input on byCol
   expect_silent(sort(X, byCol=1))
   expect_error(sort(X, byCol="a"))
-  expect_warning(expect_error(sort(X, byCol=c(1,1))))
+  expect_error(sort(X, byCol=c(1,1)))
 
   # Checking argument `decreasing`
   X.rows <- sort(X, byCol=FALSE, decreasing=TRUE)
@@ -502,7 +494,7 @@ test_that("BISM sorting", {
   # Checking for bad input on byCol
   expect_silent(sort(b, byCol=1))
   expect_error(sort(b, byCol="a"))
-  expect_warning(expect_error(sort(b, byCol=c(1,1))))
+  expect_error(sort(b, byCol=c(1,1)))
 
   data(nuclearplants)
 
