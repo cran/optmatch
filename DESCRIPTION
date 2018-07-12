@@ -1,5 +1,5 @@
 Package: optmatch
-Version: 0.9-9
+Version: 0.9-10
 Title: Functions for Optimal Matching
 Description: Distance based bipartite matching using the RELAX-IV minimum cost flow solver,
     oriented to matching of treatment and control groups in observational
@@ -36,6 +36,6 @@ Collate: 'DenseMatrix.R' 'InfinitySparseMatrix.R'
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2018-05-14 20:27:08 UTC; mark
+Packaged: 2018-07-11 21:15:26 UTC; mark
 Repository: CRAN
-Date/Publication: 2018-05-14 23:31:05 UTC
+Date/Publication: 2018-07-12 13:50:02 UTC

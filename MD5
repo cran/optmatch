@@ -1,7 +1,7 @@
-acbc2e6f4a20026ea41057e29d17493f *DESCRIPTION
+18874e7ac53cb19b08e42195681b3ba5 *DESCRIPTION
 73d3eab9eb500aa3b6e8869c41e58c1b *LICENSE
 68915d901ad4012e955eaacfb6a244aa *NAMESPACE
-85c63d25bcdd5927e069773978f408e4 *NEWS
+2848b9fe0d0175e41ada40540d6c6bad *NEWS
 9268705e27473f922c43eff2489af373 *R/DenseMatrix.R
 8fe030b430bfd5ccaed3671e967018ff *R/InfinitySparseMatrix.R
 c420a5daf16cefbf09b7bf327644cc80 *R/Ops.optmatch.dlist.R
@@ -40,7 +40,7 @@ ac1f0b35c02d7dce45e85523909081d7 *R/summary.optmatch.R
 cd8ebf3a3008a9f6744555f59754e18f *R/zzz.R
 8a642b97a136bcdf30ae9697e4521aa0 *R/zzzDistanceSpecification.R
 b920a4cb3cf0b76080d6e78e42feb697 *README.md
-615b3edbf200fb5cef1c19a9e45eeddd *build/vignette.rds
+63b27e87d8c169a144388b3bf57829be *build/vignette.rds
 d130d9da0af67100c3649ed7f3bee4cc *data/nuclearplants.rda
 6771dca6aaa81dff8f0973bb60aa5f60 *data/plantdist.rda
 9a7eb82c62d20eacaf2840fb41dee84d *demo/00Index
@@ -48,10 +48,10 @@ d130d9da0af67100c3649ed7f3bee4cc *data/nuclearplants.rda
 013c84202458b84d22e2fb0c2c791b07 *inst/CITATION
 a3a83c6cfbdf4098ac8a962b8d47c88e *inst/doc/fullmatch-vignette.R
 72bf9fc6d0792734bf18ed65c5ac338a *inst/doc/fullmatch-vignette.Rmd
-df928572cc62f2c9fadf46beffd154cb *inst/doc/fullmatch-vignette.pdf
+fb8b037d19654d13dc2e7cbdac725c51 *inst/doc/fullmatch-vignette.html
 f8d271aff3323bc974dc91cfdf38ab2f *inst/doc/matching-from-foreign-software.R
 d4a8fd71c37d249809c519158fc82370 *inst/doc/matching-from-foreign-software.Rmd
-28a6ccd891679540a9b865731a949b0c *inst/doc/matching-from-foreign-software.pdf
+93d4a3c22439acf39ab7621485bbb855 *inst/doc/matching-from-foreign-software.html
 7590f63959fdcd8ab6ee6dda7c83a936 *inst/examples/antiExactMatch.R
 adf66111e36cad3250695777bbfa331b *inst/examples/caliper.R
 2b5ac334ba26a80b7db2d4cf49e6d06f *inst/examples/fullmatch.R
@@ -143,7 +143,7 @@ b609c3e6337ee70379625dad27f15dc4 *tests/testthat.R
 ebff25df8cf0ccef389c71a88c4e46e9 *tests/testthat/test.RItools.R
 e76c4815f8167d5331deed2526da7afb *tests/testthat/test.SubDivStrat.R
 18c44504433bb6d67742f2a0ded6a072 *tests/testthat/test.caliper.R
-d99d4893870920b215ecee6d4cbc38e4 *tests/testthat/test.compute_mahal.R
+74c486ebf2cac90a67f1b309d5c9a95b *tests/testthat/test.compute_mahal.R
 8adef20ea8b3477417ed4e5a0705f271 *tests/testthat/test.distUnion.R
 d02323756964e58c345a0a6375a903a1 *tests/testthat/test.exactMatch.R
 9dea4260bda28369a432cffa84f954db *tests/testthat/test.exporting-methods.R
@@ -161,7 +161,7 @@ c15f24b1ad35647b7ce765570e784d64 *tests/testthat/test.fullmatch.old.R
 253550a5306e960d6e2a9f60e2786cb2 *tests/testthat/test.moremethods.optmatch.R
 484f506e1692de9afc5768180cf8df09 *tests/testthat/test.pairmatch.R
 0e0e3555d287fe0652818511c724b8bf *tests/testthat/test.pairmatch.old.R
-d78e2fc7df332fe45911e7307b26ac8e *tests/testthat/test.rank.mahal.R
+79ae36418e122e2b888057813d362a94 *tests/testthat/test.rank.mahal.R
 e00d0249a8cc5ce10f8bae1b00c60978 *tests/testthat/test.scores.R
 a185e91b6d81f135f879b8f8db8695b3 *tests/testthat/test.stratumStructure.R
 af15ea0fb7336ef4caf8ff326ff19bf3 *tests/testthat/test.stratumStructure.old.R
