@@ -1,5 +1,5 @@
 Package: optmatch
-Version: 0.9-10
+Version: 0.9-11
 Title: Functions for Optimal Matching
 Description: Distance based bipartite matching using the RELAX-IV minimum cost flow solver,
     oriented to matching of treatment and control groups in observational
@@ -7,9 +7,9 @@ Description: Distance based bipartite matching using the RELAX-IV minimum cost f
     score matching), formulas giving variables on which to limit matched distances, stratified or
     exact matching directives, or calipers, alone or in combination.
 Author: Ben B. Hansen <ben.hansen@umich.edu>, Mark Fredrickson
-    <mark.m.fredrickson@gmail.com>, Josh Buckner, Josh Errickson, and Peter
-    Solenberger, with embedded Fortran code due to Dimitri P. Bertsekas
-    <dimitrib@mit.edu> and Paul Tseng
+    <mark.m.fredrickson@gmail.com>, Josh Buckner, Josh Errickson,
+    Adam Rauh and Peter Solenberger, with embedded Fortran code due to
+    Dimitri P. Bertsekas <dimitrib@mit.edu> and Paul Tseng
 Maintainer: Mark M. Fredrickson <mark.m.fredrickson@gmail.com>
 LazyData: true
 Depends: R (>= 2.15.1), survival
@@ -17,10 +17,9 @@ LinkingTo: Rcpp
 Imports: Rcpp, RItools, digest, stats, methods, graphics
 Suggests: boot, biglm, testthat (>= 0.11.0), roxygen2, brglm, arm,
         knitr, rmarkdown, pander, xtable
-Enhances: CBPS
+Enhances: CBPS, haven
 License: file LICENSE
-URL: https://www.r-project.org,
-        https://github.com/markmfredrickson/optmatch
+URL: https://github.com/markmfredrickson/optmatch
 Collate: 'DenseMatrix.R' 'InfinitySparseMatrix.R'
         'Ops.optmatch.dlist.R' 'Optmatch-package.R' 'Optmatch.R'
         'RcppExports.R' 'abs.optmatch.dlist.R' 'boxplotMethods.R'
@@ -34,8 +33,9 @@ Collate: 'DenseMatrix.R' 'InfinitySparseMatrix.R'
         'summary.optmatch.R' 'utilities.R' 'zzz.R'
         'zzzDistanceSpecification.R'
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2018-07-11 21:15:26 UTC; mark
+Packaged: 2019-07-12 17:19:50 UTC; josh
 Repository: CRAN
-Date/Publication: 2018-07-12 13:50:02 UTC
+Date/Publication: 2019-07-12 17:50:03 UTC

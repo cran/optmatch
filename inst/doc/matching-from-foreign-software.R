@@ -26,16 +26,16 @@ knitr::opts_chunk$set(collapse = TRUE, prompt=TRUE)
 #                'C:/Users/myuser/Desktop/rout.code.sas', package = 'SAS')
 
 ## ----eval=FALSE----------------------------------------------------------
-#  statadata <- read.csv("C:/Users/myuser/Desktop/stataout.csv", header=TRUE)
+#  library(haven)
+#  statadata <- read_dta("C:/Users/myuser/Desktop/toR.dta")
 
 ## ----eval=FALSE----------------------------------------------------------
 #  statadata <- read.csv("C:\\Users\\myuser\\Desktop\\stataout.csv", header=TRUE)
 
 ## ----eval=FALSE----------------------------------------------------------
 #  library(optmatch)
-#  f <- fullmatch(foreign ~ price + mpg + ppty, data=statadata, max.controls=3)
-#  statadata$match <- f
+#  statadata$match <- fullmatch(foreign ~ price + mpg + ppty, data=statadata, max.controls=3)
 
 ## ----eval=FALSE----------------------------------------------------------
-#  write.dta(statadata, "C:/Users/myuser/Desktop/rout.stata.dta")
+#  write_dta(statadata, "C:/Users/myuser/Desktop/rout.stata.dta")
 
