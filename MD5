@@ -1,7 +1,7 @@
-33dc36960668cc348928216f99a4d04d *DESCRIPTION
+1f52c6c528153ac452aaf7ce698bcd7a *DESCRIPTION
 73d3eab9eb500aa3b6e8869c41e58c1b *LICENSE
 cca7ce9cc1e7150e61a99cdb958ede89 *NAMESPACE
-ff97379f0aabf21ebc4069ef39fe86ab *NEWS
+a56b12b4273d73d2189710d27a4bc73c *NEWS
 9268705e27473f922c43eff2489af373 *R/DenseMatrix.R
 19eb0bc45f68f3201a5763197cee3a42 *R/InfinitySparseMatrix.R
 c420a5daf16cefbf09b7bf327644cc80 *R/Ops.optmatch.dlist.R
@@ -20,7 +20,7 @@ b9ebbfe395ea9395b2cbc6b9ec4e5ccf *R/data.R
 f23fd64ca00c77b5593b7825ac3710bf *R/fmatch.R
 34ab0c0ca8eddfc85696ad5951176696 *R/fullmatch.R
 f01fb02326b0f40ca149a58ed7a49ebc *R/makedist.R
-4401c4602abeaccfebc3c4d3ed9aa413 *R/match_on.R
+ce6a0c2dda48c45e88b27d6d0211ecdd *R/match_on.R
 e30289672e7e757b31c8d90775c9cd22 *R/matched.R
 239aa51b8fecb7404d7ac03c89d3b902 *R/matched.distances.R
 e22c0b8749d8d717bbb2c772b6b2b13e *R/matchfailed.R
@@ -35,7 +35,7 @@ d2a4a9e5ed2ee2558106e79be9d16fda *R/print.optmatch.R
 31c95fd58e2fed92d656bdd1d60ea5b5 *R/stratumStructure.R
 d116f47339f39d906d0e3924185a1edd *R/subDivStrat.R
 726553897f4863100e6759e622a0c788 *R/summary.ism.R
-ac1f0b35c02d7dce45e85523909081d7 *R/summary.optmatch.R
+88cfca1ff92b6b77479b6a01e2f35f33 *R/summary.optmatch.R
 5ca72144e24c13625e17e9c170b60309 *R/utilities.R
 cd8ebf3a3008a9f6744555f59754e18f *R/zzz.R
 8a642b97a136bcdf30ae9697e4521aa0 *R/zzzDistanceSpecification.R
@@ -47,13 +47,13 @@ d130d9da0af67100c3649ed7f3bee4cc *data/nuclearplants.rda
 013c84202458b84d22e2fb0c2c791b07 *inst/CITATION
 a3a83c6cfbdf4098ac8a962b8d47c88e *inst/doc/fullmatch-vignette.R
 72bf9fc6d0792734bf18ed65c5ac338a *inst/doc/fullmatch-vignette.Rmd
-069ba660b61ff363743fdbdd39fb76b0 *inst/doc/fullmatch-vignette.pdf
+e93ec7cb0df23d5593653d2f5a712633 *inst/doc/fullmatch-vignette.pdf
 8547d321fae8e7f46bd6a5018a7446e2 *inst/doc/matching-from-foreign-software.R
 5811e73bb7b71c9fb51875de845512d0 *inst/doc/matching-from-foreign-software.Rmd
-bf68d3c70105346db7904d3f042570aa *inst/doc/matching-from-foreign-software.pdf
+b57901eff45ba250ad4848030ba8cafd *inst/doc/matching-from-foreign-software.pdf
 aa1f510c97781a1ae25415ba301a3680 *inst/doc/matching-within-subgroups.R
 114240cbca3e518654d53da3c9f64162 *inst/doc/matching-within-subgroups.Rmd
-16817d3880f39a078b2b4be26f7ab208 *inst/doc/matching-within-subgroups.pdf
+07c54705701548328501fddab3556cc4 *inst/doc/matching-within-subgroups.pdf
 7590f63959fdcd8ab6ee6dda7c83a936 *inst/examples/antiExactMatch.R
 adf66111e36cad3250695777bbfa331b *inst/examples/caliper.R
 2b5ac334ba26a80b7db2d4cf49e6d06f *inst/examples/fullmatch.R
@@ -141,7 +141,7 @@ df9a568f9ab4f46bdaf8384e50c38dee *tests/exporting-methods.R
 b609c3e6337ee70379625dad27f15dc4 *tests/testthat.R
 163c949daba16964103c069e814214cf *tests/testthat/test.CBPS.R
 201d97dd6fb7da3a8eee0e1f633b6deb *tests/testthat/test.DistanceSpecification.R
-6a9d782e94f0881dd50e1175383bc34d *tests/testthat/test.InfinitySparseMatrix.R
+0089728a28368dce97720b9c5d3d6f9e *tests/testthat/test.InfinitySparseMatrix.R
 34c34080f1c2d23ce18ec8bbca760b47 *tests/testthat/test.Optmatch.R
 ebff25df8cf0ccef389c71a88c4e46e9 *tests/testthat/test.RItools.R
 e76c4815f8167d5331deed2526da7afb *tests/testthat/test.SubDivStrat.R
@@ -170,7 +170,7 @@ aae6b1b25599e35facdd2e847ee90383 *tests/testthat/test.pairmatch.R
 a185e91b6d81f135f879b8f8db8695b3 *tests/testthat/test.stratumStructure.R
 8872cee22f65ceaa8f90ede115d8c1fc *tests/testthat/test.stratumStructure.old.R
 837fbed6199d9af7766b60c054b8e4b3 *tests/testthat/test.summary.ism.R
-18e41c58407001ccf517897c7de1a825 *tests/testthat/test.summary.optmatch.R
+a5f0783a427d94c0e0f164a2714bed8e *tests/testthat/test.summary.optmatch.R
 db65dba8f55e131bd48805e216ac4a02 *tests/testthat/test.summary.optmatch.old.R
 f631c8c601a15016a8f66eed33391a08 *tests/testthat/test.utilities.R
 d25854a7ef9674d1659c9ddde0ec0e5f *tests/testthat/wishlist.scores.R
