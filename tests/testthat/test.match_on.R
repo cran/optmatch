@@ -105,7 +105,7 @@ test_that("Distances from formulas", {
   expect_equivalent(res.one, res.logical)
 
   tol <- 10^(9L - getOption("digits")) * sqrt(.Machine$double.eps)
-  
+
   # euclidean distances
   # first, compute what the distances should be for the data.
   euclid <- as.matrix(dist(test.data[,-1], method = "euclidean", upper = T))
@@ -134,7 +134,8 @@ test_that("Distances from formulas", {
   expect_equal(as.matrix(match_on(Z~as.numeric(f1), method="euclidean")), as.matrix(match_on(Z~f1, method="euclidean")))
 
   # passing a function name for method
-  expect_true(all(abs(match_on(Z ~ X1 + X2 + B, method = optmatch:::compute_euclidean) - euclid) < tol)) # there is some rounding error, but it is small
+  #  expect_true(all(abs(match_on(Z ~ X1 + X2 + B, method = optmatch:::compute_euclidean) - euclid) < tol)) # there is some rounding error, but it is small
+  # removed - no longer support user-functions in method
 
   # Mahalanobis distances involving factors
 
@@ -357,6 +358,24 @@ test_that("Numeric: simple differences of scores", {
   expect_error(match_on(scores2, z = z2, caliper = c(1,2)), "scalar")
 })
 
+test_that("use of matrix, ISM, BISM methods w/ caliper arg", {
+  scores <- rep(1:3, each = 4)
+  z <- rep(c(0,1), 6)
+  b <- rep(1:3, 4)
+  names(z) <- names(scores) <- letters[1:12]
+  sISM  <- match_on(scores, z=z)
+  expect_s4_class(sISM, "DenseMatrix")
+  sISM_cal  <- match_on(scores, z=z, caliper=1)
+  expect_equivalent(sISM_cal, match_on(sISM, caliper=1))
+  expect_equivalent(sISM_cal,
+                  match_on(as.InfinitySparseMatrix(sISM), caliper=1)
+                  )
+
+  ez <- exactMatch(z ~ b)
+  res <- match_on(scores, z = z, # checked in "Numeric: simple..."
+                  caliper = 1, within = ez) # test above
+  expect_equivalent(res, sISM_cal + ez)
+})
 
 test_that("update() of match_on created objects", {
   Z <- rep(c(1,0), 10)
@@ -901,3 +920,7 @@ test_that("Exclude argument for match_on with caliper arg", {
 })
 
 
+test_that("No longer support user-defined distances in match_on.formula", {
+  data(nuclearplants)
+  expect_warning(match_on(pr ~ cost, data = nuclearplants, method = optmatch:::compute_euclidean), "not supported")
+})
