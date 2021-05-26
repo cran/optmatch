@@ -358,6 +358,58 @@ test_that("Numeric: simple differences of scores", {
   expect_error(match_on(scores2, z = z2, caliper = c(1,2)), "scalar")
 })
 
+test_that("Numeric, issues with vector names", {
+  # #189
+
+  # If z is not named, it should copy over x's names
+  z <- c(0, 0, 1, 1)
+  x <- c("a" = NA, "b" = 1, "c" = 2, "d" = 3)
+  m1 <- match_on(x, z = z)
+  expect_equal(dim(m1), c(2, 2))
+  expect_equal(m1, match_on(z ~ x, method = "euclidean",
+                            data = data.frame(x,z)),
+               check.attributes = FALSE)
+
+  # If z is named, and the same as x, everything should work.
+  z <- c("a" = 0,  "b" = 0, "c" = 1, "d" = 1)
+  x <- c("a" = NA, "b" = 1, "c" = 2, "d" = 3)
+  m2 <- match_on(x, z = z)
+  expect_equal(dim(m2), c(2, 2))
+  expect_equal(m2, match_on(z ~ x, method = "euclidean",
+                        data = data.frame(x,z)),
+               check.attributes = FALSE)
+  expect_identical(m1, m2)
+
+  # if z is named same as x, but misordered, order and continue on.
+  z <- c("b" = 0,  "a" = 0, "d" = 1, "c" = 1)
+  x <- c("a" = NA, "a" = 1, "c" = 2, "d" =  3)
+  m3 <- match_on(x, z = z)
+  expect_equal(dim(m3), c(2, 2))
+  expect_equal(m3, match_on(z ~ x, method = "euclidean",
+                        data = data.frame(x,z)),
+               check.attributes = FALSE)
+
+  # if names of z and x are not the same, error
+  z <- c("a" = 0,  "c" = 0, "b" = 1)
+  x <- c("a" = NA, "b" = 1, "d" = 2)
+  expect_error(match_on(x, z = z), "names")
+
+
+})
+
+test_that("matrix, ISM methods' within args",{
+  scores <- rep(1:3, each = 4)
+  z <- rep(c(0,1), 6)
+  b <- rep(1:3, 4)
+  names(z) <- names(scores) <- letters[1:12]
+  ez <- exactMatch(z ~ b)  
+  sISM  <- match_on(scores, z=z)
+  expect_s4_class(sISM, "DenseMatrix")
+  expect_equivalent(match_on(sISM, within=ez), sISM+ez)
+  sISM2  <- as.InfinitySparseMatrix(sISM)
+  expect_equivalent(match_on(sISM2, within=ez), sISM+ez)  
+})
+
 test_that("use of matrix, ISM, BISM methods w/ caliper arg", {
   scores <- rep(1:3, each = 4)
   z <- rep(c(0,1), 6)
@@ -375,6 +427,9 @@ test_that("use of matrix, ISM, BISM methods w/ caliper arg", {
   res <- match_on(scores, z = z, # checked in "Numeric: simple..."
                   caliper = 1, within = ez) # test above
   expect_equivalent(res, sISM_cal + ez)
+
+  res1  <- match_on(sISM, caliper=1, within=ez)
+  expect_equivalent(res, res1)
 })
 
 test_that("update() of match_on created objects", {
@@ -488,7 +543,7 @@ test_that("Issue 48: caliper is a universal argument", {
 #   expect_true(class(m2)[1] %in% c("InfinitySparseMatrix", "BlockedInfinitySparseMatrix", "DenseMatrix"))
 # })
 
-test_that("numeric standardization scale", {
+test_that("standardization scale from within match_on", {
   n <- 16
   Z <- numeric(n)
   Z[sample.int(n, n/2)] <- 1
@@ -498,10 +553,55 @@ test_that("numeric standardization scale", {
 
   test.glm <- glm(Z ~ X1 + X2 + B, family = binomial()) # the coefs should be zero or so
 
-  result.glm <- match_on(test.glm, standardization.scale=1)
-  expect_is(result.glm, "matrix")
+  expect_silent(result.glm0 <- match_on(test.glm))
+  expect_is(result.glm0, "matrix")
+
+  expect_silent(result.glm1 <- match_on(test.glm, standardization.scale=mad))
+  expect_equivalent(result.glm1, result.glm0)
+  
+  expect_silent(result.glm2 <- match_on(test.glm, standardization.scale=sd))
+  expect_is(result.glm2, "matrix")
+  
+  expect_silent(result.glm4 <- match_on(test.glm, standardization.scale=1))
+  expect_is(result.glm4, "matrix")
 })
 
+test_that("standardization_scale with svyglm",{
+  if (require("survey"))
+  {
+    data(api)
+    d<-svydesign(id=~1, probs=1, data=apistrat)
+    sglm <- svyglm(sch.wide~ell+meals+mobility, design=d,
+                   family=quasibinomial())
+    aglm  <- glm(sch.wide~ell+meals+mobility,data=apistrat,
+                 family=binomial)
+    expect_equivalent(sglm$linear.predictors, aglm$linear.predictors)
+    sd_sglm <- standardization_scale(sglm$linear.predictor,
+                                     trtgrp=sglm$y,
+                                     standardizer = svy_sd,
+                                     svydesign_ = sglm$'survey.design')
+    sd_aglm <- standardization_scale(aglm$linear.predictor,
+                                     trtgrp=aglm$y,
+                                     standardizer = stats::sd)
+    expect_equivalent(sd_sglm, sd_aglm)
+
+    d_w<-svydesign(id=~1, weights=~pw, data=apistrat)
+    sglm_w <- svyglm(sch.wide~ell+meals+mobility, design=d_w,
+                   family=quasibinomial())
+    mad_sglm_w <- standardization_scale(sglm_w$linear.predictor,
+                                      trtgrp=sglm_w$y,
+                                      standardizer = svy_mad,
+                                      svydesign_ = sglm_w$'survey.design')
+    expect_true(is.numeric(mad_sglm_w))
+    expect_gt(mad_sglm_w, 0)
+    sd_sglm_w <- standardization_scale(sglm_w$linear.predictor,
+                                     trtgrp=sglm_w$y,
+                                     standardizer = svy_sd,
+                                     svydesign_ = sglm_w$'survey.design')
+    expect_true(is.numeric(sd_sglm_w))
+    expect_gt(sd_sglm_w, 0)
+  }
+})
 test_that("Building exactMatch from formula with strata", {
 
   d <- data.frame(x = rnorm(8),

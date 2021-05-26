@@ -224,7 +224,7 @@ fullmatch.default <- function(x,
     }
     model.frame(x, na.action=na.pass)
   }
-  if (!class(mfd) == "data.frame") {
+  if (!is(mfd, "data.frame")) {
     stop("Please pass data argument")
   }
   m <- match_on(x, within=within, data=mfd, ...)
@@ -456,7 +456,7 @@ fullmatch.matrix <- function(x,
       cells.b <- rep(NA, x[2])
       names(cells.a) <- rownames(d)
       names(cells.b) <- colnames(d)
-      tmp <- list(cells = c(cells.a, cells.b), maxerr = -1)
+      tmp <- list(cells = c(cells.a, cells.b), err = -1)
       return(tmp)
     }
 

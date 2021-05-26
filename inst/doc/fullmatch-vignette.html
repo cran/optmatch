@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>The <em>R</em> Environment</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>The <em>R</em> Environment</h1>
+
+<p>All the software used in this worksheet is freely available. The <em>R</em>
+statistical package is installed for you in the lab, but you may
+download and install <em>R</em> for Windows, Mac, and Linux systems from:
+<a href="https://www.r-project.org">https://www.r-project.org</a>.</p>
+
+<p>The following document walks through a common propensity score
+matching work-flow in <em>R</em>. Example <em>R</em> code will appear with a <code>&gt;</code>
+indicating the command prompt. You may type this code yourself &mdash;
+each line is a command to <em>R</em>. Output will follow prefaced by
+<code>##</code>. (In <em>R</em>, <code>#</code> represents a comment; any command preceded by any
+number of <code>#</code>&#39;s will not be executed.) For example:</p>
+
+<pre><code class="r">&gt; 2 + 2
+## [1] 4
+</code></pre>
+
+<p>(Note that when entering the code yourself, do not include the <code>&gt;</code> in
+your command. Also, for longer lines of code in this document, the
+text may wrap onto a second line, with the second line preceded by a
+<code>+</code> sign. When entering the code yourself, you do not have to wrap the
+lines, and do not include the <code>+</code>.)</p>
+
+<p><em>R</em> stores data in named variables using the arrow operator:</p>
+
+<pre><code class="r">&gt; my.variable &lt;- 2 + 2
+&gt; my.variable * 3
+## [1] 12
+</code></pre>
+
+<h1>Setup</h1>
+
+<h2>Outfitting your <em>R</em> with the proper add-ons</h2>
+
+<p><em>R</em> add-on packages are available to install directly from <em>R</em>:</p>
+
+<pre><code class="r">&gt; install.packages(&quot;optmatch&quot;)
+&gt; install.packages(&quot;RItools&quot;)
+</code></pre>
+
+<p>These commands will ask you to select a CRAN server. Any server will
+do.  You may also be asked whether you&#39;d like to set up a &ldquo;personal
+library to install packages into&rdquo;; if so, answer yes.  (The default
+personal library location that <em>R</em> will suggest should be OK.) You&#39;ll
+only need to run these commands the first time you want to use
+<code>optmatch</code> or <code>RItools</code> on a particular computer, or when you install
+a new version of <em>R</em>.</p>
+
+<h2>Setting up the <em>R</em> environment for matching</h2>
+
+<p>Attach extension packages that we&#39;ll be using for matching and
+associated diagnostics:</p>
+
+<pre><code class="r">&gt; library(optmatch)
+&gt; library(RItools)
+</code></pre>
+
+<p>You&#39;ll do this each time you start a new <em>R</em> session and want to run
+matching commands.</p>
+
+<p>To load the nuclear plants data, enter</p>
+
+<pre><code class="r">&gt; data(nuclearplants)
+</code></pre>
+
+<p>To see the first six rows:</p>
+
+<pre><code class="r">&gt; head(nuclearplants)
+##     cost  date t1 t2  cap pr ne ct bw cum.n pt
+## H 460.05 68.58 14 46  687  0  1  0  0    14  0
+## I 452.99 67.33 10 73 1065  0  0  1  0     1  0
+## A 443.22 67.33 10 85 1065  1  0  1  0     1  0
+## J 652.32 68.00 11 67 1065  0  1  1  0    12  0
+## B 642.23 68.00 11 78 1065  1  1  1  0    12  0
+## K 345.39 67.92 13 51  514  0  1  1  0     3  0
+</code></pre>
+
+<p>For more on the variables here, enter</p>
+
+<pre><code class="r">&gt; help(&quot;nuclearplants&quot;)
+</code></pre>
+
+<p>You can directly access a variable within this data frame as follows.
+(Try typing in the commands to see what they do.)</p>
+
+<pre><code class="r">&gt; nuclearplants$pt
+&gt; table(nuclearplants$pt)
+&gt; with(nuclearplants, table(pt))
+</code></pre>
+
+<p>The variable you will have just viewed and tabulated, <code>pt</code>, is a dummy
+for whether the plant was built with &ldquo;partial turnkey guarantees.&rdquo;
+These plants were not comparable to the others in terms of
+construction costs.  Let&#39;s exclude them for the time being, for
+simplicity.  To do this we&#39;ll create a data table (in <em>R</em> jargon, a
+&ldquo;data frame&rdquo;) of just those observations for which <code>pt</code> is 0:</p>
+
+<pre><code class="r">&gt; nuke.nopt &lt;- subset(nuclearplants, pt == 0)
+</code></pre>
+
+<p>To inspect its first six or last six entries, do</p>
+
+<pre><code class="r">&gt; head(nuke.nopt)
+&gt; tail(nuke.nopt)
+</code></pre>
+
+<p>To view this as presenting a matching problem, we&#39;ll think of plants
+built on the site of a previously existing plant (<code>pr == 1</code>) as the
+treatment group and plants on new sites (<code>pr == 0</code>) as comparisons.</p>
+
+<h1>Optimal pair matching and 1:k matching</h1>
+
+<h2>Pair matching</h2>
+
+<p>To check the number of treated and control plants:</p>
+
+<pre><code class="r">&gt; table(nuke.nopt$pr)
+## 
+##  0  1 
+## 19  7
+</code></pre>
+
+<p>To get the pair match minimizing the mean paired distance on <code>cap</code>,
+among all collections of 7 non-overlapping pairs, do</p>
+
+<pre><code class="r">&gt; pairmatch(pr ~ cap, data = nuke.nopt)
+##    H    I    A    J    B    K    L    M    C    N    O    P    Q    R    S    T 
+## &lt;NA&gt;  1.2  1.1  1.1  1.2 &lt;NA&gt;  1.3 &lt;NA&gt;  1.3  1.7 &lt;NA&gt; &lt;NA&gt;  1.4  1.5 &lt;NA&gt; &lt;NA&gt; 
+##    U    D    V    E    W    F    X    G    Y    Z 
+##  1.6  1.4 &lt;NA&gt;  1.5 &lt;NA&gt;  1.6 &lt;NA&gt;  1.7 &lt;NA&gt; &lt;NA&gt;
+</code></pre>
+
+<p>For a more readable report of who gets matched to whom, type</p>
+
+<pre><code class="r">&gt; print(pairmatch(pr ~ cap, data = nuke.nopt), grouped = TRUE)
+##  Group Members
+##    1.1    A, J
+##    1.2    I, B
+##    1.3    L, C
+##    1.4    Q, D
+##    1.5    R, E
+##    1.6    U, F
+##    1.7    N, G
+</code></pre>
+
+<p>For matching on both <code>date</code> and <code>cap</code>, you&#39;d type pairmatch(pr ~ cap</p>
+
+<ul>
+<li>date, &hellip;)<code>instead of</code>pairmatch(pr ~ cap, &hellip;)<code>. We&#39;ll talk later
+about how this combines discrepancies on the two variables.  For now,
+note the form of the output this command generates: a variable of the
+same length as the variables making up</code>nuke.nopt<code>, assigning a
+distinct name to each matched set.  To fix your intuition, you might
+try connecting up below the units that</code>pairmatch() has placed in the
+same matched sets.</li>
+</ul>
+
+<hr/>
+
+<p>Plant   Date   Capacity   Plant   Date   Capacity </p>
+
+<hr/>
+
+<p>A     2.3      660        H     3.6      290    </p>
+
+<p>B     3.0      660        I     2.3      660    </p>
+
+<p>C     3.4      420        J      3       660    </p>
+
+<p>D     3.4      130        K     2.9      110    </p>
+
+<p>E     3.9      650        L     3.2      420    </p>
+
+<p>F     5.9      430        M     3.4       60    </p>
+
+<p>G     5.1      420        N     3.3      390    </p>
+
+<pre><code>                         O     3.6      160    
+
+                         P     3.8      390    
+
+                         Q     3.4      130    
+
+                         R     3.9      650    
+
+                         S     3.9      450    
+
+                         T     3.4      380    
+
+                         U     4.5      440    
+
+                         V     4.2      690    
+
+                         W     3.8      510    
+
+                         X     4.7      390    
+
+                         Y     5.4      140    
+
+                         Z     6.1      730    
+</code></pre>
+
+<hr/>
+
+<p>Table: New-site (left columns) versus existing-site (right columns) plants. &ldquo;date&rdquo; is <code>date-65</code>; &ldquo;capacity&rdquo; is <code>cap-400</code>.</p>
+
+<p>For basic summary information about this match, try</p>
+
+<pre><code class="r">&gt; summary(pairmatch(pr ~ cap, data = nuke.nopt))
+</code></pre>
+
+<p>If you&#39;ve already typed in the <code>pairmatch(...)</code> part, you can use the
+up-arrow, Home and End keys to avoid having to re-type. Alternatively,
+to assign the name &ldquo;<code>pm</code>&rdquo; to the matching result, do</p>
+
+<pre><code class="r">&gt; pm &lt;- pairmatch(pr ~ cap, data = nuke.nopt)
+</code></pre>
+
+<p>Now, you can just type <code>print(pm, grouped = TRUE)</code> or <code>summary(pm)</code>.</p>
+
+<p>The following would give a basic matched analysis of the effect of new
+or existing site on construction costs is given with the help of <em>R</em>&#39;s
+linear modeling function.  In effect, the existing site effect is
+estimated as one &ldquo;way&rdquo; in a two-way \textsc{anova}, the other &ldquo;way&rdquo;
+being the factor variable that represents the matching result,
+i.e. <code>pm</code>.</p>
+
+<pre><code class="r">&gt; summary(lm(cost ~ pr + pm, data = nuke.nopt))
+</code></pre>
+
+<h2>Matching with multiple controls</h2>
+
+<p>There are other types of matches you might want to try.  Here&#39;s how to
+create matched triples (each treatment group unit is matched to two
+control group units):</p>
+
+<pre><code class="r">&gt; tm &lt;- pairmatch(pr ~ cap, controls = 2, data = nuke.nopt)
+</code></pre>
+
+<p>There will be further variations suggested on the slides.</p>
+
+<h2>Did matching work?</h2>
+
+<p>It&#39;s possible to give the software an impossible list of requirements
+for a match.  For instance, try running the following:</p>
+
+<pre><code class="r">&gt; pairmatch(pr ~ cap, controls = 3, data=nuke.nopt)
+</code></pre>
+
+<p>The problem here is that the data don&#39;t have 3 comparison units to go
+with each treatment unit, since we have 7 treatment units but only 19
+comparison units.</p>
+
+<p>Matching can also fail because the distance matrix embodies matching
+constraints that are impossible to meet.  In these cases the matching
+function will generally run without complaint, although it won&#39;t
+create any matches.  Here is an example, where the caliper is so
+narrow as to forbid all possible matches:</p>
+
+<pre><code class="r">&gt; pairmatch(pr ~ cap + cost, caliper=.001, data = nuke.nopt)
+## Warning in fullmatch.InfinitySparseMatrix(x = x, min.controls = controls, : Matching failed. (Restrictions impossible to meet?)
+##  Enter ?matchfailed for more info.
+##    H    I    A    J    B    K    L    M    C    N    O    P    Q    R    S    T 
+## &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; 
+##    U    D    V    E    W    F    X    G    Y    Z 
+## &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
+</code></pre>
+
+<p>Behind the scenes, the <code>caliper</code> argument restricts how the maximum
+distance between matched objects. For example, consider Table 1
+above. Plants A and H are 1.3 units apart in <code>date</code>. If we assigned
+<code>caliper=1</code>, they could never be matched because they exceed the
+caliper limit.</p>
+
+<p>If before matching you want to remove just the subjects lacking a
+counterpart within caliper distance, you can do <code>pairmatch(...,
+remove.unmatchables = TRUE)</code>.  That won&#39;t help with the minuscule
+caliper above, but with less extreme calipers it helps you salvage a
+few matches.</p>
+
+<h2>Did matching balance the covariate?</h2>
+
+<p>Comparing overt biases before and after matching.  An assessment of
+the unmatched difference between the groups on <code>cap</code> can be had via:</p>
+
+<pre><code class="r">&gt; cap.noadj &lt;- lm(cap ~ pr, data = nuke.nopt)
+&gt; summary(cap.noadj)
+</code></pre>
+
+<p>The output is suppressed, as most of it is not relevant to balance.
+This variation hones in on the part that is:</p>
+
+<pre><code class="r">&gt; summary(lm(cap ~ pr, data = nuke.nopt))$coeff[&quot;pr&quot;,]
+##   Estimate Std. Error    t value   Pr(&gt;|t|) 
+## 79.7368421 92.7031668  0.8601307  0.3982280
+</code></pre>
+
+<p>(Note again the use of square brackets, <code>[</code> and <code>]</code>, for specifying
+subsets of a matrix.  With <em>R</em> one has to carefully distinguish square
+brackets, curly brackets and parentheses.)</p>
+
+<p>Here is a parallel calculation that takes the match <code>pm</code> into account.</p>
+
+<pre><code class="r">&gt; summary(lm(cap ~ pr + pm, data = nuke.nopt))$coeff[&quot;pr&quot;,]
+##   Estimate Std. Error    t value   Pr(&gt;|t|) 
+##  1.7142857  5.1395492  0.3335479  0.7500689
+</code></pre>
+
+<p>The RItools package&#39;s <code>xBalance</code> function zeroes in on balance, and
+facilitates checking balance on multiple variables at the same time. Here are some examples:</p>
+
+<pre><code class="r">&gt; 
+&gt; xBalance(pr ~ cap + t2, report=&quot;all&quot;, data=nuke.nopt)
+##      strata unstrat                                                           
+##      stat      pr=0    pr=1 adj.diff adj.diff.null.sd std.diff    z           
+## vars                                                                          
+## cap         803.263 883.000  79.737           92.220   0.380   0.865          
+## t2          59.526  66.857   7.331            4.547    0.738   1.612          
+## ---Overall Test---
+##         chisquare df p.value
+## unstrat      2.71  2   0.258
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;** &#39; 0.01 &#39;*  &#39; 0.05 &#39;.  &#39; 0.1 &#39;   &#39; 1
+&gt; xBalance(pr ~ cap + t2,
++          strata= pm,
++          data=nuke.nopt,
++          report=c(&quot;adj.mean.diffs&quot;, &quot;std&quot;, &quot;z&quot;))
+##      strata    strat                         
+##      stat   adj.diff std.diff    z           
+## vars                                         
+## cap          1.71429  0.00818 0.35698        
+## t2           4.71429  0.47444 1.16892
+</code></pre>
+
+<p><strong>Exercises.</strong></p>
+
+<ol>
+<li>Compare <code>pm</code>, <code>tm</code> and the unmatched samples in terms of balance on
+<code>t2</code>.</li>
+<li>Compare <code>pm</code>, <code>tm</code> and the unmatched samples in terms of balance on
+<code>date</code>.</li>
+<li>Compare <code>pm</code> to Mahalanobis pair matching on <code>t1</code> in terms of
+balance on <code>date</code>.</li>
+<li>Compare Mahalanobis pair matching on <code>cap</code> and <code>date</code> to
+Mahalanobis pair matching on <code>cap</code>, <code>date</code> and each of <code>t1,t2</code>.  Add
+the last two variables in one at a time, so that you&#39;re comparing a
+total of three matches.  Compare on balance in <code>cap</code> and <code>t2</code>.</li>
+</ol>
+
+<p>Section &ldquo;Checking balance in general&rdquo;, below, presents convenient ways
+to do balance assessment for many variables at once.  Before getting
+to that let&#39;s discuss try matching with propensity scores.</p>
+
+<h1>Propensity Score Matching</h1>
+
+<h2>Propensity score fitting in <em>R</em></h2>
+
+<p>Logistic regression models are fit in <em>R</em> using the function <code>glm()</code>,
+with &ldquo;<code>family</code>&rdquo; argument set to &ldquo;<code>binomial</code>.&rdquo;  Example:</p>
+
+<pre><code class="r">&gt; psm &lt;- glm(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + pt,
++            family = binomial, data = nuclearplants)
+</code></pre>
+
+<p>The fitted logistic regression is then stored in the object &ldquo;<code>psm</code>.&rdquo;
+The propensity scores can be accessed with <code>psm$fitted.values</code>
+(estimated probabilities) or <code>scores(psm)</code> (estimated logits of
+probabilities).</p>
+
+<p>It&#39;s often a good idea to compare the groups&#39; distributions on the
+propensity score.</p>
+
+<pre><code class="r">&gt; boxplot(psm)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-29"/></p>
+
+<p>The groups do overlap, if not greatly.  It may be wise to restrict the
+sample to the region of overlap, at least roughly.  A propensity
+caliper would help with this.</p>
+
+<p>First, let&#39;s match directly on the propensity score without restricting
+the sample to the region of overlap.</p>
+
+<pre><code class="r">&gt; ps.pm &lt;- pairmatch(psm, data = nuclearplants)
+&gt; summary(ps.pm)
+## Structure of matched sets:
+## 1:1 0:1 
+##  10  12 
+## Effective Sample Size:  10 
+## (equivalent number of matched pairs).
+</code></pre>
+
+<p>To restrict to the overlapping region, we want to imply a caliper to
+the distances generated by the propensity score model. To do this
+requires a more explicit generation of the match, involving separate
+steps for generation of the distances followed by matching upon those
+distances.</p>
+
+<p>First, we create a distance matrix based upon <code>psm</code>:</p>
+
+<pre><code class="r">&gt; psm.dist &lt;- match_on(psm, data=nuclearplants)
+</code></pre>
+
+<p><code>psm.dist</code> is a matrix with an entry corresponding to the distance
+between each potential pair of treatment and control units. We can
+caliper directly on this distance matrix,</p>
+
+<pre><code class="r">&gt; caliper(psm.dist, 2)
+##        control
+## treated   H   I   J   K   L   M   N   O   P   Q   R   S   T U   V   W   X   Y
+##       A Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf 0   0 Inf Inf Inf
+##       B Inf   0 Inf Inf Inf   0   0   0 Inf   0   0   0   0 0   0   0 Inf Inf
+##       C Inf   0   0 Inf Inf   0   0   0 Inf   0   0   0   0 0 Inf   0   0 Inf
+##       D Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf   0 Inf 0   0 Inf Inf Inf
+##       E Inf   0 Inf Inf Inf   0   0   0 Inf   0   0   0   0 0   0   0   0 Inf
+##       F Inf   0 Inf Inf Inf   0 Inf   0 Inf Inf   0   0   0 0   0 Inf Inf Inf
+##       G Inf   0 Inf Inf Inf   0   0   0 Inf   0   0   0   0 0   0   0 Inf Inf
+##       a Inf   0 Inf Inf Inf Inf Inf Inf Inf Inf   0   0   0 0   0 Inf Inf Inf
+##       b Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf Inf 0   0 Inf Inf Inf
+##       c Inf   0 Inf Inf Inf   0   0   0 Inf   0   0   0   0 0   0   0 Inf Inf
+##        control
+## treated   Z d   e   f
+##       A Inf 0 Inf Inf
+##       B   0 0 Inf   0
+##       C   0 0 Inf   0
+##       D Inf 0 Inf Inf
+##       E   0 0 Inf   0
+##       F   0 0 Inf   0
+##       G   0 0 Inf   0
+##       a   0 0 Inf   0
+##       b Inf 0 Inf Inf
+##       c   0 0 Inf   0
+</code></pre>
+
+<p>Entries which are <code>Inf</code> will never be matched. Adding the caliper to
+<code>psm.dist</code> will disallow matching between units which differ by more
+than 2 standard deviations.</p>
+
+<p>(Note that this differs from the previous use of <code>caliper</code> directly in
+<code>pairmatch</code>, where the caliper is applied directly to the distances
+instead of smartly upon the standard deviations between the propensity
+scores.)</p>
+
+<p>Combining the above, we can now</p>
+
+<pre><code class="r">&gt; ps.pm2 &lt;- pairmatch(psm.dist, data = nuclearplants)
+&gt; ps.pm3 &lt;- pairmatch(psm.dist + caliper(psm.dist, 2), data = nuclearplants)
+&gt; all.equal(ps.pm, ps.pm2, check.attributes=FALSE)
+## [1] TRUE
+&gt; all.equal(ps.pm, ps.pm3, check.attributes=FALSE)
+## [1] &quot;8 string mismatches&quot;
+&gt; summary(ps.pm3)
+## Structure of matched sets:
+## 1:1 0:1 
+##  10  12 
+## Effective Sample Size:  10 
+## (equivalent number of matched pairs).
+</code></pre>
+
+<p>Or you could match within calipers of the propensity score on some
+other distance, perhaps Mahalanobis distances based on selected
+covariates as recommended by Rubin and Thomas (2000, JASA) and
+others. For Mahalanobis matching on <code>date</code>, <code>cap</code> and the propensity
+score, for instance, combined with a propensity caliper of 1 pooled
+sd.</p>
+
+<pre><code class="r">&gt; mhd1 &lt;- match_on(pr ~ date + cap + scores(psm), data=nuclearplants)
+&gt; mhpc.pm &lt;- pairmatch(mhd1, caliper=1, data=nuclearplants)
+&gt; summary(mhpc.pm) # oops
+## Structure of matched sets:
+## 1:1 0:1 
+##  10  12 
+## Effective Sample Size:  10 
+## (equivalent number of matched pairs).
+&gt; mhpc.pm &lt;- pairmatch(mhd1, caliper=2, data=nuclearplants)
+&gt; summary(mhpc.pm) # better!
+## Structure of matched sets:
+## 1:1 0:1 
+##  10  12 
+## Effective Sample Size:  10 
+## (equivalent number of matched pairs).
+</code></pre>
+
+<h2>Checking balance in general</h2>
+
+<p>The <code>RItools</code> package has a convenient function for checking balance
+on many variables simultaneously.  To get a sense of what it does, try
+this:</p>
+
+<pre><code class="r">&gt; library(RItools)
+&gt; xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data = nuclearplants)
+&gt; xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + pt +
++              strata(ps.pm2) -1, # the `-1` just focuses the output a little
++          data = nuclearplants)
+</code></pre>
+
+<p>It can in the same display compare matching to no matching, on any of
+a number of axes.  Here is a demonstration:</p>
+
+<pre><code class="r">&gt; myb &lt;- xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
++                 strata(ps.pm2),
++                 data = nuclearplants,
++                 report = c(&quot;adj.means&quot;, &quot;std.diffs&quot;,
++                            &quot;z.scores&quot;, &quot;chisquare.test&quot;))
+&gt; plot(myb)
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAYAAAB65WHVAAAEDmlDQ1BrQ0dDb2xvclNwYWNlR2VuZXJpY1JHQgAAOI2NVV1oHFUUPpu5syskzoPUpqaSDv41lLRsUtGE2uj+ZbNt3CyTbLRBkMns3Z1pJjPj/KRpKT4UQRDBqOCT4P9bwSchaqvtiy2itFCiBIMo+ND6R6HSFwnruTOzu5O4a73L3PnmnO9+595z7t4LkLgsW5beJQIsGq4t5dPis8fmxMQ6dMF90A190C0rjpUqlSYBG+PCv9rt7yDG3tf2t/f/Z+uuUEcBiN2F2Kw4yiLiZQD+FcWyXYAEQfvICddi+AnEO2ycIOISw7UAVxieD/Cyz5mRMohfRSwoqoz+xNuIB+cj9loEB3Pw2448NaitKSLLRck2q5pOI9O9g/t/tkXda8Tbg0+PszB9FN8DuPaXKnKW4YcQn1Xk3HSIry5ps8UQ/2W5aQnxIwBdu7yFcgrxPsRjVXu8HOh0qao30cArp9SZZxDfg3h1wTzKxu5E/LUxX5wKdX5SnAzmDx4A4OIqLbB69yMesE1pKojLjVdoNsfyiPi45hZmAn3uLWdpOtfQOaVmikEs7ovj8hFWpz7EV6mel0L9Xy23FMYlPYZenAx0yDB1/PX6dledmQjikjkXCxqMJS9WtfFCyH9XtSekEF+2dH+P4tzITduTygGfv58a5VCTH5PtXD7EFZiNyUDBhHnsFTBgE0SQIA9pfFtgo6cKGuhooeilaKH41eDs38Ip+f4At1Rq/sjr6NEwQqb/I/DQqsLvaFUjvAx+eWirddAJZnAj1DFJL0mSg/gcIpPkMBkhoyCSJ8lTZIxk0TpKDjXHliJzZPO50dR5ASNSnzeLvIvod0HG/mdkmOC0z8VKnzcQ2M/Yz2vKldduXjp9bleLu0ZWn7vWc+l0JGcaai10yNrUnXLP/8Jf59ewX+c3Wgz+B34Df+vbVrc16zTMVgp9um9bxEfzPU5kPqUtVWxhs6OiWTVW+gIfywB9uXi7CGcGW/zk98k/kmvJ95IfJn/j3uQ+4c5zn3Kfcd+AyF3gLnJfcl9xH3OfR2rUee80a+6vo7EK5mmXUdyfQlrYLTwoZIU9wsPCZEtP6BWGhAlhL3p2N6sTjRdduwbHsG9kq32sgBepc+xurLPW4T9URpYGJ3ym4+8zA05u44QjST8ZIoVtu3qE7fWmdn5LPdqvgcZz8Ww8BWJ8X3w0PhQ/wnCDGd+LvlHs8dRy6bLLDuKMaZ20tZrqisPJ5ONiCq8yKhYM5cCgKOu66Lsc0aYOtZdo5QCwezI4wm9J/v0X23mlZXOfBjj8Jzv3WrY5D+CsA9D7aMs2gGfjve8ArD6mePZSeCfEYt8CONWDw8FXTxrPqx/r9Vt4biXeANh8vV7/+/16ffMD1N8AuKD/A/8leAvFY9bLAAAAOGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAACoAIABAAAAAEAAAFooAMABAAAAAEAAAFoAAAAAHiVHG8AADMPSURBVHgB7Z0HeBTV+sa/EHovofcqVXrvRUHaI9KrARRREFEQUC+KilIvAkrRK6DA/YNSpQsCiqIoHYmg9CYEkN4F5j/vuXfmbjbZZLLZ7M7svud5Jjvl1N+ZvHvmm7PnC9P0IAwkQAIkQAK2I5DCdjVihUiABEiABBQBCjRvBBIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG1SIBEiABCjTvARIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG1SIBEiABCjTvARIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG1SIBEiABCjTvARIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG1SIBEiABCjTvARIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG1SIBEiABCjTvARIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG1SIBEiABCjTvARIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG1SIBEiABCjTvARIgARKwKQEKtE07htUiARIgAQo07wESIAESsCkBCrRNO4bVIgESIAEKNO8BEiABErApAQq0TTuG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" alt="plot of chunk unnamed-chunk-36"/></p>
+
+<pre><code class="r">&gt; print(myb, digits=1)
+##       strata  Unadj                                ps.pm2                               
+##       stat     pr=0   pr=1 std.diff    z             pr=0   pr=1 std.diff    z          
+## vars                                                                                    
+## date         68.62  68.50    -0.11   -0.31         68.68  68.50    -0.18   -0.36        
+## t1           13.64  14.00    0.11    0.28          14.30  14.00    -0.09   -0.17        
+## t2           59.32  69.10    1.03    2.47   *      62.60  69.10    0.69    1.43         
+## cap          805.18 869.80   0.34    0.89          889.60 869.80   -0.10   -0.29        
+## ne           0.27   0.20     -0.16   -0.43         0.10   0.20     0.22    0.58         
+## ct           0.45   0.30     -0.31   -0.81         0.20   0.30     0.20    0.45         
+## bw           0.18   0.20     0.05    0.12          0.20   0.20     0.00    0.00         
+## cum.n        8.73   8.10     -0.10   -0.26         8.60   8.10     -0.08   -0.19        
+## ---Overall Test---
+##        chisquare df p.value
+## Unadj         11  8     0.2
+## ps.pm2         9  8     0.4
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;** &#39; 0.01 &#39;*  &#39; 0.05 &#39;.  &#39; 0.1 &#39;   &#39; 1
+</code></pre>
+
+<p>For a very compact representation of the assessment, call <code>summary()</code>
+on the match, passing along the fitted propensity model as a second
+argument.  If you&#39;ve got <code>RItools</code> loaded, then this will call
+<code>xBalance</code> in the background, reporting the summary chi-square test
+results.</p>
+
+<pre><code class="r">&gt; summary(ps.pm2, psm)
+## Structure of matched sets:
+## 1:1 0:1 
+##  10  12 
+## Effective Sample Size:  10 
+## (equivalent number of matched pairs).
+## 
+## Balance test overall result:
+##   chisquare df p.value
+##          10  9   0.351
+</code></pre>
+
+<p><strong>Exercise.</strong></p>
+
+<p>Try out {at least 3} different combinations of propensity score and
+Mahalanobis matching.  Identify the matches that gives:</p>
+
+<ol>
+<li>the &ldquo;best balance overall,&rdquo; as measured by Chi-square statistics;</li>
+<li>the &ldquo;best balance overall,&rdquo; as indicated by the largest
+standardized difference among the covariates;</li>
+<li>the best balance on <code>date</code> and <code>cap</code>, as measured by the larger of
+the standardized differences for these two variables; and</li>
+<li>the best balance on <code>date</code> and <code>cap</code>, as measured by the larger of
+the standardized differences for these two variables, among those
+matches for which the overall imbalance <em>p</em>-value is no more than
+.1.</li>
+</ol>
+
+<h1>Other topics in matching</h1>
+
+<h2>Full matching and matching with a varying number of controls</h2>
+
+<p>Try out for yourself and compare:</p>
+
+<pre><code class="r">&gt; summary(fullmatch(pr ~ date + cap, data = nuke.nopt))
+&gt; summary(fullmatch(pr ~ date + cap, data = nuke.nopt, min = 1))
+&gt; summary(fullmatch(pr ~ date + cap, data = nuke.nopt, min = 2, max = 3))
+</code></pre>
+
+<h2>Subclassification before matching</h2>
+
+<p>Recall that the data set <code>nuclearplants</code> had 32 observations, 6 of
+which we excluded.  These were plants built under &ldquo;partial turnkey&rdquo;
+guarantees (<code>pt == 1</code>), for which costs are difficult to compare with
+other plants.  We might include the excluded plants by matching them
+only among themselves.  Then we need to subclassify prior to matching.</p>
+
+<p>This is a common and useful operation, and <code>optmatch</code> is designed to
+help you do it via a <code>strata</code> term in the matching formula.</p>
+
+<pre><code class="r">&gt; pairmatch(pr ~ date + cap + scores(psm), data=nuclearplants)
+##    H    I    A    J    B    K    L    M    C    N    O    P    Q    R    S    T 
+## &lt;NA&gt;  1.1  1.1 &lt;NA&gt;  1.2 &lt;NA&gt; &lt;NA&gt;  1.4  1.3  1.3 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;  1.2 &lt;NA&gt;  1.8 
+##    U    D    V    E    W    F    X    G    Y    Z    d    e    f    a    b    c 
+##  1.7  1.4  1.5  1.5 &lt;NA&gt;  1.6  1.6  1.7 &lt;NA&gt; &lt;NA&gt;  1.9 &lt;NA&gt; 1.10  1.8  1.9 1.10
+&gt; pairmatch(pr ~ date + cap + scores(psm) + strata(pt), data=nuclearplants)
+##    H    I    A    J    B    K    L    M    C    N    O    P    Q    R    S    T 
+## &lt;NA&gt;  0.1  0.1 &lt;NA&gt;  0.2 &lt;NA&gt; &lt;NA&gt;  0.4  0.3  0.3 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;  0.2 &lt;NA&gt; &lt;NA&gt; 
+##    U    D    V    E    W    F    X    G    Y    Z    d    e    f    a    b    c 
+##  0.7  0.4  0.5  0.5 &lt;NA&gt;  0.6  0.6  0.7 &lt;NA&gt; &lt;NA&gt;  1.2  1.1  1.3  1.1  1.2  1.3
+</code></pre>
+
+<h2>Distances</h2>
+
+<p>You&#39;ll often want to do several variations on a match.  It may save
+computation and typing time to store the distance you&#39;re using to
+match, if you&#39;re going to re-use that distance.  To do so, you&#39;ll have
+to explicitly separate distance-making and matching, two steps that
+we&#39;ve merged together thus far. We&#39;ll use the <code>match_on()</code> to
+create distances.</p>
+
+<pre><code class="r">&gt; cap.dist &lt;- match_on(pr ~ cap, data = nuke.nopt)
+&gt; pm1 &lt;- pairmatch(pr ~ cap, data=nuke.nopt)
+&gt; pm2 &lt;- pairmatch(cap.dist, data=nuke.nopt)
+&gt; all.equal(pm1, pm2, check.attributes = FALSE)
+## [1] TRUE
+&gt; summary(pm2)
+## Structure of matched sets:
+## 1:1 0:1 
+##   7  12 
+## Effective Sample Size:  7 
+## (equivalent number of matched pairs).
+</code></pre>
+
+<p>What does a matching distance look like?  Here&#39;s the upper-left corner
+of one of them:</p>
+
+<pre><code class="r">&gt; round(cap.dist[1:3, 1:3], 1)
+##          control
+## treatment   H   I   J
+##         A 1.8 0.0 0.0
+##         B 1.8 0.0 0.0
+##         C 0.6 1.2 1.2
+</code></pre>
+
+<p>(Note the use of square brackets, <code>[</code> and <code>]</code>, for specifying rows and
+columns of the distance matrix.  If you find that this isn&#39;t working
+on a distance that you&#39;ve produced, try <code>as.matrix(my.dist)[1:3,1:3]</code>
+or similar.)</p>
+
+<p>Matching with a caliper of 2 pooled standard deviations on the <code>cap</code>
+variable:</p>
+
+<pre><code class="r">&gt; round(cap.dist + caliper(cap.dist, 2), 1)
+##        control
+## treated   H   I   J   K   L   M   N   O   P   Q   R   S   T   U   V   W   X   Y
+##       A 1.8 0.0 0.0 Inf 1.2 Inf 1.3 Inf 1.3 Inf 0.1 1.0 1.4 1.0 0.1 0.7 1.3 Inf
+##       B 1.8 0.0 0.0 Inf 1.2 Inf 1.3 Inf 1.3 Inf 0.1 1.0 1.4 1.0 0.1 0.7 1.3 Inf
+##       C 0.6 1.2 1.2 1.5 0.0 1.7 0.1 1.2 0.2 1.4 1.1 0.1 0.2 0.1 1.3 0.4 0.2 1.4
+##       D 0.7 Inf Inf 0.1 1.4 0.3 1.2 0.1 1.2 0.0 Inf 1.5 1.2 1.5 Inf 1.8 1.2 0.0
+##       E 1.7 0.1 0.1 Inf 1.1 Inf 1.2 Inf 1.2 Inf 0.0 1.0 1.3 1.0 0.2 0.7 1.3 Inf
+##       F 0.7 1.1 1.1 1.5 0.0 1.8 0.2 1.3 0.2 1.4 1.1 0.1 0.2 0.1 1.2 0.4 0.2 1.4
+##       G 0.6 1.2 1.2 1.5 0.0 1.7 0.1 1.2 0.1 1.4 1.1 0.1 0.2 0.1 1.3 0.4 0.2 1.3
+##        control
+## treated   Z
+##       A 0.3
+##       B 0.3
+##       C 1.5
+##       D Inf
+##       E 0.4
+##       F 1.4
+##       G 1.5
+</code></pre>
+
+<p>Entries of <code>Inf</code> or <code>NaN</code> in a distance matrix are interpreted as
+forbidden matches.  Thus</p>
+
+<pre><code class="r">&gt; pairmatch(cap.dist + caliper(cap.dist, 2), data = nuke.nopt)
+</code></pre>
+
+<p>matches on <code>cap</code>, insisting that paired units not differ by more than
+2 pooled SDs in <code>cap</code>. If you would prefer to set a requirement on how
+much paired units can differ in <code>cap</code> in its original units, rather
+than standard units, then you would have to create <code>cap.dist</code> in a
+somewhat different way.  There&#39;s an example on the help page for
+<code>caliper()</code>. Enter <code>help(caliper)</code> at the <em>R</em> command line.</p>
+
+<h2>Using <em>R</em> for matching and another program for matched analysis</h2>
+
+<p>If you prefer to do your main work in another statistical package, you
+can use <em>R</em> for matching and balance assessment, and then re-import
+the matched data back into your preferred package for the main
+analysis. A typical work flow might look something like this:</p>
+
+<ol>
+<li>Load data into your primary statistical package.</li>
+<li>Preprocess data (handle missing values, combine variables into
+single measures, etc).</li>
+<li>Export data in a format <em>R</em> can read.</li>
+<li>Load data into <em>R</em>.</li>
+<li>Perform matching and balance testing.</li>
+<li>Append matches to your data and export in a format your statistical
+package can read.</li>
+<li>Load appended data into your primary package and perform analyses.</li>
+</ol>
+
+<p>You already know how to perform the matching and balance testing, so
+what remains are the import and export steps, along with appending
+your matches to your original data.</p>
+
+<p>When importing and exporting data, you must select a data format. In a
+broad sense, you have two options: proprietary data formats (for
+example <code>.dta</code> for Stata) or open standards (for example <code>.csv</code>, Comma
+Separated Values). The advantage of proprietary formats is that they
+may include additional information for <em>R</em> to use, such as the labels
+on a categorical variable. The potential pitfall is that <em>R</em> might not
+know how to read your particular file type. Open formats like CSV are
+easy to read and write, but you may lose variable names, labels, or
+other special forms of data. For reading and writing proprietary
+formats, consider the use of the <code>foreign</code> library in <em>R</em>. See for
+example <code>read.dta</code> and <code>write.dta</code>:</p>
+
+<pre><code class="r">&gt; library(foreign)
+&gt; ?read.dta
+&gt; ?write.dta
+</code></pre>
+
+<p>For much more detail on this topic, see the <a href="https://cran.r-project.org/doc/manuals/r-release/R-data.html">&ldquo;<em>R</em> Data Import/Export&rdquo;
+manual</a>.</p>
+
+<p>If you use CSV files, consult your statistical package&#39;s manuals for
+details on how to export your data as a CSV. Once you have exported
+your data into a file, open the file (using a text editor, not
+Microsoft Word) to see if there is a header row of variable
+names. Then, to import your data use the following:</p>
+
+<pre><code class="r">&gt; my.plants &lt;- read.csv(&quot;nuclearplants.csv&quot;, header = TRUE)
+</code></pre>
+
+<p>If you do not have a header on your data change to <code>header = FALSE</code>.</p>
+
+<p>At this point, you may proceed to conduct your matching as usual (for
+example using an example from earlier in this document). When you are
+done, you will need to append your match to your original data. The
+safest way to do this is using the following code snippet:</p>
+
+<pre><code class="r">&gt; plant.match &lt;- pairmatch(pr ~ cap, data = my.plants)
+&gt; my.plants.extended &lt;- data.frame(my.plants, matches = plant.match, check.rows=TRUE)
+</code></pre>
+
+<p>Finally, export your data as a .csv file (or a proprietary format such
+as with <code>write.dta</code> if that is what you are using):</p>
+
+<pre><code class="r">&gt; write.csv(my.plants.extended, file = &quot;nuclearplants-with-matches.csv&quot;)
+</code></pre>
+
+<p>As one final note, many of the balance tests included in <code>RItools</code> are
+available to Stata users directly from Stata. Information is available
+at the <code>RItools</code> webpage at {<a href="http://www.jakebowers.org/RItools.html">http://www.jakebowers.org/RItools.html</a>}.</p>
+
+<h2>Trying it out on your own</h2>
+
+<p>For another interesting (toy) data set, do</p>
+
+<pre><code class="r">&gt; data(tli, package=&quot;xtable&quot;)
+&gt; head(tli)
+##   grade sex disadvg ethnicty tlimth
+## 1     6   M     YES HISPANIC     43
+## 2     7   M      NO    BLACK     88
+## 3     5   F     YES HISPANIC     34
+## 4     3   M     YES HISPANIC     65
+## 5     8   M     YES    WHITE     75
+## 6     5   M      NO    BLACK     74
+</code></pre>
+
+<p>You might compare test scores for kids with <code>disadvg==&quot;YES&quot;` to
+those of kids with</code>disadvg==&ldquo;NO&rdquo;&ldquo; using propensity matching, in
+some combination with Mahalanobis matching and caliper matching.  A
+check of propensity overlap may inform your decision as to whether to
+include a propensity caliper.  Be sure to check for balance, and do
+check the structure of the matched sets.</p>
+
+<p>Three sources of \textit{real} data can be gotten as follows.  First,
+Paul Rosenbaum has posted many of the data sets discussed in his <em>Design of
+Observational Studies</em> (2010) to his web site.  If you have an active
+internet connection then you can get them by (as of this writing):</p>
+
+<pre><code class="r">&gt; download.file(&quot;http://www-stat.wharton.upenn.edu/~rosenbap/DOSdata.RData&quot;,
++               destfile=&quot;./DOSdata.RData&quot;)
+&gt; load(&quot;./DOSdata.RData&quot;)
+</code></pre>
+
+<p>Second, the &rdquo;<code>lalonde</code>&ldquo; data set, discussed by Lalonde (1986,
+<em>Am. Econom. Rev.</em>),
+Dehejia and Wahba (1999, <em>JASA</em>) and Smith and Todd (2005,
+<em>J. Econom.</em>), is bundled with several <em>R</em> packages, including
+&rdquo;<code>{arm}</code>&ldquo; and &rdquo;<code>Matching</code>.&ldquo;  To get it:</p>
+
+<pre><code class="r">&gt; install.packages(&quot;arm&quot;, dep=T) # if not already installed
+&gt; data(lalonde, package=&quot;arm&quot;)
+&gt; help(&quot;lalonde&quot;, package=&quot;arm&quot;)
+</code></pre>
+
+<p>Third, the data used by Connors et al (1996, <em>J. Am. Med. Assoc.</em>)
+to examine costs, benefits and risks associated with right heart catheterization
+is bundled with Frank Harrell and collaborators&#39; &rdquo;<code>Hmisc</code>&ldquo; package.</p>
+
+<pre><code class="r">&gt; install.packages(&quot;Hmisc&quot;, dep=T) # if not already installed
+&gt; Hmisc:::getHdata(rhc, what = &quot;all&quot;)
+</code></pre>
+
+</body>
+
+</html>
