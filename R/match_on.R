@@ -340,7 +340,7 @@ match_on.formula <- function(x, within = NULL, caliper = NULL, exclude = NULL, d
   }
 
   # we want to use our own contrasts creating function
-  isF <- colnames(mf)[vapply(mf, is.factor, TRUE)]
+  isF <- colnames(mf)[vapply(mf, is.factor, logical(1))]
   c.arg <- lapply(isF, function(fname) {
     if (nlevels(mf[[fname]]) < 2) {
       return(NULL)
@@ -422,7 +422,7 @@ makeWithinFromStrata <- function(x, data)
 {
   xs <- findStrata(x, data)
 
-  em <- unlist(sapply(strsplit(xs$strata, "\\(|)|,"), "[", -1))
+  em <- unlist(lapply(strsplit(xs$strata, "\\(|)|,"), "[", -1))
   lhs <- paste(xs$newx[[2]], collapse="")
   within <- exactMatch(as.formula(paste(lhs, "~", paste(em, collapse="+"))),
                              data=data)
@@ -879,11 +879,12 @@ standardization_scale <- function(x, trtgrp, standardizer = NULL, svydesign_=NUL
 #' @importFrom survey svyquantile
 svy_mad <- function(design)
 {
-        med <- as.vector(survey::svyquantile(~x, design, 0.5))$x[1]
+        med <- svyquantile(~x, design, 0.5)[[1]][1]
+
         design <- update(design,
-                        abs_dev=abs( design$variable$x - med)
+                        abs_dev=abs( design$variable$x - med )
                         )
-        mad <- as.vector(survey::svyquantile(~abs_dev, design, 0.5))$abs_dev[1]
+        mad <- svyquantile(~abs_dev, design, 0.5)[[1]][1]
         constant <- formals(stats::mad)$constant
         s2_t <- constant * mad
 }
@@ -896,14 +897,12 @@ svy_sd <- function(design)
 }
 
 #' This method quells a warning when \code{optmatch::scores()}
-#' is applied to a svyglm object.  I don't expect that it to be
-#' useful in other contexts, only exporting it for ease of debugging.
+#' is applied to a svyglm object.
 #' @method model.frame svyglm
 #' @keywords internal
-#' @export
 model.frame.svyglm <- function (formula, ...)
 {
-    ans <- model.frame(formula$survey.design, ...)
+    ans <- get_all_vars(formula, formula[["survey.design"]][["variables"]])
     attr(ans, "terms") <- terms(formula)
     ans
 }

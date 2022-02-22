@@ -379,7 +379,8 @@ subset.InfinitySparseMatrix <- function(x, subset, select, ...) {
                                   subset.data[, 2],
                                   subset.data[, 1],
                                   colnames = x@colnames[select],
-                                  rownames = x@rownames[subset]))
+                                  rownames = x@rownames[subset],
+                                  dimension = c(sum(subset), sum(select))))
 }
 
 # a slightly different method of subsetting. Return a matrix of the same size, but with
@@ -790,7 +791,7 @@ subdim.BlockedInfinitySparseMatrix <- function(x) {
       cidx <- x@cols %in% col.members
       any(ridx & cidx)
   },
-  TRUE)
+  logical(1))
   out <- out[filt]
   out.cnms <- names(out)
   out <- as.data.frame(out)
