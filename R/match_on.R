@@ -170,15 +170,14 @@ match_on.glm <- function(x, within = NULL, caliper = NULL, exclude = NULL, data 
   match_on(lp.adj, within = within, caliper = caliper, exclude = exclude, z = z, ...)
 }
 
-#' @title pooled dispersion for a numeric variable
-#'
 #' Dispersion as pooled across a treatment and a control group. By default,
 #' the measure of dispersion calculated within each group is not the
 #' ordinary standard deviation but rather the robust alternative
 #' provided by \code{stats::mad}.
 #'
+#' @title pooled dispersion for a numeric variable
 #' @param x numeric variable
-#' @param trtgrp logical or numeric.  If numeric, coerced to `T`/`F` via `!`
+#' @param trtgrp logical or numeric. If numeric, coerced to logical via \code{!}
 #' @param standardizer function or numeric of length 1
 #' @return numeric of length 1
 #' @keywords internal
@@ -509,7 +508,7 @@ compute_rank_mahalanobis <- function(index, data, z) {
         stop("Infinite or NA values detected in data for Mahalanobis computations.")
     }
 
-    if (is.null(index)) return(r_smahal(NULL, data, z))
+    if (is.null(index)) return(sqrt(r_smahal(NULL, data, z)))
 
     if (is.null(rownames(data)) | !all(index %in% rownames(data)))
         stop("data must have row names matching index")
@@ -524,7 +523,7 @@ compute_rank_mahalanobis <- function(index, data, z) {
     indices <- match(short_indices, all_indices)
     if (any(is.na(indices))) stop("Unanticipated problem. (Make sure row names of data don't use the string '%@%'.)")
     # Now, since `r_smahal` is ignoring its `index` argument anyway:
-    rankdists <- r_smahal(NULL, data, z)
+    rankdists <- sqrt(r_smahal(NULL, data, z))
     rankdists <- rankdists[indices]
     return(rankdists)
 }
@@ -836,9 +835,10 @@ contr.match_on <- function(n, contrasts=TRUE, sparse=FALSE) {
 #' and the \code{standardizer} function is to return the dispersion of this variable.)
 #'
 #' @param x numeric variable
-#' @param trtgrp logical or numeric.  If numeric, coerced to `T`/`F` via `!`
+#' @param trtgrp logical or numeric. If numeric, coerced to logical via \code{!}
 #' @param standardizer function, \code{NULL} or numeric of length 1
-#' @param svydesign_ ordinarily \code{NULL}, but may also be a \code{survey.design2}; see Details.
+#' @param svydesign_ ordinarily \code{NULL}, but may also be a
+#'   \code{survey.design2}; see Details.
 #' @return numeric of length 1
 #' @export
 #' @keywords internal
@@ -876,24 +876,31 @@ standardization_scale <- function(x, trtgrp, standardizer = NULL, svydesign_=NUL
 }
 
 #' @keywords internal
-#' @importFrom survey svyquantile
 svy_mad <- function(design)
 {
-        med <- svyquantile(~x, design, 0.5)[[1]][1]
+  if (requireNamespace("survey", quietly = TRUE)) {
+        med <- survey::svyquantile(~x, design, 0.5)[[1]][1]
 
         design <- update(design,
                         abs_dev=abs( design$variable$x - med )
                         )
-        mad <- svyquantile(~abs_dev, design, 0.5)[[1]][1]
+        mad <- survey::svyquantile(~abs_dev, design, 0.5)[[1]][1]
         constant <- formals(stats::mad)$constant
         s2_t <- constant * mad
+        return(s2_t)
+  } else {
+    stop("'survey' package must be installed")
+  }
 }
 #' @keywords internal
-#' @importFrom survey svyvar
 svy_sd <- function(design)
 {
+  if (requireNamespace("survey", quietly = TRUE)) {
         var_ <- survey::svyvar(~x, design)
-        sqrt(unname(var_)[1])
+        return(sqrt(unname(var_)[1]))
+  } else {
+    stop("'survey' package must be installed")
+  }
 }
 
 #' This method quells a warning when \code{optmatch::scores()}

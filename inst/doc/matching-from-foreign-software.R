@@ -2,40 +2,30 @@
 knitr::opts_chunk$set(collapse = TRUE, prompt=TRUE)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  externaldata <- read.csv("externaldata.csv", header=TRUE)
-#  externaldata$match <- fullmatch(..., data=externaldata)
-#  write.csv(externaldata, file="externaldata.matched.csv")
+#  externaldata <- read.csv("externaldata.csv", header = TRUE)
+#  externaldata$match <- fullmatch(..., data = externaldata)
+#  write.csv(externaldata, file = "externaldata.matched.csv")
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  sasdata <- read.csv("C:/Users/myuser/Desktop/sasout.csv", header=TRUE)
-
-## ----eval=FALSE---------------------------------------------------------------
-#  sasdata <- read.csv("C:\\Users\\myuser\\Desktop\\sasout.csv", header=TRUE)
+#  sasdata <- read.csv("/path/to/save/sasout.csv", header = TRUE)
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  library(optmatch)
-#  f <- fullmatch(gender ~ age + ppty, data=sasdata)
+#  f <- fullmatch(gender ~ age + ppty, data = sasdata)
 #  sasdata$match <- f
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  write.csv(sasdata, "C:/Users/myuser/Desktop/rout.sas.csv", row.names=FALSE)
-
-## ----eval=FALSE---------------------------------------------------------------
-#  library(foreign)
-#  write.foreign(sasdata, 'C:/Users/myuser/Desktop/rout.sas.txt',
-#                'C:/Users/myuser/Desktop/rout.code.sas', package = 'SAS')
+#  write.csv(sasdata, "/path/to/saverout.sas.csv", row.names = FALSE)
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  library(haven)
-#  statadata <- read_dta("C:/Users/myuser/Desktop/toR.dta")
-
-## ----eval=FALSE---------------------------------------------------------------
-#  statadata <- read.csv("C:\\Users\\myuser\\Desktop\\stataout.csv", header=TRUE)
+#  statadata <- read_dta("/path/to/save/toR.dta")
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  library(optmatch)
-#  statadata$match <- fullmatch(foreign ~ price + mpg + ppty, data=statadata, max.controls=3)
+#  f <- fullmatch(gender ~ age + ppty, data = sttadata)
+#  statadata$match <- f
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  write_dta(statadata, "C:/Users/myuser/Desktop/rout.stata.dta")
+#  write_dta(statadata, "/path/to/save/rout.stata.dta")
 

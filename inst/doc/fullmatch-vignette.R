@@ -183,36 +183,22 @@ round(cap.dist + caliper(cap.dist, 2), 1)
 ## ---- eval=FALSE--------------------------------------------------------------
 #  pairmatch(cap.dist + caliper(cap.dist, 2), data = nuke.nopt)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  library(foreign)
-#  ?read.dta
-#  ?write.dta
+## ---- eval = FALSE------------------------------------------------------------
+#  install.packages("xtable") # if not already installed
+#  data(tli, package = "xtable")
+
+## ---- eval = FALSE------------------------------------------------------------
+#  install.packages("DOS") # if not already installed
+#  install.packages("DOS2") # if not already installed
+#  data(package = "DOS")
+#  data(package = "DOS2")
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  my.plants <- read.csv("nuclearplants.csv", header = TRUE)
+#  install.packages("arm") # if not already installed
+#  data(lalonde, package = "arm")
+#  help("lalonde", package = "arm")
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  plant.match <- pairmatch(pr ~ cap, data = my.plants)
-#  my.plants.extended <- data.frame(my.plants, matches = plant.match, check.rows=TRUE)
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  write.csv(my.plants.extended, file = "nuclearplants-with-matches.csv")
-
-## -----------------------------------------------------------------------------
-data(tli, package="xtable")
-head(tli)
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  download.file("http://www-stat.wharton.upenn.edu/~rosenbap/DOSdata.RData",
-#                destfile="./DOSdata.RData")
-#  load("./DOSdata.RData")
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  install.packages("arm", dep=T) # if not already installed
-#  data(lalonde, package="arm")
-#  help("lalonde", package="arm")
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  install.packages("Hmisc", dep=T) # if not already installed
+#  install.packages("Hmisc") # if not already installed
 #  Hmisc:::getHdata(rhc, what = "all")
 
