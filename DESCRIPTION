@@ -1,5 +1,5 @@
 Package: optmatch
-Version: 0.10.1
+Version: 0.10.2
 Title: Functions for Optimal Matching
 Description: Distance based bipartite matching using minimum cost flow, oriented
     to matching of treatment and control groups in observational studies (Hansen
@@ -22,8 +22,8 @@ Suggests: RItools, boot, biglm, survey, testthat (>= 0.11.0), roxygen2,
         rrelaxiv
 Enhances: CBPS, haven
 License: MIT + file LICENSE
-License_is_FOSS: true
-License_restricts_use: false
+License_is_FOSS: yes
+License_restricts_use: no
 URL: https://github.com/markmfredrickson/optmatch,
         https://markmfredrickson.github.io/optmatch/
 BugReports: https://github.com/markmfredrickson/optmatch/issues
@@ -44,7 +44,7 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.0
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2022-05-13 16:39:20 UTC; josh
+Packaged: 2022-05-14 01:04:06 UTC; josh
 Author: Ben Hansen [aut],
   Mark Fredrickson [aut],
   Josh Errickson [cre, aut],
@@ -52,4 +52,4 @@ Author: Ben Hansen [aut],
   Adam Rauh [ctb]
 Maintainer: Josh Errickson <jerrick@umich.edu>
 Repository: CRAN
-Date/Publication: 2022-05-13 20:20:12 UTC
+Date/Publication: 2022-05-14 23:20:16 UTC
