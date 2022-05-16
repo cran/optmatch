@@ -1,7 +1,7 @@
-7ac8078c51e1ae5086c30dc73b43766a *DESCRIPTION
+08cad47fc1f23e2c25778afe2a82184a *DESCRIPTION
 d0de84b39e63bd3b111e0e27c61f6903 *LICENSE
 1b44cf335fd47c5763d6242215950e4a *NAMESPACE
-3e3247d1701efd086425978d682a141c *NEWS.md
+0b684edaae2abd6cd74672ee67dbff7a *NEWS.md
 9268705e27473f922c43eff2489af373 *R/DenseMatrix.R
 6fbd63c8034a2d4397c7df6689936dce *R/InfinitySparseMatrix.R
 11030ed023b70567cb2cc6de6d481f79 *R/Ops.optmatch.dlist.R
@@ -48,13 +48,13 @@ d130d9da0af67100c3649ed7f3bee4cc *data/nuclearplants.rda
 013c84202458b84d22e2fb0c2c791b07 *inst/CITATION
 4bb669b4f702c7d26ca71191994386e5 *inst/doc/fullmatch-vignette.R
 6f1645bc7aebb4ad6f02baaedd0c10f2 *inst/doc/fullmatch-vignette.Rmd
-30c84220f561d869c5b4ffa53527676d *inst/doc/fullmatch-vignette.html
+c84b6d45ab519cc7c5d210f0512f7b97 *inst/doc/fullmatch-vignette.html
 3922f7d589b088296dcc20b3c8c7f61b *inst/doc/matching-from-foreign-software.R
 650c3ccb44ab489ad807dba9c1d5aaf7 *inst/doc/matching-from-foreign-software.Rmd
-191bd38a9d1b11b9a393c34f5eca0333 *inst/doc/matching-from-foreign-software.html
+ff99dcd47c2618d1a4166de4a886ce4b *inst/doc/matching-from-foreign-software.html
 177d3c8e4ebf2461328e74092208c9da *inst/doc/matching-within-subgroups.R
 4a0c3387c565623d8457bbf85a1b8fa2 *inst/doc/matching-within-subgroups.Rmd
-edc61aa516156f3eac8359b45e4114c7 *inst/doc/matching-within-subgroups.html
+ab1cc20b86c6cf2fb20551f7c6c4762a *inst/doc/matching-within-subgroups.html
 7590f63959fdcd8ab6ee6dda7c83a936 *inst/examples/antiExactMatch.R
 adf66111e36cad3250695777bbfa331b *inst/examples/caliper.R
 2b5ac334ba26a80b7db2d4cf49e6d06f *inst/examples/fullmatch.R

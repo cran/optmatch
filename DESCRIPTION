@@ -1,5 +1,5 @@
 Package: optmatch
-Version: 0.10.2
+Version: 0.10.3
 Title: Functions for Optimal Matching
 Description: Distance based bipartite matching using minimum cost flow, oriented
     to matching of treatment and control groups in observational studies (Hansen
@@ -44,7 +44,7 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.0
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2022-05-14 01:04:06 UTC; josh
+Packaged: 2022-05-16 09:57:59 UTC; josh
 Author: Ben Hansen [aut],
   Mark Fredrickson [aut],
   Josh Errickson [cre, aut],
@@ -52,4 +52,4 @@ Author: Ben Hansen [aut],
   Adam Rauh [ctb]
 Maintainer: Josh Errickson <jerrick@umich.edu>
 Repository: CRAN
-Date/Publication: 2022-05-14 23:20:16 UTC
+Date/Publication: 2022-05-16 10:20:02 UTC
