@@ -1,3 +1,14 @@
+ ## Changes in **optmatch** Version 0.10.4
+
+- When including factor variables on the right hand side of the formula passed
+  into `match_on()`, now more simply calculates the contrast to enable more
+  intuitive results. (Thanks Noah Greifer, #220)
+- `dbind()` will now properly support binding more than 26 unique matrices when
+  renaming is necessary; in fact it supports up to 18,278 uniquely renamed
+  matrices.
+- A few tweaks in documentation, testing and vignettes to satisfy CRAN
+  requirements and harden against loss of dependencies.
+
 ## Changes in **optmatch** Version 0.10.3
 
 ### Interface changes
@@ -26,9 +37,9 @@
   - Implemented `optmatch::strata` to be used in place of `survival::strata`.
     Loading **survival** and masking `strata` should not cause issues either.
   - Hashing of distance matrixes is now done internally.
-  - **RItools** and **survery** are now only suggested with appropriate
-      warnings if users attempt to utilize code with them without first
-      installing the packages.
+  - **RItools** and **survey** are now only suggested with appropriate warnings
+      if users attempt to utilize code with them without first installing the
+      packages.
 - Modernized some vignettes
 
 (Note: 0.10.1 and 0.10.2 were functionally equivalent releases updated to

@@ -10,15 +10,12 @@ my.variable * 3
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  install.packages("optmatch")
-#  install.packages("RItools")
 
 ## ----echo=FALSE,message=FALSE-------------------------------------------------
 library(optmatch)
-library(RItools)
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  library(optmatch)
-#  library(RItools)
 
 ## ---- echo=FALSE--------------------------------------------------------------
 data(nuclearplants)
@@ -54,7 +51,6 @@ pairmatch(pr ~ cap, data = nuke.nopt)
 print(pairmatch(pr ~ cap, data = nuke.nopt), grouped = TRUE)
 
 ## ---- results="asis", echo=FALSE, warning=FALSE-------------------------------
-library(pander)
 a <- with(nuke.nopt, data.frame(
                          Plant=row.names(nuke.nopt),
                          Date=round(date-65, 1),
@@ -69,8 +65,12 @@ rownames(a) <- NULL
 rownames(b) <- NULL
 
 c <- cbind(data.frame(rbind(as.matrix(a), matrix(nrow=nrow(b)-nrow(a), ncol=3))), b)
-pandoc.table(c, style="multiline", missing="",
-             caption='New-site (left columns) versus existing-site (right columns) plants. "date" is `date-65`; "capacity" is `cap-400`.')
+if (requireNamespace("pander", quietly = TRUE)) {
+  pander::pandoc.table(c, style="multiline", missing="",
+                       caption='New-site (left columns) versus existing-site (right columns) plants. "date" is `date-65`; "capacity" is `cap-400`.')
+} else {
+  show(p)
+}
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  summary(pairmatch(pr ~ cap, data = nuke.nopt))
@@ -100,13 +100,31 @@ summary(lm(cap ~ pr, data = nuke.nopt))$coeff["pr",]
 ## -----------------------------------------------------------------------------
 summary(lm(cap ~ pr + pm, data = nuke.nopt))$coeff["pr",]
 
-## -----------------------------------------------------------------------------
+## ---- eval = FALSE------------------------------------------------------------
+#  install.packages("RItools")
+#  library(RItools)
+#  balanceTest(pr ~ cap + t2, data = nuke.nopt)
 
-xBalance(pr ~ cap + t2, report="all", data=nuke.nopt)
-xBalance(pr ~ cap + t2,
-         strata= pm,
-         data=nuke.nopt,
-         report=c("adj.mean.diffs", "std", "z"))
+## ---- echo = FALSE, message = FALSE-------------------------------------------
+if (requireNamespace("RItools", quietly = TRUE)) {
+  library(RItools)
+} else {
+  cat("RItools package not installed properly")
+}
+
+## ---- echo = FALSE------------------------------------------------------------
+if (requireNamespace("RItools", quietly = TRUE)) {
+  balanceTest(pr ~ cap + t2, data = nuke.nopt)
+}
+
+## ---- eval = FALSE------------------------------------------------------------
+#  balanceTest(pr ~ cap + t2 + strata(pm) - 1, data = nuke.nopt)
+#  # The `- 1` suppresses the unmatched output to make the output cleaner
+
+## ---- echo = FALSE------------------------------------------------------------
+if (requireNamespace("RItools", quietly = TRUE)) {
+  balanceTest(pr ~ cap + t2 + strata(pm) - 1, data = nuke.nopt)
+}
 
 ## -----------------------------------------------------------------------------
 psm <- glm(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + pt,
@@ -140,20 +158,29 @@ mhpc.pm <- pairmatch(mhd1, caliper=2, data=nuclearplants)
 summary(mhpc.pm) # better!
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  library(RItools)
-#  xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data = nuclearplants)
-#  xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + pt +
-#               strata(ps.pm2) -1, # the `-1` just focuses the output a little
-#           data = nuclearplants)
+#  balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
+#              data = nuclearplants)
+#  balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + pt +
+#                strata(ps.pm2) - 1,
+#              data = nuclearplants)
 
-## ---- fig.width=5, fig.height=5-----------------------------------------------
-myb <- xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
-                strata(ps.pm2),
-                data = nuclearplants,
-                report = c("adj.means", "std.diffs",
-                           "z.scores", "chisquare.test"))
-plot(myb)
-print(myb, digits=1)
+## ---- eval = FALSE------------------------------------------------------------
+#  myb <- balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
+#                       strata(ps.pm2),
+#                     data = nuclearplants)
+#  plot(myb)
+#  print(myb, digits=1)
+
+## ---- fig.width=5, fig.height=5, echo = FALSE---------------------------------
+if (requireNamespace("RItools", quietly = TRUE)) {
+  myb <- balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
+                     strata(ps.pm2),
+                   data = nuclearplants)
+  print(myb, digits=1)
+  plot(myb)
+} else {
+  cat("RItools package not installed properly")
+}
 
 ## -----------------------------------------------------------------------------
 summary(ps.pm2, psm)
