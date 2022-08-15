@@ -114,7 +114,7 @@ if (requireNamespace("RItools", quietly = TRUE)) {
 
 ## ---- echo = FALSE------------------------------------------------------------
 if (requireNamespace("RItools", quietly = TRUE)) {
-  balanceTest(pr ~ cap + t2, data = nuke.nopt)
+  RItools::balanceTest(pr ~ cap + t2, data = nuke.nopt)
 }
 
 ## ---- eval = FALSE------------------------------------------------------------
@@ -123,7 +123,7 @@ if (requireNamespace("RItools", quietly = TRUE)) {
 
 ## ---- echo = FALSE------------------------------------------------------------
 if (requireNamespace("RItools", quietly = TRUE)) {
-  balanceTest(pr ~ cap + t2 + strata(pm) - 1, data = nuke.nopt)
+  RItools::balanceTest(pr ~ cap + t2 + strata(pm) - 1, data = nuke.nopt)
 }
 
 ## -----------------------------------------------------------------------------
@@ -173,9 +173,8 @@ summary(mhpc.pm) # better!
 
 ## ---- fig.width=5, fig.height=5, echo = FALSE---------------------------------
 if (requireNamespace("RItools", quietly = TRUE)) {
-  myb <- balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
-                     strata(ps.pm2),
-                   data = nuclearplants)
+  myb <- RItools::balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
+                                strata(ps.pm2), data = nuclearplants)
   print(myb, digits=1)
   plot(myb)
 } else {
