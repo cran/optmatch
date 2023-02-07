@@ -69,7 +69,7 @@ if (requireNamespace("pander", quietly = TRUE)) {
   pander::pandoc.table(c, style="multiline", missing="",
                        caption='New-site (left columns) versus existing-site (right columns) plants. "date" is `date-65`; "capacity" is `cap-400`.')
 } else {
-  show(p)
+  show(c)
 }
 
 ## ---- eval=FALSE--------------------------------------------------------------
@@ -130,7 +130,7 @@ if (requireNamespace("RItools", quietly = TRUE)) {
 psm <- glm(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + pt,
            family = binomial, data = nuclearplants)
 
-## ----fig.width=5, fig.height=5------------------------------------------------
+## ----fig.width=5, fig.height=5, fig.alt="Box plot showing distribution of propensity scores"----
 boxplot(psm)
 
 ## -----------------------------------------------------------------------------
@@ -171,12 +171,19 @@ summary(mhpc.pm) # better!
 #  plot(myb)
 #  print(myb, digits=1)
 
-## ---- fig.width=5, fig.height=5, echo = FALSE---------------------------------
+## ---- fig.width=5, fig.height=5, echo = FALSE, fig.alt="Love plot showing the change in balance with and without matching"----
 if (requireNamespace("RItools", quietly = TRUE)) {
-  myb <- RItools::balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
-                                strata(ps.pm2), data = nuclearplants)
-  print(myb, digits=1)
-  plot(myb)
+  tryCatch({
+    myb <- RItools::balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
+                                  strata(ps.pm2), data = nuclearplants)
+    print(myb, digits=1)
+    p <- plot(myb)
+    print(p)
+  }, error = function(e) {
+    cat(paste("RItools is producing an unexpected error. Please report",
+              "this to https://github.com/markmfredrickson/optmatch/issues"))
+  })
+
 } else {
   cat("RItools package not installed properly")
 }

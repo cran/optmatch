@@ -170,6 +170,8 @@ match_on.glm <- function(x, within = NULL, caliper = NULL, exclude = NULL, data 
   match_on(lp.adj, within = within, caliper = caliper, exclude = exclude, z = z, ...)
 }
 
+#' Pooled Dispersion for a Numeric Variable
+#'
 #' Dispersion as pooled across a treatment and a control group. By default,
 #' the measure of dispersion calculated within each group is not the
 #' ordinary standard deviation but rather the robust alternative

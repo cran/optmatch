@@ -17,6 +17,9 @@ match_on_szn_scale(x, trtgrp, standardizer = mad)
 numeric of length 1
 }
 \description{
+Pooled Dispersion for a Numeric Variable
+}
+\details{
 Dispersion as pooled across a treatment and a control group. By default,
 the measure of dispersion calculated within each group is not the
 ordinary standard deviation but rather the robust alternative

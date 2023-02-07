@@ -4,50 +4,7 @@
 
 context("fullmatch function")
 
-# test whether two matches are the same. Uses all.equal on exceedances
-# to ignore errors below some tolerance. After checking those, strips
-# attributes that may differ but not break `identical` status.
-match_equal <- function(match1, match2, ignore.solver = TRUE) {
-  expect_true(all.equal(attr(match1, "exceedances"),
-                        attr(match2, "exceedances")))
-
-  attr(match1, "hashed.distance") <- NULL
-  attr(match2, "hashed.distance") <- NULL
-  attr(match1, "exceedances") <- NULL
-  attr(match2, "exceedances") <- NULL
-  attr(match1, "call") <- NULL
-  attr(match2, "call") <- NULL
-  if (!ignore.solver) {
-    attr(match1, "solver") <- NULL
-    attr(match2, "solver") <- NULL
-  }
-
-  expect_true(identical(match1, match2))
-}
-
-#' Similar to match_equal, but doesn't care about differences
-#' among labels of matched sets.
-match_equivalent <- function(match1, match2) {
-  expect_true(all.equal(attr(match1, "exceedances"),
-                        attr(match2, "exceedances")))
-
-  attr(match1, "hashed.distance") <- NULL
-  attr(match2, "hashed.distance") <- NULL
-  attr(match1, "exceedances") <- NULL
-  attr(match2, "exceedances") <- NULL
-  attr(match1, "call") <- NULL
-  attr(match2, "call") <- NULL
-
-  m1labs <- as.character(match1[!is.na(match1) & !duplicated(match1)])
-  levels(match1)[match(m1labs, levels(match1))] <- m1labs
-  match1 <- factor(match1)
-
-  m2labs <- as.character(match2[!is.na(match2) & !duplicated(match2)])
-  levels(match2)[match(m2labs, levels(match2))] <- m2labs
-  match2 <- factor(match2)
-
-  expect_true(identical(match1, match2))
-}
+source("utilities.R")
 
 test_that("No cross strata matches", {
   # test data
@@ -693,6 +650,46 @@ test_that("accept negative omit.fraction", {
 
 })
 
+test_that("returns min-cost flow solution info", {
+
+        data <- data.frame(z = c(rep(0,10), rep(1,5)),
+                     x = rnorm(15), fac=rep(c(rep("a",2), rep("b",3)),3))
+
+    f1 <- fullmatch(z~x, min.c=1, max.c=1, omit.fraction=.5, data = data)
+    expect_false(is.null(attr(f1, "MCFSolutions")))
+    f2 <- fullmatch(z~x+strata(fac), min.c=1, max.c=1, omit.fraction=.5, data = data)
+    expect_false(is.null(attr(f2, "MCFSolutions")))
+
+})
+
+test_that('Hints accepted',{
+  set.seed(201905)
+  data <- data.frame(z = rep(0:1, each = 5),
+                     x = rnorm(10), fac=rep(c(rep("a",2), rep("b",3)),2) )
+  mo  <- match_on(z ~ x, data=data)
+  f1a <- fullmatch(mo, min.c=.5, max.c=2, data = data, tol=0.1)
+  expect_is(attr(f1a, "MCFSolutions"), "FullmatchMCFSolutions")
+  expect_silent(fullmatch(mo, min.c=.5, max.c=2, data = data, tol=0.0001, hint=f1a))
+  mos <- match_on(z ~ x + strata(fac), data=data)
+  f1b <- fullmatch(mos, min.c=.5, max.c=2, data = data, tol=0.1)
+  expect_is(attr(f1b, "MCFSolutions"), "FullmatchMCFSolutions")
+  expect_warning(fullmatch(mos, min.c=.5, max.c=2, data = data, tol=0.1, hint=f1a), "ignoring")
+  expect_silent(fullmatch(mos, min.c=.5, max.c=2, data = data, tol=0.0001, hint=f1b))
+
+  expect_equal(length(summary(mos)$overall$unmatchable$treatment), 0)
+  mosc  <- mos + caliper(mos, width=1)
+  expect_equal(length(summary(mosc)$overall$unmatchable$treatment), 1)
+  expect_silent(f1c  <- fullmatch(mosc, min.c=.5, max.c=2, data = data, tol=0.1, hint=f1b))
+  expect_is(attr(f1c, "MCFSolutions"), "FullmatchMCFSolutions")
+  ## expect_error(fullmatch(mos, min.c=.5, max.c=2, data = data, tol=0.1, hint=f1c))
+  ## (b/c hint is missing price for the treatment node that was excluded by the caliper.
+  ##  [But this is no longer an error.])
+  ## OTOH it's always been OK to be missing a price for a control node.
+  expect_silent(f1d  <- fullmatch(t(mosc), min.c=.5, max.c=2, data = data, tol=0.1))
+  expect_is(attr(f1d, "MCFSolutions"), "FullmatchMCFSolutions")
+  expect_silent(fullmatch(t(mosc), min.c=.5, max.c=2, data = data, tol=0.1, hint=f1d))
+})
+
 test_that("If matching fails, we should give a warning", {
   # One subproblem, matching fails
   expect_warning(fullmatch(pr ~ cost, data = nuclearplants, min = 5, max = 5),
@@ -726,11 +723,12 @@ test_that("LEMON solvers", {
   f6 <- fullmatch(pr ~ cost + t1, min.controls = 1, max.controls = 3, data = nuclearplants,
                   solver = LEMON("NetworkSimplex"))
 
-  match_equal(f1, f2, ignore.solver = FALSE)
-  match_equal(f1, f3, ignore.solver = FALSE)
-  match_equal(f1, f4, ignore.solver = FALSE)
-  match_equal(f1, f5, ignore.solver = FALSE)
-  match_equal(f1, f6, ignore.solver = FALSE)
+  mytol <- .Machine$double.eps^(1/4)
+  match_equal(f1, f2, ignore.solver = FALSE, tolerance = mytol)
+  match_equal(f1, f3, ignore.solver = FALSE, tolerance= mytol)
+  match_equal(f1, f4, ignore.solver = FALSE, tolerance = mytol)
+  match_equal(f1, f5, ignore.solver = FALSE, tolerance = mytol)
+  match_equal(f1, f6, ignore.solver = FALSE, tolerance = mytol)
 
   if (requireNamespace("rrelaxiv", quietly = TRUE)) {
     f7 <- fullmatch(pr ~ cost + t1, min.controls = 1, max.controls = 3, data = nuclearplants,

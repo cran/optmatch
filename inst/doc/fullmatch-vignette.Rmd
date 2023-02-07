@@ -181,7 +181,7 @@ if (requireNamespace("pander", quietly = TRUE)) {
   pander::pandoc.table(c, style="multiline", missing="",
                        caption='New-site (left columns) versus existing-site (right columns) plants. "date" is `date-65`; "capacity" is `cap-400`.')
 } else {
-  show(p)
+  show(c)
 }
 ```
 
@@ -359,7 +359,7 @@ probabilities) or `scores(psm)` (estimated logits of probabilities).
 It's often a good idea to compare the groups' distributions on the
 propensity score.
 
-```{r,fig.width=5, fig.height=5}
+```{r,fig.width=5, fig.height=5, fig.alt="Box plot showing distribution of propensity scores"}
 boxplot(psm)
 ```
 
@@ -454,12 +454,19 @@ plot(myb)
 print(myb, digits=1)
 ```
 
-```{r, fig.width=5, fig.height=5, echo = FALSE}
+```{r, fig.width=5, fig.height=5, echo = FALSE, fig.alt="Love plot showing the change in balance with and without matching"}
 if (requireNamespace("RItools", quietly = TRUE)) {
-  myb <- RItools::balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
-                                strata(ps.pm2), data = nuclearplants)
-  print(myb, digits=1)
-  plot(myb)
+  tryCatch({
+    myb <- RItools::balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
+                                  strata(ps.pm2), data = nuclearplants)
+    print(myb, digits=1)
+    p <- plot(myb)
+    print(p)
+  }, error = function(e) {
+    cat(paste("RItools is producing an unexpected error. Please report",
+              "this to https://github.com/markmfredrickson/optmatch/issues"))
+  })
+
 } else {
   cat("RItools package not installed properly")
 }
