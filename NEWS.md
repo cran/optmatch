@@ -1,4 +1,19 @@
-## Changes in **optmatch** Version 0.10.5
+## Changes in **optmatch** Version 0.10.6.9001
+
+- Hardened tests further against package unavailability
+- Changed the name of default arguments for a version of `predict`. (#223)
+- Several small documentation tweaks to pass CRAN checks on R-devel.
+- Fix a bug introduced in version 0.10.6, involving discretization of
+  distances. The fix avoids spurious errors for distance matrices with
+  very large values, although you may still have to pass tol=
+  arguments to pairmatch() and fullmatch() that are smaller than the
+  desired tolerance.(#230)
+- Disable passing of local variables from generic corresponding to change in
+  R_USEMETHOD_FORWARD_LOCALS coming in the next major release. No user-facing
+  change, except the `@call` slot of objects may look slighly different (but
+  should function identically). (#234)
+
+## Changes in **optmatch** Version 0.10.6
 
 - Adjusted a check to avoid ambiguous failures when using LEMON vs RELAX-IV.
 - Updated CITATION to use `bibentry()`.

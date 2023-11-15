@@ -1,4 +1,4 @@
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::opts_chunk$set(collapse = TRUE, prompt=TRUE)
 library(optmatch)
 
@@ -36,7 +36,7 @@ fwithin <- fullmatch(case ~ age, data = infert, max.controls = 4,
                      within = exactMatch(case ~ education, data = infert))
 summary(fwithin)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  f1 <- fullmatch(z ~ x, data = d[d$group == 1, ], max.controls = 2)
 #  f2 <- fullmatch(z ~ x, data = d[d$group == 2, ], min.controls = 1/3)
 #  c(f1, f2)

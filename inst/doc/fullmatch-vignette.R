@@ -1,4 +1,4 @@
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::opts_chunk$set(collapse = TRUE, prompt=TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -17,16 +17,16 @@ library(optmatch)
 ## ----eval=FALSE---------------------------------------------------------------
 #  library(optmatch)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 data(nuclearplants)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  data(nuclearplants)
 
 ## -----------------------------------------------------------------------------
 head(nuclearplants)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  help("nuclearplants")
 
 ## ----eval=FALSE---------------------------------------------------------------
@@ -50,7 +50,7 @@ pairmatch(pr ~ cap, data = nuke.nopt)
 ## -----------------------------------------------------------------------------
 print(pairmatch(pr ~ cap, data = nuke.nopt), grouped = TRUE)
 
-## ---- results="asis", echo=FALSE, warning=FALSE-------------------------------
+## ----results="asis", echo=FALSE, warning=FALSE--------------------------------
 a <- with(nuke.nopt, data.frame(
                          Plant=row.names(nuke.nopt),
                          Date=round(date-65, 1),
@@ -72,25 +72,25 @@ if (requireNamespace("pander", quietly = TRUE)) {
   show(c)
 }
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  summary(pairmatch(pr ~ cap, data = nuke.nopt))
 
 ## -----------------------------------------------------------------------------
 pm <- pairmatch(pr ~ cap, data = nuke.nopt)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  summary(lm(cost ~ pr + pm, data = nuke.nopt))
 
 ## -----------------------------------------------------------------------------
 tm <- pairmatch(pr ~ cap, controls = 2, data = nuke.nopt)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  pairmatch(pr ~ cap, controls = 3, data=nuke.nopt)
 
-## ---- error=TRUE--------------------------------------------------------------
+## ----error=TRUE---------------------------------------------------------------
 pairmatch(pr ~ cap + cost, caliper=.001, data = nuke.nopt)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  cap.noadj <- lm(cap ~ pr, data = nuke.nopt)
 #  summary(cap.noadj)
 
@@ -100,28 +100,28 @@ summary(lm(cap ~ pr, data = nuke.nopt))$coeff["pr",]
 ## -----------------------------------------------------------------------------
 summary(lm(cap ~ pr + pm, data = nuke.nopt))$coeff["pr",]
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  install.packages("RItools")
 #  library(RItools)
 #  balanceTest(pr ~ cap + t2, data = nuke.nopt)
 
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 if (requireNamespace("RItools", quietly = TRUE)) {
   library(RItools)
 } else {
   cat("RItools package not installed properly")
 }
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 if (requireNamespace("RItools", quietly = TRUE)) {
   RItools::balanceTest(pr ~ cap + t2, data = nuke.nopt)
 }
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  balanceTest(pr ~ cap + t2 + strata(pm) - 1, data = nuke.nopt)
 #  # The `- 1` suppresses the unmatched output to make the output cleaner
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 if (requireNamespace("RItools", quietly = TRUE)) {
   RItools::balanceTest(pr ~ cap + t2 + strata(pm) - 1, data = nuke.nopt)
 }
@@ -157,21 +157,21 @@ summary(mhpc.pm) # oops
 mhpc.pm <- pairmatch(mhd1, caliper=2, data=nuclearplants)
 summary(mhpc.pm) # better!
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 #              data = nuclearplants)
 #  balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n + pt +
 #                strata(ps.pm2) - 1,
 #              data = nuclearplants)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  myb <- balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
 #                       strata(ps.pm2),
 #                     data = nuclearplants)
 #  plot(myb)
 #  print(myb, digits=1)
 
-## ---- fig.width=5, fig.height=5, echo = FALSE, fig.alt="Love plot showing the change in balance with and without matching"----
+## ----fig.width=5, fig.height=5, echo = FALSE, fig.alt="Love plot showing the change in balance with and without matching"----
 if (requireNamespace("RItools", quietly = TRUE)) {
   tryCatch({
     myb <- RItools::balanceTest(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n +
@@ -191,7 +191,7 @@ if (requireNamespace("RItools", quietly = TRUE)) {
 ## -----------------------------------------------------------------------------
 summary(ps.pm2, psm)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  summary(fullmatch(pr ~ date + cap, data = nuke.nopt))
 #  summary(fullmatch(pr ~ date + cap, data = nuke.nopt, min = 1))
 #  summary(fullmatch(pr ~ date + cap, data = nuke.nopt, min = 2, max = 3))
@@ -213,25 +213,25 @@ round(cap.dist[1:3, 1:3], 1)
 ## -----------------------------------------------------------------------------
 round(cap.dist + caliper(cap.dist, 2), 1)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  pairmatch(cap.dist + caliper(cap.dist, 2), data = nuke.nopt)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  install.packages("xtable") # if not already installed
 #  data(tli, package = "xtable")
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  install.packages("DOS") # if not already installed
 #  install.packages("DOS2") # if not already installed
 #  data(package = "DOS")
 #  data(package = "DOS2")
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  install.packages("arm") # if not already installed
 #  data(lalonde, package = "arm")
 #  help("lalonde", package = "arm")
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  install.packages("Hmisc") # if not already installed
 #  Hmisc:::getHdata(rhc, what = "all")
 
